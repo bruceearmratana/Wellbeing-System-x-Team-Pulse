@@ -2,6 +2,7 @@
 <html><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="support.js"></script>
 </head>
 <body>
@@ -1913,9 +1914,12 @@ a:hover { text-decoration: underline; }
     </section>
 
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-      <button onclick="{{ submitBooking }}" disabled="{{ submitDisabled }}" style="{{ submitStyle }}" style-hover="filter:brightness(1.07);transform:translateY(-1px);" style-active="transform:translateY(0);">Submit anonymous request</button>
+      <button onclick="{{ submitBooking }}" disabled="{{ submitDisabled }}" style="{{ submitStyle }}" style-hover="filter:brightness(1.07);transform:translateY(-1px);" style-active="transform:translateY(0);">{{ submitLabel }}</button>
       <span style="font-size:13px;color:var(--text-secondary);">{{ submitHint }}</span>
     </div>
+    <sc-if value="{{ submitError }}" hint-placeholder-val="">
+      <div style="font-size:13px;color:var(--tcc-danger);margin-top:10px;">{{ submitError }}</div>
+    </sc-if>
   </main>
   </sc-if>
 
@@ -1953,7 +1957,7 @@ a:hover { text-decoration: underline; }
       <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-accent);font-weight:600;margin-bottom:10px;">HR / People &amp; Culture</div>
       <h1 style="font-family:var(--font-display);font-weight:300;font-size:30px;margin:0 0 24px;color:var(--text-primary);">Admin sign in</h1>
       <label style="display:block;font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Username</label>
-      <input class="wb-input" type="text" value="{{ loginUser }}" oninput="{{ onUser }}" placeholder="hr" style="margin-bottom:16px;">
+      <input class="wb-input" type="email" value="{{ loginUser }}" oninput="{{ onUser }}" placeholder="you@company.com" style="margin-bottom:16px;">
       <label style="display:block;font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Password</label>
       <input class="wb-input" type="password" value="{{ loginPass }}" oninput="{{ onPass }}" placeholder="••••••••" onkeydown="{{ onLoginKey }}" style="margin-bottom:8px;">
       <sc-if value="{{ loginError }}" hint-placeholder-val="">
@@ -2097,6 +2101,53 @@ a:hover { text-decoration: underline; }
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script="" data-props="{&quot;$preview&quot;:{&quot;width&quot;:1200,&quot;height&quot;:860},&quot;loopSeconds&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:6,&quot;tsType&quot;:&quot;number&quot;,&quot;min&quot;:3,&quot;max&quot;:15}}">
+const SUPABASE_URL = "https://yisvpkxgguigsnfegtmm.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_8lJx8R7j1OdsgZd8UMz5hQ_KmDTY8sf";
+const sb = (SUPABASE_URL && SUPABASE_ANON_KEY) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+function rowToTicket(r) {
+  return {
+    id: r.id,
+    dims: r.dims || [],
+    mood: r.mood,
+    urgency: r.urgency,
+    format: r.format,
+    times: r.times || [],
+    note: r.note || '',
+    preferredDate: r.preferred_date || '',
+    status: r.status,
+    officer: r.officer || '',
+    when: r.scheduled_when || '',
+    outcome: r.outcome || '',
+    flag: !!r.flag,
+  };
+}
+function ticketToInsertRow(t) {
+  return {
+    id: t.id,
+    dims: t.dims,
+    mood: t.mood,
+    urgency: t.urgency,
+    format: t.format,
+    times: t.times,
+    note: t.note,
+    preferred_date: t.preferredDate,
+    status: t.status,
+    officer: t.officer,
+    scheduled_when: t.when,
+    outcome: t.outcome,
+    flag: t.flag,
+  };
+}
+function patchToRow(patch) {
+  const out = {};
+  if ('officer' in patch) out.officer = patch.officer;
+  if ('status' in patch) out.status = patch.status;
+  if ('outcome' in patch) out.outcome = patch.outcome;
+  if ('when' in patch) out.scheduled_when = patch.when;
+  return out;
+}
+
 class Component extends DCLogic {
   DIMS = [
     { key: 'work', label: 'Work Experience', desc: 'Task clarity, workload, learning curve' },
@@ -2132,6 +2183,9 @@ class Component extends DCLogic {
     times: [],
     note: '',
     ticketId: '',
+    submitting: false,
+    submitError: '',
+    publicStats: null,
     loginUser: '',
     loginPass: '',
     loginError: '',
@@ -2145,28 +2199,49 @@ class Component extends DCLogic {
     bookDate: null,
   };
 
-  componentDidMount() {
-    let theme = 'light', tickets = null;
+  async componentDidMount() {
+    let theme = 'light';
     try { theme = localStorage.getItem('wb_theme') || 'light'; } catch (e) {}
-    try { const raw = localStorage.getItem('wb_tickets'); if (raw) tickets = JSON.parse(raw); } catch (e) {}
-    if (!tickets || !tickets.length) tickets = this.seedTickets();
-    this.setState({ theme, tickets });
+    this.setState({ theme });
+
     const secs = Math.max(2, Number(this.props.loopSeconds) || 6);
     this._timer = setInterval(() => {
       this.setState(s => (s.view === 'home' ? { slide: (s.slide + 1) % 5 } : {}));
     }, secs * 1000);
+
+    if (!sb) { console.error('Supabase not configured — set SUPABASE_URL / SUPABASE_ANON_KEY'); return; }
+
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) this.setState({ authed: true });
+
+    this.refreshPublicStats();
+    if (session) this.loadTickets();
+
+    sb.auth.onAuthStateChange((_event, session) => {
+      this.setState({ authed: !!session });
+      if (session) this.loadTickets();
+    });
   }
   componentWillUnmount() { if (this._timer) clearInterval(this._timer); }
 
-  seedTickets() {
-    return [
-      { id: 'WB-7T1A8', dims: ['emotional', 'work'], mood: 1, urgency: 'week', format: 'inperson', times: ['Mornings'], note: "Haven't been sleeping well for a couple of weeks and feel stressed most days.", status: 'Assigned', officer: "P'Nan · Wellbeing Officer", when: '', outcome: 'SUPPORT', flag: true },
-      { id: 'WB-4K9X2', dims: ['work', 'growth'], mood: 3, urgency: 'soon', format: 'virtual', times: ['Tue', 'Thu', 'Afternoons'], note: "Not always sure what I should be working on day to day.", status: 'New', officer: '', when: '', outcome: '', flag: false },
-      { id: 'WB-2M5P0', dims: ['social', 'env'], mood: 4, urgency: 'checkin', format: 'either', times: ['Wed', 'Fri', 'Mornings'], note: '', status: 'Scheduled', officer: "P'Mai · People & Culture", when: 'Wed 25 Jun, 11:00', outcome: 'WATCH', flag: false },
-    ];
+  async refreshPublicStats() {
+    const { data, error } = await sb.rpc('get_booking_public_stats');
+    if (error) { console.error('stats fetch failed', error); return; }
+    const row = (data && data[0]) || { total_count: 0, new_count: 0, scheduled_count: 0, flag_count: 0, dim_counts: {} };
+    this.setState({
+      publicStats: {
+        total: row.total_count, newCount: row.new_count,
+        scheduled: row.scheduled_count, flag: row.flag_count,
+        dimCounts: row.dim_counts || {},
+      },
+    });
   }
 
-  persist(tickets) { try { localStorage.setItem('wb_tickets', JSON.stringify(tickets)); } catch (e) {} }
+  async loadTickets() {
+    const { data, error } = await sb.from('bookings').select('*').order('created_at', { ascending: false });
+    if (error) { console.error('tickets fetch failed', error); return; }
+    this.setState({ tickets: (data || []).map(rowToTicket) });
+  }
 
   // ---------- navigation ----------
   nav(view) { this.setState({ view, loginError: '' }); }
@@ -2186,37 +2261,59 @@ class Component extends DCLogic {
     const n = (note || '').toLowerCase();
     return mood === 1 || (dims.includes('emotional') && mood && mood <= 2) || /sleep|can.?t sleep|useless|invisible|unwanted|panic|burn ?out|burnt? out/.test(n);
   }
-  submitBooking() {
-    const { dims, mood, urgency, format, times, note, tickets, bookDate } = this.state;
+  async submitBooking() {
+    const { dims, mood, urgency, format, times, note, bookDate } = this.state;
     if (!dims.length && !mood) return;
     const id = this.genId();
     const t = { id, dims: [...dims], mood, urgency, format, times: [...times], note: note.trim(), preferredDate: bookDate || '', status: 'New', officer: '', when: '', outcome: '', flag: this.computeFlag(dims, mood, note) };
-    const next = [t, ...tickets];
-    this.persist(next);
-    this.setState({ tickets: next, ticketId: id, view: 'confirm', dims: [], mood: null, urgency: null, format: null, times: [], note: '', bookDate: null });
+
+    this.setState({ submitting: true, submitError: '' });
+    const { error } = await sb.from('bookings').insert(ticketToInsertRow(t));
+    if (error) {
+      console.error('submit failed', error);
+      this.setState({ submitting: false, submitError: 'Something went wrong sending your request. Please try again.' });
+      return;
+    }
+    this.setState({
+      submitting: false, submitError: '',
+      ticketId: id, view: 'confirm',
+      dims: [], mood: null, urgency: null, format: null, times: [], note: '', bookDate: null,
+    });
+    this.refreshPublicStats();
   }
 
   // ---------- admin ----------
-  doLogin() {
-    if (this.state.loginUser.trim().toLowerCase() === 'hr' && this.state.loginPass === 'wellbeing2026') {
-      this.setState({ authed: true, view: 'admin', loginError: '', loginPass: '' });
-    } else {
-      this.setState({ loginError: 'Incorrect username or password.' });
+  async doLogin() {
+    this.setState({ loginError: '' });
+    const { error } = await sb.auth.signInWithPassword({
+      email: this.state.loginUser.trim(),
+      password: this.state.loginPass,
+    });
+    if (error) {
+      this.setState({ loginError: 'Incorrect email or password.' });
+      return;
     }
+    this.setState({ authed: true, view: 'admin', loginError: '', loginPass: '' });
+    this.loadTickets();
+  }
+  async logout() {
+    await sb.auth.signOut();
+    this.setState({ authed: false, tickets: [], view: 'home' });
   }
   updateTicket(id, patch) {
-    this.setState(s => {
-      const tickets = s.tickets.map(t => t.id === id ? { ...t, ...patch } : t);
-      this.persist(tickets);
-      return { tickets };
+    this.setState(s => ({ tickets: s.tickets.map(t => t.id === id ? { ...t, ...patch } : t) }));
+    sb.from('bookings').update(patchToRow(patch)).eq('id', id).then(({ error }) => {
+      if (error) { console.error('update failed', error); this.loadTickets(); }
+      else { this.refreshPublicStats(); }
     });
   }
   deleteTicket(id) {
     if (!window.confirm('Delete this wellbeing request? This cannot be undone.')) return;
-    this.setState(s => {
-      const tickets = s.tickets.filter(t => t.id !== id);
-      this.persist(tickets);
-      return { tickets };
+    const prev = this.state.tickets;
+    this.setState(s => ({ tickets: s.tickets.filter(t => t.id !== id) }));
+    sb.from('bookings').delete().eq('id', id).then(({ error }) => {
+      if (error) { console.error('delete failed', error); this.setState({ tickets: prev }); }
+      else { this.refreshPublicStats(); }
     });
   }
 
@@ -2385,17 +2482,13 @@ class Component extends DCLogic {
       };
     });
 
+    const dimCounts = (s.publicStats && s.publicStats.dimCounts) || {};
     const counts = {};
-    this.DIMS.forEach(d => counts[d.key] = 0);
-    s.tickets.forEach(t => (t.dims || []).forEach(k => { if (counts[k] != null) counts[k]++; }));
+    this.DIMS.forEach(d => counts[d.key] = dimCounts[d.key] || 0);
     const maxc = Math.max(1, ...Object.values(counts));
     const dimBars = this.DIMS.map(d => ({ label: d.label, count: counts[d.key], pct: Math.round((counts[d.key] / maxc) * 100) + '%' }));
 
-    const newCount = s.tickets.filter(t => t.status === 'New').length;
-    const schedCount = s.tickets.filter(t => t.status === 'Scheduled').length;
-    const flagCount = s.tickets.filter(t => t.flag).length;
-
-    const canSubmit = s.dims.length > 0 || !!s.mood;
+    const canSubmit = (s.dims.length > 0 || !!s.mood) && !s.submitting;
 
     return {
       theme: s.theme,
@@ -2463,7 +2556,9 @@ class Component extends DCLogic {
       note: s.note,
       onNote: e => this.setState({ note: e.target.value }),
       submitDisabled: !canSubmit,
-      submitHint: canSubmit ? 'You can stay completely anonymous.' : 'Pick at least one area or a mood to continue.',
+      submitLabel: s.submitting ? 'Sending…' : 'Submit anonymous request',
+      submitHint: s.submitting ? '' : ((s.dims.length > 0 || !!s.mood) ? 'You can stay completely anonymous.' : 'Pick at least one area or a mood to continue.'),
+      submitError: s.submitError,
       submitStyle: {
         fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: 'var(--fs-body-lg)',
         color: '#062a33', background: 'var(--brand-accent)', border: 'none',
@@ -2481,15 +2576,15 @@ class Component extends DCLogic {
       onPass: e => this.setState({ loginPass: e.target.value }),
       onLoginKey: e => { if (e.key === 'Enter') this.doLogin(); },
       doLogin: () => this.doLogin(),
-      logout: () => this.setState({ authed: false, view: 'home' }),
+      logout: () => this.logout(),
 
       // admin
       ticketRows,
       dimBars,
-      aggTotal: s.tickets.length,
-      aggNew: newCount,
-      aggScheduled: schedCount,
-      aggFlag: flagCount,
+      aggTotal: (s.publicStats && s.publicStats.total) || 0,
+      aggNew: (s.publicStats && s.publicStats.newCount) || 0,
+      aggScheduled: (s.publicStats && s.publicStats.scheduled) || 0,
+      aggFlag: (s.publicStats && s.publicStats.flag) || 0,
       calendarEl: this.renderCalendar(),
       bookDateDisplay: s.bookDate || 'Pick a specific date →',
       bookDateBtnStyle: { fontFamily: 'var(--font-sans)', fontWeight: s.bookDate ? 600 : 400, fontSize: 'var(--fs-body)', padding: '13px 20px', borderRadius: 'var(--radius-sm)', border: s.bookDate ? '1px solid var(--brand-accent)' : '1px solid var(--border-subtle)', background: s.bookDate ? 'rgba(0,168,200,0.10)' : 'var(--surface-card)', color: s.bookDate ? 'var(--text-primary)' : 'var(--text-secondary)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '10px', transition: 'all var(--dur-fast) var(--ease-standard)' },
