@@ -2118,11 +2118,10 @@ const SUPABASE_URL = "https://yisvpkxgguigsnfegtmm.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_8lJx8R7j1OdsgZd8UMz5hQ_KmDTY8sf";
 const sb = (SUPABASE_URL && SUPABASE_ANON_KEY) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
-// TODO: fill in from emailjs.com dashboard
-const EMAILJS_PUBLIC_KEY = "";
-const EMAILJS_SERVICE_ID = "";
-const EMAILJS_TEMPLATE_USER = "";
-const EMAILJS_TEMPLATE_ADMIN = "";
+const EMAILJS_PUBLIC_KEY = "tjLIkfAextXAoq6PG";
+const EMAILJS_SERVICE_ID = "service_ethgx7o";
+const EMAILJS_TEMPLATE_USER = "template_rh3gxgd";
+const EMAILJS_TEMPLATE_ADMIN = "template_hycq9he";
 if (EMAILJS_PUBLIC_KEY) window.emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 
 function isValidEmail(email) {
