@@ -3,6 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="support.js"></script>
 </head>
 <body>
@@ -1726,14 +1727,14 @@ a:hover { text-decoration: underline; }
   <main style="position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:56px 32px 40px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;">
     <div style="animation:wbFade var(--dur-slow) var(--ease-out);">
       <div style="font-family:var(--font-sans);font-weight:600;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-accent);margin-bottom:18px;">TCCtech People &amp; Culture</div>
-      <h1 style="font-family:var(--font-display);font-weight:300;font-size:52px;line-height:1.08;letter-spacing:.01em;margin:0 0 20px;color:var(--text-primary);">Book a wellbeing session, <span style="color:var(--text-accent);">completely anonymously.</span></h1>
-      <p style="font-size:var(--fs-body-lg);line-height:1.6;color:var(--text-secondary);max-width:30em;margin:0 0 32px;">A confidential check-in with an independent Wellbeing Officer. You choose what to share. HR only ever sees aggregated, anonymised signals — never your name.</p>
+      <h1 style="font-family:var(--font-display);font-weight:300;font-size:52px;line-height:1.08;letter-spacing:.01em;margin:0 0 20px;color:var(--text-primary);">Book a wellbeing session, <span style="color:var(--text-accent);">completely confidentially.</span></h1>
+      <p style="font-size:var(--fs-body-lg);line-height:1.6;color:var(--text-secondary);max-width:30em;margin:0 0 32px;">A confidential check-in with an independent Wellbeing Officer. You choose what to share. Only the Wellbeing Officer and HR admin can see your request — it's never shared publicly.</p>
       <div style="display:flex;gap:14px;flex-wrap:wrap;">
         <button onclick="{{ goBook }}" style="display:inline-flex;align-items:center;gap:10px;font-family:var(--font-sans);font-weight:600;font-size:var(--fs-body-lg);color:#062a33;background:var(--brand-accent);border:none;border-radius:var(--radius-md);padding:16px 30px;cursor:pointer;box-shadow:0 8px 24px rgba(0,168,200,.24);transition:all var(--dur-fast) var(--ease-standard);" style-hover="filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 14px 32px rgba(0,168,200,.40);" style-active="transform:translateY(0);">Book a session →</button>
         <button onclick="{{ goAdmin }}" style="font-family:var(--font-sans);font-weight:600;font-size:var(--fs-body-lg);color:var(--text-brand);background:transparent;border:1px solid var(--border-strong);border-radius:var(--radius-md);padding:16px 26px;cursor:pointer;transition:all var(--dur-fast) var(--ease-standard);" style-hover="background:var(--surface-sunken);border-color:rgba(255,255,255,0.35);" style-active="transform:translateY(1px);">HR / Admin login</button>
       </div>
       <div style="display:flex;gap:28px;margin-top:40px;flex-wrap:wrap;">
-        <div><div style="font-family:var(--font-mono);font-size:30px;font-weight:600;color:var(--text-primary);">100%</div><div style="font-size:13px;color:var(--text-secondary);">Anonymous</div></div>
+        <div><div style="font-family:var(--font-mono);font-size:30px;font-weight:600;color:var(--text-primary);">100%</div><div style="font-size:13px;color:var(--text-secondary);">Confidential</div></div>
         <div><div style="font-family:var(--font-mono);font-size:30px;font-weight:600;color:var(--text-primary);">5</div><div style="font-size:13px;color:var(--text-secondary);">Wellbeing dimensions</div></div>
         <div><div style="font-family:var(--font-mono);font-size:30px;font-weight:600;color:var(--text-primary);">0</div><div style="font-size:13px;color:var(--text-secondary);">Names shared with HR</div></div>
       </div>
@@ -1764,7 +1765,7 @@ a:hover { text-decoration: underline; }
           <h3 style="font-family:var(--font-display);font-weight:300;font-size:28px;margin:0 0 20px;color:var(--text-primary);">A check-in that stays private</h3>
           <div style="display:flex;flex-direction:column;gap:14px;">
             <div style="display:flex;gap:14px;align-items:center;"><span style="flex:none;width:30px;height:30px;border-radius:50%;background:var(--surface-sunken);border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--text-accent);">1</span><span style="color:var(--text-primary);font-size:15px;">Team Pulse flags a possible workload concern</span></div>
-            <div style="display:flex;gap:14px;align-items:center;"><span style="flex:none;width:30px;height:30px;border-radius:50%;background:var(--surface-sunken);border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--text-accent);">2</span><span style="color:var(--text-primary);font-size:15px;">You book an anonymous session — no login needed</span></div>
+            <div style="display:flex;gap:14px;align-items:center;"><span style="flex:none;width:30px;height:30px;border-radius:50%;background:var(--surface-sunken);border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--text-accent);">2</span><span style="color:var(--text-primary);font-size:15px;">You book a confidential session — no login needed</span></div>
             <div style="display:flex;gap:14px;align-items:center;"><span style="flex:none;width:30px;height:30px;border-radius:50%;background:var(--surface-sunken);border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--text-accent);">3</span><span style="color:var(--text-primary);font-size:15px;">An independent Wellbeing Officer meets with you</span></div>
             <div style="display:flex;gap:14px;align-items:center;"><span style="flex:none;width:30px;height:30px;border-radius:50%;background:var(--surface-sunken);border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--text-accent);">4</span><span style="color:var(--text-primary);font-size:15px;">HR receives only aggregated insights</span></div>
             <div style="display:flex;gap:14px;align-items:center;"><span style="flex:none;width:30px;height:30px;border-radius:50%;background:var(--surface-sunken);border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--text-accent);">5</span><span style="color:var(--text-primary);font-size:15px;">Team Pulse monitors improvement over time</span></div>
@@ -1841,11 +1842,11 @@ a:hover { text-decoration: underline; }
   <sc-if value="{{ isBook }}" hint-placeholder-val="{{ true }}">
   <main style="position:relative;z-index:2;max-width:760px;margin:0 auto;padding:48px 32px 64px;animation:wbFade var(--dur-slow) var(--ease-out);">
     <button onclick="{{ goHome }}" style="font-size:14px;color:var(--text-secondary);background:none;border:none;cursor:pointer;padding:0;margin-bottom:20px;transition:color var(--dur-fast) var(--ease-standard);" style-hover="color:var(--text-primary);">← Back to overview</button>
-    <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-accent);font-weight:600;margin-bottom:12px;">Anonymous booking</div>
+    <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-accent);font-weight:600;margin-bottom:12px;">Confidential booking</div>
     <h1 style="font-family:var(--font-display);font-weight:300;font-size:40px;line-height:1.1;margin:0 0 14px;color:var(--text-primary);">Request a wellbeing session</h1>
     <div style="display:flex;align-items:center;gap:10px;background:var(--surface-sunken);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:36px;">
       <span style="display:inline-flex;width:20px;height:20px;color:var(--text-accent);flex:none;">{{ lockIcon }}</span>
-      <span style="font-size:14px;color:var(--text-secondary);">No name, email or login is collected. Your request is identified only by an anonymous ticket code.</span>
+      <span style="font-size:14px;color:var(--text-secondary);">Your email is used only to send you a confirmation and is kept confidential — visible only to the wellbeing team, never shared or published.</span>
     </div>
 
     <section style="margin-bottom:36px;">
@@ -1908,8 +1909,17 @@ a:hover { text-decoration: underline; }
     </section>
 
     <section style="margin-bottom:32px;">
+      <h2 style="font-family:var(--font-sans);font-weight:600;font-size:18px;margin:0 0 6px;color:var(--text-primary);">Your email</h2>
+      <p style="font-size:14px;color:var(--text-secondary);margin:0 0 16px;">Required — used only to send you a confirmation and is kept confidential, visible only to the wellbeing team.</p>
+      <input class="wb-input" type="email" placeholder="you@company.com" value="{{ email }}" oninput="{{ onEmail }}">
+      <sc-if value="{{ emailError }}" hint-placeholder-val="">
+        <div style="font-size:13px;color:var(--tcc-danger);margin-top:8px;">{{ emailError }}</div>
+      </sc-if>
+    </section>
+
+    <section style="margin-bottom:32px;">
       <h2 style="font-family:var(--font-sans);font-weight:600;font-size:18px;margin:0 0 6px;color:var(--text-primary);">Anything you'd like to add?</h2>
-      <p style="font-size:14px;color:var(--text-secondary);margin:0 0 16px;">Optional and anonymous. Share as much or as little as you like.</p>
+      <p style="font-size:14px;color:var(--text-secondary);margin:0 0 16px;">Optional. Share as much or as little as you like.</p>
       <textarea class="wb-input" rows="4" placeholder="In your own words…" value="{{ note }}" oninput="{{ onNote }}" style="resize:vertical;line-height:1.5;"></textarea>
     </section>
 
@@ -1930,7 +1940,7 @@ a:hover { text-decoration: underline; }
       <span style="display:inline-flex;width:34px;height:34px;">{{ checkIcon }}</span>
     </div>
     <h1 style="font-family:var(--font-display);font-weight:300;font-size:38px;margin:0 0 12px;color:var(--text-primary);">Request received</h1>
-    <p style="font-size:var(--fs-body-lg);color:var(--text-secondary);margin:0 0 28px;line-height:1.6;">Your anonymous request is now in the HR queue. Keep this code if you'd like to reference it later.</p>
+    <p style="font-size:var(--fs-body-lg);color:var(--text-secondary);margin:0 0 28px;line-height:1.6;">Your request is now in the HR queue, and a confirmation has been sent to your email. Keep this code if you'd like to reference it later.</p>
     <div style="display:inline-block;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:24px 40px;box-shadow:var(--shadow-md);margin-bottom:36px;">
       <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-secondary);margin-bottom:8px;">Your ticket</div>
       <div style="font-family:var(--font-mono);font-size:34px;font-weight:600;letter-spacing:.06em;color:var(--text-accent);">{{ ticketId }}</div>
@@ -2009,6 +2019,9 @@ a:hover { text-decoration: underline; }
                 <span style="font-size:12px;font-weight:500;color:var(--text-brand);background:var(--surface-sunken);border:1px solid var(--border-subtle);border-radius:var(--radius-pill);padding:4px 12px;">{{ tag }}</span>
               </sc-for>
             </div>
+            <sc-if value="{{ row.email }}" hint-placeholder-val="">
+              <div style="font-size:12.5px;color:var(--text-secondary);margin-bottom:10px;">Email: <strong style="color:var(--text-primary);font-family:var(--font-mono);">{{ row.email }}</strong></div>
+            </sc-if>
             <sc-if value="{{ row.preferredDate }}" hint-placeholder-val="">
               <div style="font-size:12.5px;color:var(--text-secondary);margin-bottom:10px;">Booker's preferred: <strong style="color:var(--text-primary);font-family:var(--font-mono);">{{ row.preferredDate }}</strong></div>
             </sc-if>
@@ -2092,7 +2105,7 @@ a:hover { text-decoration: underline; }
 
   <!-- ===== FOOTER ===== -->
   <footer style="position:relative;z-index:2;margin-top:auto;border-top:1px solid var(--border-subtle);padding:20px 32px;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--text-secondary);">
-    <span style="display:inline-flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#1f8a5b;animation:wbPulse 2.6s var(--ease-standard) infinite;"></span>Anonymous by design — no names, no tracking</span>
+    <span style="display:inline-flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#1f8a5b;animation:wbPulse 2.6s var(--ease-standard) infinite;"></span>Confidential by design — visible only to the wellbeing team</span>
     <span style="opacity:.45;">·</span>
     <span>Supports wellbeing &amp; early intervention; not clinical assessment or diagnosis</span>
     <span style="opacity:.45;">·</span>
@@ -2105,6 +2118,17 @@ const SUPABASE_URL = "https://yisvpkxgguigsnfegtmm.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_8lJx8R7j1OdsgZd8UMz5hQ_KmDTY8sf";
 const sb = (SUPABASE_URL && SUPABASE_ANON_KEY) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
+// TODO: fill in from emailjs.com dashboard
+const EMAILJS_PUBLIC_KEY = "";
+const EMAILJS_SERVICE_ID = "";
+const EMAILJS_TEMPLATE_USER = "";
+const EMAILJS_TEMPLATE_ADMIN = "";
+if (EMAILJS_PUBLIC_KEY) window.emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((email || '').trim());
+}
+
 function rowToTicket(r) {
   return {
     id: r.id,
@@ -2114,6 +2138,7 @@ function rowToTicket(r) {
     format: r.format,
     times: r.times || [],
     note: r.note || '',
+    email: r.email || '',
     preferredDate: r.preferred_date || '',
     status: r.status,
     officer: r.officer || '',
@@ -2131,6 +2156,7 @@ function ticketToInsertRow(t) {
     format: t.format,
     times: t.times,
     note: t.note,
+    email: t.email,
     preferred_date: t.preferredDate,
     status: t.status,
     officer: t.officer,
@@ -2182,6 +2208,7 @@ class Component extends DCLogic {
     format: null,
     times: [],
     note: '',
+    email: '',
     ticketId: '',
     submitting: false,
     submitError: '',
@@ -2262,10 +2289,10 @@ class Component extends DCLogic {
     return mood === 1 || (dims.includes('emotional') && mood && mood <= 2) || /sleep|can.?t sleep|useless|invisible|unwanted|panic|burn ?out|burnt? out/.test(n);
   }
   async submitBooking() {
-    const { dims, mood, urgency, format, times, note, bookDate } = this.state;
-    if (!dims.length && !mood) return;
+    const { dims, mood, urgency, format, times, note, bookDate, email } = this.state;
+    if ((!dims.length && !mood) || !isValidEmail(email)) return;
     const id = this.genId();
-    const t = { id, dims: [...dims], mood, urgency, format, times: [...times], note: note.trim(), preferredDate: bookDate || '', status: 'New', officer: '', when: '', outcome: '', flag: this.computeFlag(dims, mood, note) };
+    const t = { id, dims: [...dims], mood, urgency, format, times: [...times], note: note.trim(), email: email.trim(), preferredDate: bookDate || '', status: 'New', officer: '', when: '', outcome: '', flag: this.computeFlag(dims, mood, note) };
 
     this.setState({ submitting: true, submitError: '' });
     const { error } = await sb.from('bookings').insert(ticketToInsertRow(t));
@@ -2277,9 +2304,27 @@ class Component extends DCLogic {
     this.setState({
       submitting: false, submitError: '',
       ticketId: id, view: 'confirm',
-      dims: [], mood: null, urgency: null, format: null, times: [], note: '', bookDate: null,
+      dims: [], mood: null, urgency: null, format: null, times: [], note: '', email: '', bookDate: null,
     });
     this.refreshPublicStats();
+    this.sendBookingEmails(t);
+  }
+
+  sendBookingEmails(t) {
+    if (!EMAILJS_SERVICE_ID) return;
+    const params = {
+      ticket_id: t.id,
+      to_email: t.email,
+      dims: (t.dims || []).map(k => (this.DIMS.find(d => d.key === k) || {}).label || k).join(', ') || '—',
+      mood_label: (this.MOODS.find(m => m.v === t.mood) || {}).label || '—',
+      urgency_label: (this.URGENCY.find(u => u.key === t.urgency) || {}).label || '—',
+      format_label: (this.FORMATS.find(f => f.key === t.format) || {}).label || '—',
+      times: (t.times || []).join(', ') || '—',
+      preferred_date: t.preferredDate || '—',
+      note: t.note || '—',
+    };
+    window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_USER, params).catch(err => console.error('user confirmation email failed', err));
+    window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ADMIN, params).catch(err => console.error('admin notification email failed', err));
   }
 
   // ---------- admin ----------
@@ -2462,6 +2507,7 @@ class Component extends DCLogic {
         when: t.when || '',
         outcome: t.outcome || '',
         note: t.note || '',
+        email: t.email || '',
         flag: !!t.flag,
         moodLabel: mm.label,
         moodBadgeStyle: this.badgePill(mm.bg, mm.fg),
@@ -2488,7 +2534,9 @@ class Component extends DCLogic {
     const maxc = Math.max(1, ...Object.values(counts));
     const dimBars = this.DIMS.map(d => ({ label: d.label, count: counts[d.key], pct: Math.round((counts[d.key] / maxc) * 100) + '%' }));
 
-    const canSubmit = (s.dims.length > 0 || !!s.mood) && !s.submitting;
+    const dimsOrMoodPicked = s.dims.length > 0 || !!s.mood;
+    const emailOk = isValidEmail(s.email);
+    const canSubmit = dimsOrMoodPicked && emailOk && !s.submitting;
 
     return {
       theme: s.theme,
@@ -2555,9 +2603,12 @@ class Component extends DCLogic {
       })),
       note: s.note,
       onNote: e => this.setState({ note: e.target.value }),
+      email: s.email,
+      onEmail: e => this.setState({ email: e.target.value }),
+      emailError: (s.email && !emailOk) ? 'Enter a valid email address.' : '',
       submitDisabled: !canSubmit,
-      submitLabel: s.submitting ? 'Sending…' : 'Submit anonymous request',
-      submitHint: s.submitting ? '' : ((s.dims.length > 0 || !!s.mood) ? 'You can stay completely anonymous.' : 'Pick at least one area or a mood to continue.'),
+      submitLabel: s.submitting ? 'Sending…' : 'Submit request',
+      submitHint: s.submitting ? '' : (!dimsOrMoodPicked ? 'Pick at least one area or a mood to continue.' : (!emailOk ? 'Enter your email to continue.' : 'We\'ll only use your email to confirm this request.')),
       submitError: s.submitError,
       submitStyle: {
         fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: 'var(--fs-body-lg)',
