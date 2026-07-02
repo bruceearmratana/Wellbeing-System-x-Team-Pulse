@@ -1,0 +1,2505 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>/* ============================================================
+   TCC Technology — Web fonts
+   Jost + IBM Plex Sans + IBM Plex Mono (Google Fonts).
+   NOTE: served from Google Fonts CDN. If you need self-hosted
+   binaries for offline/production, download the .woff2 files
+   and swap these @import lines for local @font-face rules.
+   ============================================================ */
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/f0.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/f1.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/f2.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/f3.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/f4.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/f5.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/f6.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/f7.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/f8.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/f9.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/f10.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/f11.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/f12.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/f13.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/f14.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f15.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f16.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f17.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f18.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f19.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f20.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f15.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f16.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f17.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f18.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f19.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f20.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f15.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f16.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f17.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f18.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f19.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f20.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f15.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f16.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f17.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f18.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f19.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f20.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f15.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f16.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f17.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f18.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f19.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f20.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("fonts/f21.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("fonts/f22.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("fonts/f23.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/f21.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/f22.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/f23.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/f21.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/f22.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/f23.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/f21.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/f22.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/f23.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/f21.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/f22.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/f23.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+</style>
+  <style>/* ============================================================
+   TCC Technology — Color tokens
+   Brand: deep corporate navy + steel gray, digital cyan accent.
+   ============================================================ */
+:root {
+  /* ---- Brand core ---- */
+  --tcc-navy-900: #0c1233;   /* deepest — backdrops */
+  --tcc-navy-800: #111a4a;
+  --tcc-navy-700: #16215c;   /* PRIMARY navy (logo "TECHNOLOGY") */
+  --tcc-navy-600: #1d2c75;
+  --tcc-navy-500: #2a3d96;   /* lifted navy for hover */
+  --tcc-navy-300: #6f7bc0;
+  --tcc-navy-100: #d9deef;
+  --tcc-navy-050: #eef1f9;
+
+  /* ---- Steel gray (logo "TCC") ---- */
+  --tcc-steel-700: #4a4c4f;
+  --tcc-steel-600: #5f6164;
+  --tcc-steel-500: #808285;   /* PRIMARY steel gray */
+  --tcc-steel-400: #9a9c9f;
+  --tcc-steel-300: #c3c5c8;
+  --tcc-steel-200: #dfe1e3;
+  --tcc-steel-100: #eef0f1;
+
+  /* ---- Digital cyan accent (data / connectivity) ---- */
+  --tcc-cyan-600: #008bb0;
+  --tcc-cyan-500: #00a8c8;   /* PRIMARY accent */
+  --tcc-cyan-400: #2bc1dd;
+  --tcc-cyan-300: #7adcef;
+  --tcc-cyan-100: #d3f2f8;
+
+  /* ---- Neutrals ---- */
+  --tcc-white: #ffffff;
+  --tcc-paper: #f6f8fb;       /* app/page background */
+  --tcc-ink-900: #14161c;     /* primary text on light */
+  --tcc-ink-700: #3a3d45;
+  --tcc-ink-500: #6b6f78;
+  --tcc-line: #e3e6ec;        /* hairline borders */
+
+  /* ---- Semantic status ---- */
+  --tcc-success: #2e9e6b;
+  --tcc-warning: #e0973a;
+  --tcc-danger:  #d2444a;
+  --tcc-info:    var(--tcc-cyan-500);
+
+  /* ============================================================
+     Semantic aliases — reference these in components
+     ============================================================ */
+  --color-bg: var(--tcc-paper);
+  --color-bg-inverse: var(--tcc-navy-900);
+  --surface-card: var(--tcc-white);
+  --surface-sunken: var(--tcc-steel-100);
+  --surface-inverse: var(--tcc-navy-800);
+
+  --text-primary: var(--tcc-ink-900);
+  --text-secondary: var(--tcc-ink-500);
+  --text-on-brand: var(--tcc-white);
+  --text-brand: var(--tcc-navy-700);
+  --text-accent: var(--tcc-cyan-600);
+
+  --border-subtle: var(--tcc-line);
+  --border-strong: var(--tcc-steel-300);
+
+  --brand-primary: var(--tcc-navy-700);
+  --brand-primary-hover: var(--tcc-navy-600);
+  --brand-primary-active: var(--tcc-navy-800);
+  --brand-accent: var(--tcc-cyan-500);
+  --brand-accent-hover: var(--tcc-cyan-600);
+
+  --focus-ring: var(--tcc-cyan-400);
+}
+</style>
+  <style>/* ============================================================
+   TCC Technology — Typography tokens
+   Display: Jost (geometric, echoes the wide thin logo letterforms)
+   Text/UI: IBM Plex Sans (enterprise, neutral, technical)
+   Mono: IBM Plex Mono (specs, metrics, code)
+   ============================================================ */
+:root {
+  --font-display: 'Jost', 'Century Gothic', system-ui, sans-serif;
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* Weights */
+  --fw-light: 300; /* @kind font */
+  --fw-regular: 400; /* @kind font */
+  --fw-medium: 500; /* @kind font */
+  --fw-semibold: 600; /* @kind font */
+  --fw-bold: 700; /* @kind font */
+
+  /* Type scale (1.250 major-third-ish, tuned) */
+  --fs-display-xl: 64px;
+  --fs-display-lg: 48px;
+  --fs-display-md: 36px;
+  --fs-heading-lg: 28px;
+  --fs-heading-md: 22px;
+  --fs-heading-sm: 18px;
+  --fs-body-lg: 18px;
+  --fs-body: 16px;
+  --fs-body-sm: 14px;
+  --fs-caption: 12px;
+  --fs-overline: 11px;
+
+  /* Line heights */
+  --lh-tight: 1.1; /* @kind font */
+  --lh-snug: 1.25; /* @kind font */
+  --lh-normal: 1.5; /* @kind font */
+  --lh-relaxed: 1.65; /* @kind font */
+
+  /* Letter spacing — Jost display & overlines run wide, echoing logo */
+  --ls-display: 0.01em; /* @kind font */
+  --ls-overline: 0.18em; /* @kind font */
+  --ls-wide: 0.06em; /* @kind font */
+  --ls-normal: 0; /* @kind font */
+
+  /* Semantic text roles */
+  --text-display: var(--fw-light) var(--fs-display-lg)/var(--lh-tight) var(--font-display); /* @kind font */
+  --text-heading: var(--fw-semibold) var(--fs-heading-lg)/var(--lh-snug) var(--font-display); /* @kind font */
+  --text-body-role: var(--fw-regular) var(--fs-body)/var(--lh-normal) var(--font-sans); /* @kind font */
+}
+</style>
+  <style>/* ============================================================
+   TCC Technology — Spacing, radius, shadow, motion tokens
+   Base unit: 4px. Calm, gridded, enterprise.
+   ============================================================ */
+:root {
+  /* Spacing scale (4px base) */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+
+  /* Radii — restrained, corporate (not pill-soft) */
+  --radius-xs: 3px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* Borders */
+  --border-width: 1px;
+  --border-width-strong: 2px;
+
+  /* Elevation — soft, cool-tinted navy shadows */
+  --shadow-xs: 0 1px 2px rgba(12, 18, 51, 0.06);
+  --shadow-sm: 0 2px 6px rgba(12, 18, 51, 0.08);
+  --shadow-md: 0 8px 24px rgba(12, 18, 51, 0.10);
+  --shadow-lg: 0 18px 48px rgba(12, 18, 51, 0.14);
+  --shadow-glow: 0 0 0 4px rgba(0, 168, 200, 0.18);
+
+  /* Motion — confident, no bounce */
+  --ease-standard: cubic-bezier(0.4, 0.0, 0.2, 1); /* @kind other */
+  --ease-out: cubic-bezier(0.0, 0.0, 0.2, 1); /* @kind other */
+  --ease-in: cubic-bezier(0.4, 0.0, 1, 1); /* @kind other */
+  --dur-fast: 140ms; /* @kind other */
+  --dur-base: 240ms; /* @kind other */
+  --dur-slow: 420ms; /* @kind other */
+
+  /* Layout */
+  --container-max: 1200px;
+  --content-max: 720px;
+}
+</style>
+  <style>/* ============================================================
+   TCC Technology — base element styles & helpers
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: var(--text-body-role);
+  color: var(--text-primary);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--text-brand);
+  margin: 0 0 var(--space-3);
+  line-height: var(--lh-snug);
+  font-weight: var(--fw-semibold);
+}
+h1 { font-size: var(--fs-display-md); font-weight: var(--fw-light); letter-spacing: var(--ls-display); }
+h2 { font-size: var(--fs-heading-lg); }
+h3 { font-size: var(--fs-heading-md); }
+
+p { margin: 0 0 var(--space-4); }
+a { color: var(--text-accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Overline / eyebrow — recurring brand motif (wide-tracked caps) */
+.tcc-overline {
+  font-family: var(--font-sans);
+  font-size: var(--fs-overline);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-overline);
+  text-transform: uppercase;
+  color: var(--text-accent);
+}
+
+/* Thin brand rule echoing the logo's divider ellipse */
+.tcc-rule {
+  height: 2px;
+  border: 0;
+  background: linear-gradient(90deg, var(--tcc-cyan-500), transparent);
+  width: 64px;
+}
+</style>
+  <style>/* ============================================================
+   TCC Technology Design System — global entry point
+   Consumers link THIS file. It is a manifest of @imports only.
+   ============================================================ */
+/* ============================================================
+   TCC Technology — Web fonts
+   Jost + IBM Plex Sans + IBM Plex Mono (Google Fonts).
+   NOTE: served from Google Fonts CDN. If you need self-hosted
+   binaries for offline/production, download the .woff2 files
+   and swap these @import lines for local @font-face rules.
+   ============================================================ */
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/f0.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/f1.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/f2.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/f3.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/f4.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/f5.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/f6.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/f7.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/f8.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/f9.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/f10.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/f11.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/f12.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/f13.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/f14.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f15.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f16.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f17.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f18.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f19.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f20.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f15.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f16.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f17.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f18.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f19.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f20.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f15.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f16.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f17.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f18.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f19.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f20.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f15.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f16.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f17.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f18.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f19.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f20.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f15.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f16.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f17.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f18.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f19.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fonts/f20.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("fonts/f21.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("fonts/f22.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("fonts/f23.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/f21.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/f22.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/f23.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/f21.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/f22.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/f23.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/f21.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/f22.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/f23.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/f21.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/f22.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/f23.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
+/* ============================================================
+   TCC Technology — Color tokens
+   Brand: deep corporate navy + steel gray, digital cyan accent.
+   ============================================================ */
+:root {
+  /* ---- Brand core ---- */
+  --tcc-navy-900: #0c1233;   /* deepest — backdrops */
+  --tcc-navy-800: #111a4a;
+  --tcc-navy-700: #16215c;   /* PRIMARY navy (logo "TECHNOLOGY") */
+  --tcc-navy-600: #1d2c75;
+  --tcc-navy-500: #2a3d96;   /* lifted navy for hover */
+  --tcc-navy-300: #6f7bc0;
+  --tcc-navy-100: #d9deef;
+  --tcc-navy-050: #eef1f9;
+
+  /* ---- Steel gray (logo "TCC") ---- */
+  --tcc-steel-700: #4a4c4f;
+  --tcc-steel-600: #5f6164;
+  --tcc-steel-500: #808285;   /* PRIMARY steel gray */
+  --tcc-steel-400: #9a9c9f;
+  --tcc-steel-300: #c3c5c8;
+  --tcc-steel-200: #dfe1e3;
+  --tcc-steel-100: #eef0f1;
+
+  /* ---- Digital cyan accent (data / connectivity) ---- */
+  --tcc-cyan-600: #008bb0;
+  --tcc-cyan-500: #00a8c8;   /* PRIMARY accent */
+  --tcc-cyan-400: #2bc1dd;
+  --tcc-cyan-300: #7adcef;
+  --tcc-cyan-100: #d3f2f8;
+
+  /* ---- Neutrals ---- */
+  --tcc-white: #ffffff;
+  --tcc-paper: #f6f8fb;       /* app/page background */
+  --tcc-ink-900: #14161c;     /* primary text on light */
+  --tcc-ink-700: #3a3d45;
+  --tcc-ink-500: #6b6f78;
+  --tcc-line: #e3e6ec;        /* hairline borders */
+
+  /* ---- Semantic status ---- */
+  --tcc-success: #2e9e6b;
+  --tcc-warning: #e0973a;
+  --tcc-danger:  #d2444a;
+  --tcc-info:    var(--tcc-cyan-500);
+
+  /* ============================================================
+     Semantic aliases — reference these in components
+     ============================================================ */
+  --color-bg: var(--tcc-paper);
+  --color-bg-inverse: var(--tcc-navy-900);
+  --surface-card: var(--tcc-white);
+  --surface-sunken: var(--tcc-steel-100);
+  --surface-inverse: var(--tcc-navy-800);
+
+  --text-primary: var(--tcc-ink-900);
+  --text-secondary: var(--tcc-ink-500);
+  --text-on-brand: var(--tcc-white);
+  --text-brand: var(--tcc-navy-700);
+  --text-accent: var(--tcc-cyan-600);
+
+  --border-subtle: var(--tcc-line);
+  --border-strong: var(--tcc-steel-300);
+
+  --brand-primary: var(--tcc-navy-700);
+  --brand-primary-hover: var(--tcc-navy-600);
+  --brand-primary-active: var(--tcc-navy-800);
+  --brand-accent: var(--tcc-cyan-500);
+  --brand-accent-hover: var(--tcc-cyan-600);
+
+  --focus-ring: var(--tcc-cyan-400);
+}
+
+/* ============================================================
+   TCC Technology — Typography tokens
+   Display: Jost (geometric, echoes the wide thin logo letterforms)
+   Text/UI: IBM Plex Sans (enterprise, neutral, technical)
+   Mono: IBM Plex Mono (specs, metrics, code)
+   ============================================================ */
+:root {
+  --font-display: 'Jost', 'Century Gothic', system-ui, sans-serif;
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* Weights */
+  --fw-light: 300; /* @kind font */
+  --fw-regular: 400; /* @kind font */
+  --fw-medium: 500; /* @kind font */
+  --fw-semibold: 600; /* @kind font */
+  --fw-bold: 700; /* @kind font */
+
+  /* Type scale (1.250 major-third-ish, tuned) */
+  --fs-display-xl: 64px;
+  --fs-display-lg: 48px;
+  --fs-display-md: 36px;
+  --fs-heading-lg: 28px;
+  --fs-heading-md: 22px;
+  --fs-heading-sm: 18px;
+  --fs-body-lg: 18px;
+  --fs-body: 16px;
+  --fs-body-sm: 14px;
+  --fs-caption: 12px;
+  --fs-overline: 11px;
+
+  /* Line heights */
+  --lh-tight: 1.1; /* @kind font */
+  --lh-snug: 1.25; /* @kind font */
+  --lh-normal: 1.5; /* @kind font */
+  --lh-relaxed: 1.65; /* @kind font */
+
+  /* Letter spacing — Jost display & overlines run wide, echoing logo */
+  --ls-display: 0.01em; /* @kind font */
+  --ls-overline: 0.18em; /* @kind font */
+  --ls-wide: 0.06em; /* @kind font */
+  --ls-normal: 0; /* @kind font */
+
+  /* Semantic text roles */
+  --text-display: var(--fw-light) var(--fs-display-lg)/var(--lh-tight) var(--font-display); /* @kind font */
+  --text-heading: var(--fw-semibold) var(--fs-heading-lg)/var(--lh-snug) var(--font-display); /* @kind font */
+  --text-body-role: var(--fw-regular) var(--fs-body)/var(--lh-normal) var(--font-sans); /* @kind font */
+}
+
+/* ============================================================
+   TCC Technology — Spacing, radius, shadow, motion tokens
+   Base unit: 4px. Calm, gridded, enterprise.
+   ============================================================ */
+:root {
+  /* Spacing scale (4px base) */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+
+  /* Radii — restrained, corporate (not pill-soft) */
+  --radius-xs: 3px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* Borders */
+  --border-width: 1px;
+  --border-width-strong: 2px;
+
+  /* Elevation — soft, cool-tinted navy shadows */
+  --shadow-xs: 0 1px 2px rgba(12, 18, 51, 0.06);
+  --shadow-sm: 0 2px 6px rgba(12, 18, 51, 0.08);
+  --shadow-md: 0 8px 24px rgba(12, 18, 51, 0.10);
+  --shadow-lg: 0 18px 48px rgba(12, 18, 51, 0.14);
+  --shadow-glow: 0 0 0 4px rgba(0, 168, 200, 0.18);
+
+  /* Motion — confident, no bounce */
+  --ease-standard: cubic-bezier(0.4, 0.0, 0.2, 1); /* @kind other */
+  --ease-out: cubic-bezier(0.0, 0.0, 0.2, 1); /* @kind other */
+  --ease-in: cubic-bezier(0.4, 0.0, 1, 1); /* @kind other */
+  --dur-fast: 140ms; /* @kind other */
+  --dur-base: 240ms; /* @kind other */
+  --dur-slow: 420ms; /* @kind other */
+
+  /* Layout */
+  --container-max: 1200px;
+  --content-max: 720px;
+}
+
+/* ============================================================
+   TCC Technology — base element styles & helpers
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: var(--text-body-role);
+  color: var(--text-primary);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--text-brand);
+  margin: 0 0 var(--space-3);
+  line-height: var(--lh-snug);
+  font-weight: var(--fw-semibold);
+}
+h1 { font-size: var(--fs-display-md); font-weight: var(--fw-light); letter-spacing: var(--ls-display); }
+h2 { font-size: var(--fs-heading-lg); }
+h3 { font-size: var(--fs-heading-md); }
+
+p { margin: 0 0 var(--space-4); }
+a { color: var(--text-accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Overline / eyebrow — recurring brand motif (wide-tracked caps) */
+.tcc-overline {
+  font-family: var(--font-sans);
+  font-size: var(--fs-overline);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-overline);
+  text-transform: uppercase;
+  color: var(--text-accent);
+}
+
+/* Thin brand rule echoing the logo's divider ellipse */
+.tcc-rule {
+  height: 2px;
+  border: 0;
+  background: linear-gradient(90deg, var(--tcc-cyan-500), transparent);
+  width: 64px;
+}
+
+</style>
+  <style>
+    *{box-sizing:border-box;}
+    body{margin:0;}
+    [data-theme="dark"], :root:has([data-theme="dark"]){
+      --color-bg:#0a0f2b;
+      --surface-card:#111a4a;
+      --surface-sunken:#0c1233;
+      --surface-inverse:#0c1233;
+      --text-primary:#eef1f9;
+      --text-secondary:#9aa3c8;
+      --text-brand:#ffffff;
+      --text-accent:#2bc1dd;
+      --border-subtle:rgba(255,255,255,0.10);
+      --border-strong:rgba(255,255,255,0.20);
+      --brand-primary:#2a3d96;
+      --brand-primary-hover:#1d2c75;
+      --wb-wash-a:rgba(0,168,200,.10);
+      --wb-wash-b:rgba(42,61,150,.14);
+      --wb-blob:rgba(0,168,200,.08);
+      --wb-blob2:rgba(111,123,192,.09);
+      --wb-mote:rgba(120,220,240,.5);
+    }
+    /* Light theme (default): white surfaces with a subtle light-blue wash */
+    :root, [data-theme="light"]{
+      --color-bg:#f2f7fd;         /* white with a faint cool-blue tint */
+      --surface-card:#ffffff;
+      --surface-sunken:#eaf1fa;
+      --wb-wash-a:rgba(0,168,200,.16);
+      --wb-wash-b:rgba(42,61,150,.12);
+      --wb-blob:rgba(0,168,200,.14);
+      --wb-blob2:rgba(111,123,192,.16);
+      --wb-mote:rgba(0,140,170,.42);
+      --wb-ring:rgba(0,140,170,.24);
+      --wb-ring-soft:rgba(0,140,170,.15);
+      --wb-ring-dash:rgba(0,140,170,.13);
+      --wb-wave-a:rgba(0,140,170,.24);
+      --wb-wave-b:rgba(111,123,192,.20);
+    }
+    [data-theme="dark"], :root:has([data-theme="dark"]){
+      --wb-ring:rgba(0,168,200,.20);
+      --wb-ring-soft:rgba(0,168,200,.13);
+      --wb-ring-dash:rgba(0,168,200,.11);
+      --wb-wave-a:rgba(0,168,200,.16);
+      --wb-wave-b:rgba(111,123,192,.13);
+    }
+    @keyframes wbFade{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes wbMorph{0%,100%{border-radius:58% 42% 55% 45% / 52% 48% 52% 48%;transform:translate(0,0) scale(1);}33%{border-radius:45% 55% 48% 52% / 55% 45% 58% 42%;transform:translate(3vw,-3vh) scale(1.06);}66%{border-radius:52% 48% 42% 58% / 45% 55% 48% 52%;transform:translate(-2vw,2vh) scale(.96);}}
+    @keyframes wbInhale{0%,100%{transform:scale(1);opacity:.5;}50%{transform:scale(1.12);opacity:1;}}
+    @keyframes wbRise{0%{transform:translateY(0);opacity:0;}12%{opacity:1;}88%{opacity:1;}100%{transform:translateY(-88vh);opacity:0;}}
+    @keyframes wbPulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+    @keyframes wbDrift{0%,100%{transform:translate(0,0) scale(1);opacity:.7;}50%{transform:translate(4vw,-3vh) scale(1.15);opacity:1;}}
+    @keyframes wbBreathe{0%,100%{transform:scale(.9);opacity:.35;}50%{transform:scale(1.05);opacity:.9;}}
+    @keyframes wbSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+    @keyframes wbWave{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+    @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;}}
+    .wb-input{width:100%;font-family:var(--font-sans);font-size:var(--fs-body);color:var(--text-primary);background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:11px 14px;outline:none;transition:border-color var(--dur-fast) var(--ease-standard),box-shadow var(--dur-fast) var(--ease-standard);}
+    .wb-input:focus{border-color:var(--brand-accent);box-shadow:0 0 0 3px rgba(0,168,200,.16);}
+    select.wb-input{cursor:pointer;}
+  </style>
+</helmet>
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" fill="#16215C"></rect>
+    <circle cx="50" cy="50" r="22" fill="none" stroke="#00A8C8" stroke-width="2.5"></circle>
+    <circle cx="50" cy="50" r="13" fill="none" stroke="#00A8C8" stroke-width="2" opacity="0.55"></circle>
+    <circle cx="50" cy="50" r="4.5" fill="#00A8C8"></circle>
+  </svg>
+</template>
+<div data-theme="{{ theme }}" style="min-height:100vh;display:flex;flex-direction:column;background:var(--color-bg);color:var(--text-primary);font-family:var(--font-sans);position:relative;overflow:hidden;">
+
+  <!-- ===== AMBIENT BACKGROUND — calm breath, organic and looping ===== -->
+  <div aria-hidden="true" style="position:absolute;inset:0;background:radial-gradient(ellipse 90% 60% at 20% -10%,var(--wb-wash-a),transparent 65%),radial-gradient(ellipse 80% 55% at 85% 110%,var(--wb-wash-b),transparent 65%);pointer-events:none;z-index:0;"></div>
+  <div aria-hidden="true" style="position:absolute;top:-14vh;right:-10vw;width:56vw;height:56vw;background:var(--wb-blob);filter:blur(40px);animation:wbMorph 36s ease-in-out infinite;pointer-events:none;z-index:0;"></div>
+  <div aria-hidden="true" style="position:absolute;bottom:-18vh;left:-12vw;width:60vw;height:60vw;background:var(--wb-blob2);filter:blur(48px);animation:wbMorph 44s ease-in-out infinite reverse;pointer-events:none;z-index:0;"></div>
+  <div aria-hidden="true" style="position:absolute;top:56%;left:70%;width:22vw;height:22vw;border-radius:50%;background:radial-gradient(circle,var(--wb-blob),transparent 70%);animation:wbInhale 10s ease-in-out infinite;pointer-events:none;z-index:0;"></div>
+  <div aria-hidden="true" style="position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;">
+    <span style="position:absolute;bottom:-2vh;left:12%;width:5px;height:5px;border-radius:50%;background:var(--wb-mote);animation:wbRise 26s linear infinite;"></span>
+    <span style="position:absolute;bottom:-2vh;left:28%;width:3px;height:3px;border-radius:50%;background:var(--wb-mote);animation:wbRise 34s linear infinite;animation-delay:-9s;"></span>
+    <span style="position:absolute;bottom:-2vh;left:47%;width:4px;height:4px;border-radius:50%;background:var(--wb-mote);animation:wbRise 30s linear infinite;animation-delay:-18s;"></span>
+    <span style="position:absolute;bottom:-2vh;left:63%;width:3px;height:3px;border-radius:50%;background:var(--wb-mote);animation:wbRise 38s linear infinite;animation-delay:-5s;"></span>
+    <span style="position:absolute;bottom:-2vh;left:78%;width:5px;height:5px;border-radius:50%;background:var(--wb-mote);animation:wbRise 28s linear infinite;animation-delay:-14s;"></span>
+    <span style="position:absolute;bottom:-2vh;left:91%;width:3px;height:3px;border-radius:50%;background:var(--wb-mote);animation:wbRise 36s linear infinite;animation-delay:-24s;"></span>
+  </div>
+  <div aria-hidden="true" style="position:absolute;top:34%;left:38%;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,var(--wb-blob),transparent 66%);filter:blur(12px);animation:wbDrift 34s var(--ease-standard) infinite;pointer-events:none;z-index:0;"></div>
+  <div aria-hidden="true" style="position:absolute;top:50%;right:-170px;width:540px;height:540px;margin-top:-270px;pointer-events:none;z-index:0;">
+    <div style="position:absolute;inset:0;border:1px solid var(--wb-ring);border-radius:50%;animation:wbBreathe 9s var(--ease-standard) infinite;"></div>
+    <div style="position:absolute;inset:64px;border:1px solid var(--wb-ring-soft);border-radius:50%;animation:wbBreathe 9s var(--ease-standard) infinite;animation-delay:-2.3s;"></div>
+    <div style="position:absolute;inset:136px;border:1px dashed var(--wb-ring-dash);border-radius:50%;animation:wbSpin 90s linear infinite;"></div>
+  </div>
+  <div aria-hidden="true" style="position:absolute;bottom:0;left:0;width:100%;height:160px;overflow:hidden;pointer-events:none;z-index:0;">
+    <svg width="200%" height="160" viewBox="0 0 2880 160" preserveAspectRatio="none" style="display:block;animation:wbWave 40s linear infinite;">
+      <path d="M0,80 C120,44 240,44 360,80 C480,116 600,116 720,80 C840,44 960,44 1080,80 C1200,116 1320,116 1440,80 C1560,44 1680,44 1800,80 C1920,116 2040,116 2160,80 C2280,44 2400,44 2520,80 C2640,116 2760,116 2880,80" fill="none" stroke="var(--wb-wave-a)" stroke-width="1.5"></path>
+      <path d="M0,96 C120,60 240,60 360,96 C480,132 600,132 720,96 C840,60 960,60 1080,96 C1200,132 1320,132 1440,96 C1560,60 1680,60 1800,96 C1920,132 2040,132 2160,96 C2280,60 2400,60 2520,96 C2640,132 2760,132 2880,96" fill="none" stroke="var(--wb-wave-b)" stroke-width="1"></path>
+    </svg>
+  </div>
+
+  <!-- ===== TOP NAV ===== -->
+  <nav style="position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);padding:16px 32px;border-bottom:1px solid var(--border-subtle);background:color-mix(in srgb, var(--surface-card) 78%, transparent);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);">
+    <button onclick="{{ goHome }}" style="display:flex;align-items:center;gap:12px;background:none;border:none;cursor:pointer;padding:0;transition:opacity var(--dur-fast) var(--ease-standard);" style-hover="opacity:0.72;">
+      <sc-if value="{{ isDark }}" hint-placeholder-val=""><img src="assets/logo-tcctech-white.png" alt="TCC Technology" style="height:32px;width:auto;display:block;filter:drop-shadow(0 1px 3px rgba(0,0,0,.25));"></sc-if>
+      <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><img src="assets/logo-tcctech.png" alt="TCC Technology" style="height:32px;width:auto;display:block;filter:drop-shadow(0 1px 2px rgba(12,18,51,.14));"></sc-if>
+      <span style="font-family:var(--font-display);font-weight:300;letter-spacing:.04em;font-size:15px;color:var(--text-secondary);border-left:1px solid var(--border-subtle);padding-left:12px;display:inline-flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:var(--brand-accent);animation:wbPulse 3s var(--ease-standard) infinite;"></span>Wellbeing</span>
+    </button>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button onclick="{{ goHome }}" style="{{ navHomeStyle }}" style-hover="background:var(--surface-sunken);color:var(--text-primary);">Overview</button>
+      <button onclick="{{ goBook }}" style="{{ navBookStyle }}" style-hover="background:var(--surface-sunken);color:var(--text-primary);">Book a session</button>
+      <button onclick="{{ goAdmin }}" style="{{ navAdminStyle }}" style-hover="background:var(--surface-sunken);color:var(--text-primary);">Admin</button>
+      <button onclick="{{ toggleTheme }}" aria-label="Toggle theme" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--font-sans);font-size:var(--fs-body-sm);font-weight:var(--fw-medium);color:var(--text-primary);background:var(--surface-sunken);border:1px solid var(--border-subtle);border-radius:var(--radius-pill);padding:8px 14px;cursor:pointer;margin-left:6px;transition:all var(--dur-fast) var(--ease-standard);" style-hover="border-color:var(--border-strong);filter:brightness(1.05);" style-active="transform:translateY(1px);">
+        <span style="display:inline-flex;width:16px;height:16px;">{{ themeIcon }}</span>
+        <span>{{ themeLabel }}</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== HOME / KIOSK ===== -->
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <main style="position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:56px 32px 40px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;">
+    <div style="animation:wbFade var(--dur-slow) var(--ease-out);">
+      <div style="font-family:var(--font-sans);font-weight:600;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-accent);margin-bottom:18px;">TCCtech People &amp; Culture</div>
+      <h1 style="font-family:var(--font-display);font-weight:300;font-size:52px;line-height:1.08;letter-spacing:.01em;margin:0 0 20px;color:var(--text-primary);">Book a wellbeing session, <span style="color:var(--text-accent);">completely anonymously.</span></h1>
+      <p style="font-size:var(--fs-body-lg);line-height:1.6;color:var(--text-secondary);max-width:30em;margin:0 0 32px;">A confidential check-in with an independent Wellbeing Officer. You choose what to share. HR only ever sees aggregated, anonymised signals — never your name.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;">
+        <button onclick="{{ goBook }}" style="display:inline-flex;align-items:center;gap:10px;font-family:var(--font-sans);font-weight:600;font-size:var(--fs-body-lg);color:#062a33;background:var(--brand-accent);border:none;border-radius:var(--radius-md);padding:16px 30px;cursor:pointer;box-shadow:0 8px 24px rgba(0,168,200,.24);transition:all var(--dur-fast) var(--ease-standard);" style-hover="filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 14px 32px rgba(0,168,200,.40);" style-active="transform:translateY(0);">Book a session →</button>
+        <button onclick="{{ goAdmin }}" style="font-family:var(--font-sans);font-weight:600;font-size:var(--fs-body-lg);color:var(--text-brand);background:transparent;border:1px solid var(--border-strong);border-radius:var(--radius-md);padding:16px 26px;cursor:pointer;transition:all var(--dur-fast) var(--ease-standard);" style-hover="background:var(--surface-sunken);border-color:rgba(255,255,255,0.35);" style-active="transform:translateY(1px);">HR / Admin login</button>
+      </div>
+      <div style="display:flex;gap:28px;margin-top:40px;flex-wrap:wrap;">
+        <div><div style="font-family:var(--font-mono);font-size:30px;font-weight:600;color:var(--text-primary);">100%</div><div style="font-size:13px;color:var(--text-secondary);">Anonymous</div></div>
+        <div><div style="font-family:var(--font-mono);font-size:30px;font-weight:600;color:var(--text-primary);">5</div><div style="font-size:13px;color:var(--text-secondary);">Wellbeing dimensions</div></div>
+        <div><div style="font-family:var(--font-mono);font-size:30px;font-weight:600;color:var(--text-primary);">0</div><div style="font-size:13px;color:var(--text-secondary);">Names shared with HR</div></div>
+      </div>
+    </div>
+
+    <!-- Auto-looping info card -->
+    <div style="position:relative;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);overflow:hidden;min-height:452px;display:flex;flex-direction:column;">
+      <div style="height:4px;background:linear-gradient(90deg,var(--brand-accent),var(--brand-primary));"></div>
+      <div style="padding:32px 32px 20px;flex:1;position:relative;">
+
+        <sc-if value="{{ isSlide0 }}" hint-placeholder-val="{{ true }}">
+        <div style="animation:wbFade var(--dur-slow) var(--ease-out);">
+          <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-accent);font-weight:600;margin-bottom:8px;">The Framework</div>
+          <h3 style="font-family:var(--font-display);font-weight:300;font-size:28px;margin:0 0 20px;color:var(--text-primary);">Five dimensions of wellbeing</h3>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-family:var(--font-mono);color:var(--text-accent);font-weight:600;font-size:14px;width:18px;">1</span><div><div style="font-weight:600;color:var(--text-primary);">Work Experience</div><div style="font-size:13px;color:var(--text-secondary);">Task clarity, workload, learning curve</div></div></div>
+            <div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-family:var(--font-mono);color:var(--text-accent);font-weight:600;font-size:14px;width:18px;">2</span><div><div style="font-weight:600;color:var(--text-primary);">Social Integration</div><div style="font-size:13px;color:var(--text-secondary);">Team dynamics, communication, belonging</div></div></div>
+            <div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-family:var(--font-mono);color:var(--text-accent);font-weight:600;font-size:14px;width:18px;">3</span><div><div style="font-weight:600;color:var(--text-primary);">Emotional Health</div><div style="font-size:13px;color:var(--text-secondary);">Stress levels, motivation, self-efficacy</div></div></div>
+            <div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-family:var(--font-mono);color:var(--text-accent);font-weight:600;font-size:14px;width:18px;">4</span><div><div style="font-weight:600;color:var(--text-primary);">Growth &amp; Purpose</div><div style="font-size:13px;color:var(--text-secondary);">Goals alignment, mentorship, career vision</div></div></div>
+            <div style="display:flex;gap:12px;align-items:flex-start;"><span style="font-family:var(--font-mono);color:var(--text-accent);font-weight:600;font-size:14px;width:18px;">5</span><div><div style="font-weight:600;color:var(--text-primary);">Environmental Fit</div><div style="font-size:13px;color:var(--text-secondary);">Office culture, physical space, logistics</div></div></div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isSlide1 }}" hint-placeholder-val="{{ true }}">
+        <div style="animation:wbFade var(--dur-slow) var(--ease-out);">
+          <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-accent);font-weight:600;margin-bottom:8px;">How it works</div>
+          <h3 style="font-family:var(--font-display);font-weight:300;font-size:28px;margin:0 0 20px;color:var(--text-primary);">A check-in that stays private</h3>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div style="display:flex;gap:14px;align-items:center;"><span style="flex:none;width:30px;height:30px;border-radius:50%;background:var(--surface-sunken);border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--text-accent);">1</span><span style="color:var(--text-primary);font-size:15px;">Team Pulse flags a possible workload concern</span></div>
+            <div style="display:flex;gap:14px;align-items:center;"><span style="flex:none;width:30px;height:30px;border-radius:50%;background:var(--surface-sunken);border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--text-accent);">2</span><span style="color:var(--text-primary);font-size:15px;">You book an anonymous session — no login needed</span></div>
+            <div style="display:flex;gap:14px;align-items:center;"><span style="flex:none;width:30px;height:30px;border-radius:50%;background:var(--surface-sunken);border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--text-accent);">3</span><span style="color:var(--text-primary);font-size:15px;">An independent Wellbeing Officer meets with you</span></div>
+            <div style="display:flex;gap:14px;align-items:center;"><span style="flex:none;width:30px;height:30px;border-radius:50%;background:var(--surface-sunken);border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--text-accent);">4</span><span style="color:var(--text-primary);font-size:15px;">HR receives only aggregated insights</span></div>
+            <div style="display:flex;gap:14px;align-items:center;"><span style="flex:none;width:30px;height:30px;border-radius:50%;background:var(--surface-sunken);border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--text-accent);">5</span><span style="color:var(--text-primary);font-size:15px;">Team Pulse monitors improvement over time</span></div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isSlide2 }}" hint-placeholder-val="{{ true }}">
+        <div style="animation:wbFade var(--dur-slow) var(--ease-out);">
+          <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-accent);font-weight:600;margin-bottom:8px;">The Sync</div>
+          <h3 style="font-family:var(--font-display);font-weight:300;font-size:28px;margin:0 0 18px;color:var(--text-primary);">Team Pulse × Wellbeing</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div style="background:var(--surface-sunken);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:16px;">
+              <div style="font-family:var(--font-mono);font-size:12px;color:var(--text-secondary);margin-bottom:6px;">TEAM PULSE</div>
+              <div style="font-weight:600;color:var(--text-primary);font-size:18px;margin-bottom:6px;">The <span style="color:var(--text-accent);">What</span></div>
+              <div style="font-size:13px;color:var(--text-secondary);line-height:1.5;">Quantitative. Commits, PRs, velocity, task progression — what is moving.</div>
+            </div>
+            <div style="background:var(--surface-sunken);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:16px;">
+              <div style="font-family:var(--font-mono);font-size:12px;color:var(--text-secondary);margin-bottom:6px;">WELLBEING</div>
+              <div style="font-weight:600;color:var(--text-primary);font-size:18px;margin-bottom:6px;">The <span style="color:var(--text-accent);">Why</span></div>
+              <div style="font-size:13px;color:var(--text-secondary);line-height:1.5;">Qualitative. How people feel, how they cope, why they behave the way they do.</div>
+            </div>
+          </div>
+          <p style="margin:18px 0 0;font-size:14px;color:var(--text-secondary);line-height:1.55;"><strong style="color:var(--text-primary);">Together:</strong> Team Pulse explains behaviour, Wellbeing explains motivation — covering overall company wellbeing.</p>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isSlide3 }}" hint-placeholder-val="{{ true }}">
+        <div style="animation:wbFade var(--dur-slow) var(--ease-out);">
+          <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-accent);font-weight:600;margin-bottom:8px;">Scoring</div>
+          <h3 style="font-family:var(--font-display);font-weight:300;font-size:28px;margin:0 0 18px;color:var(--text-primary);">Support tiers, never diagnosis</h3>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:14px;background:var(--surface-sunken);border-radius:var(--radius-sm);padding:11px 14px;"><span style="font-family:var(--font-mono);font-weight:600;color:#2e9e6b;width:64px;">4.0–5.0</span><span style="font-weight:600;color:var(--text-primary);width:78px;">Pass</span><span style="font-size:13px;color:var(--text-secondary);">Well-adjusted, progressing</span></div>
+            <div style="display:flex;align-items:center;gap:14px;background:var(--surface-sunken);border-radius:var(--radius-sm);padding:11px 14px;"><span style="font-family:var(--font-mono);font-weight:600;color:#c98a2e;width:64px;">3.0–3.9</span><span style="font-weight:600;color:var(--text-primary);width:78px;">Watch</span><span style="font-size:13px;color:var(--text-secondary);">Acceptable, monitor</span></div>
+            <div style="display:flex;align-items:center;gap:14px;background:var(--surface-sunken);border-radius:var(--radius-sm);padding:11px 14px;"><span style="font-family:var(--font-mono);font-weight:600;color:#d98a4a;width:64px;">2.0–2.9</span><span style="font-weight:600;color:var(--text-primary);width:78px;">Support</span><span style="font-size:13px;color:var(--text-secondary);">At risk — 1-on-1 plan</span></div>
+            <div style="display:flex;align-items:center;gap:14px;background:var(--surface-sunken);border-radius:var(--radius-sm);padding:11px 14px;"><span style="font-family:var(--font-mono);font-weight:600;color:#d2444a;width:64px;">1.0–1.9</span><span style="font-weight:600;color:var(--text-primary);width:78px;">Flag</span><span style="font-size:13px;color:var(--text-secondary);">Immediate follow-up</span></div>
+          </div>
+          <p style="margin:16px 0 0;font-size:13px;color:var(--text-secondary);font-style:italic;">For workplace wellbeing support &amp; early intervention — not clinical assessment.</p>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isSlide4 }}" hint-placeholder-val="{{ true }}">
+        <div style="animation:wbFade var(--dur-slow) var(--ease-out);">
+          <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-accent);font-weight:600;margin-bottom:8px;">From Check-Up #1</div>
+          <h3 style="font-family:var(--font-display);font-weight:300;font-size:28px;margin:0 0 18px;color:var(--text-primary);">What we heard so far</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div>
+              <div style="font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#2e9e6b;margin-bottom:10px;">Strengths</div>
+              <ul style="margin:0;padding-left:18px;color:var(--text-secondary);font-size:14px;line-height:1.7;"><li>Strong support network</li><li>Good social integration</li><li>Positive office environment</li></ul>
+            </div>
+            <div>
+              <div style="font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#c98a2e;margin-bottom:10px;">Opportunities</div>
+              <ul style="margin:0;padding-left:18px;color:var(--text-secondary);font-size:14px;line-height:1.7;"><li>Work allocation visibility</li><li>Communication consistency</li><li>Project context sharing</li></ul>
+            </div>
+          </div>
+          <p style="margin:18px 0 0;font-size:14px;color:var(--text-secondary);line-height:1.55;">These anonymised patterns feed TCCtech's People &amp; Culture strategy — turning signals into better decisions.</p>
+        </div>
+        </sc-if>
+
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 32px 24px;border-top:1px solid var(--border-subtle);">
+        <div style="display:flex;gap:8px;">
+          <sc-for list="{{ dotItems }}" as="dot" hint-placeholder-count="5">
+            <button onclick="{{ dot.onClick }}" aria-label="Go to slide" style="{{ dot.style }}" style-hover="opacity:0.75;" style-active="transform:scale(0.88);"></button>
+          </sc-for>
+        </div>
+        <div style="font-family:var(--font-mono);font-size:12px;color:var(--text-secondary);">{{ slideCounter }}</div>
+      </div>
+    </div>
+  </main>
+  </sc-if>
+
+  <!-- ===== BOOKING ===== -->
+  <sc-if value="{{ isBook }}" hint-placeholder-val="{{ true }}">
+  <main style="position:relative;z-index:2;max-width:760px;margin:0 auto;padding:48px 32px 64px;animation:wbFade var(--dur-slow) var(--ease-out);">
+    <button onclick="{{ goHome }}" style="font-size:14px;color:var(--text-secondary);background:none;border:none;cursor:pointer;padding:0;margin-bottom:20px;transition:color var(--dur-fast) var(--ease-standard);" style-hover="color:var(--text-primary);">← Back to overview</button>
+    <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-accent);font-weight:600;margin-bottom:12px;">Anonymous booking</div>
+    <h1 style="font-family:var(--font-display);font-weight:300;font-size:40px;line-height:1.1;margin:0 0 14px;color:var(--text-primary);">Request a wellbeing session</h1>
+    <div style="display:flex;align-items:center;gap:10px;background:var(--surface-sunken);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:36px;">
+      <span style="display:inline-flex;width:20px;height:20px;color:var(--text-accent);flex:none;">{{ lockIcon }}</span>
+      <span style="font-size:14px;color:var(--text-secondary);">No name, email or login is collected. Your request is identified only by an anonymous ticket code.</span>
+    </div>
+
+    <section style="margin-bottom:36px;">
+      <h2 style="font-family:var(--font-sans);font-weight:600;font-size:18px;margin:0 0 6px;color:var(--text-primary);">Which areas feel heavy right now?</h2>
+      <p style="font-size:14px;color:var(--text-secondary);margin:0 0 16px;">Select any that apply.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <sc-for list="{{ dimItems }}" as="d" hint-placeholder-count="5">
+          <button onclick="{{ d.onClick }}" style="{{ d.style }}" style-hover="transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,168,200,.13);" style-active="transform:translateY(0);box-shadow:none;">
+            <span style="font-weight:600;display:block;margin-bottom:2px;">{{ d.label }}</span>
+            <span style="font-size:12.5px;opacity:.8;font-weight:400;">{{ d.desc }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="margin-bottom:36px;">
+      <h2 style="font-family:var(--font-sans);font-weight:600;font-size:18px;margin:0 0 16px;color:var(--text-primary);">How are you feeling overall?</h2>
+      <div style="display:flex;gap:10px;">
+        <sc-for list="{{ moodItems }}" as="m" hint-placeholder-count="5">
+          <button onclick="{{ m.onClick }}" style="{{ m.style }}" style-hover="transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,168,200,.13);" style-active="transform:translateY(0);box-shadow:none;">
+            <span style="font-family:var(--font-mono);font-size:20px;font-weight:600;">{{ m.v }}</span>
+            <span style="font-size:12px;font-weight:500;">{{ m.label }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="margin-bottom:36px;">
+      <h2 style="font-family:var(--font-sans);font-weight:600;font-size:18px;margin:0 0 16px;color:var(--text-primary);">How soon would you like to talk?</h2>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <sc-for list="{{ urgencyItems }}" as="u" hint-placeholder-count="3">
+          <button onclick="{{ u.onClick }}" style="{{ u.style }}" style-hover="transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,168,200,.13);" style-active="transform:translateY(0);box-shadow:none;">{{ u.label }}</button>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="margin-bottom:36px;">
+      <h2 style="font-family:var(--font-sans);font-weight:600;font-size:18px;margin:0 0 16px;color:var(--text-primary);">Preferred format</h2>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <sc-for list="{{ formatItems }}" as="f" hint-placeholder-count="3">
+          <button onclick="{{ f.onClick }}" style="{{ f.style }}" style-hover="transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,168,200,.13);" style-active="transform:translateY(0);box-shadow:none;">{{ f.label }}</button>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="margin-bottom:36px;">
+      <h2 style="font-family:var(--font-sans);font-weight:600;font-size:18px;margin:0 0 6px;color:var(--text-primary);">When are you usually free?</h2>
+      <p style="font-size:14px;color:var(--text-secondary);margin:0 0 16px;">Optional — helps the officer find a time.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <sc-for list="{{ timeItems }}" as="t" hint-placeholder-count="7">
+          <button onclick="{{ t.onClick }}" style="{{ t.style }}" style-hover="transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,168,200,.13);" style-active="transform:translateY(0);box-shadow:none;">{{ t.label }}</button>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="margin-bottom:36px;">
+      <h2 style="font-family:var(--font-sans);font-weight:600;font-size:18px;margin:0 0 6px;color:var(--text-primary);">Preferred date</h2>
+      <p style="font-size:14px;color:var(--text-secondary);margin:0 0 16px;">Optional — pick a specific date that works for you.</p>
+      <button onclick="{{ openBookCal }}" style="{{ bookDateBtnStyle }}" style-hover="border-color:var(--brand-accent);background:rgba(0,168,200,.08);" style-active="transform:translateY(1px);">{{ bookDateDisplay }}</button>
+    </section>
+
+    <section style="margin-bottom:32px;">
+      <h2 style="font-family:var(--font-sans);font-weight:600;font-size:18px;margin:0 0 6px;color:var(--text-primary);">Anything you'd like to add?</h2>
+      <p style="font-size:14px;color:var(--text-secondary);margin:0 0 16px;">Optional and anonymous. Share as much or as little as you like.</p>
+      <textarea class="wb-input" rows="4" placeholder="In your own words…" value="{{ note }}" oninput="{{ onNote }}" style="resize:vertical;line-height:1.5;"></textarea>
+    </section>
+
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <button onclick="{{ submitBooking }}" disabled="{{ submitDisabled }}" style="{{ submitStyle }}" style-hover="filter:brightness(1.07);transform:translateY(-1px);" style-active="transform:translateY(0);">Submit anonymous request</button>
+      <span style="font-size:13px;color:var(--text-secondary);">{{ submitHint }}</span>
+    </div>
+  </main>
+  </sc-if>
+
+  <!-- ===== CONFIRM ===== -->
+  <sc-if value="{{ isConfirm }}" hint-placeholder-val="{{ true }}">
+  <main style="position:relative;z-index:2;max-width:620px;margin:0 auto;padding:72px 32px;text-align:center;animation:wbFade var(--dur-slow) var(--ease-out);">
+    <div style="width:72px;height:72px;border-radius:50%;background:var(--tcc-cyan-100);display:flex;align-items:center;justify-content:center;margin:0 auto 28px;color:var(--tcc-cyan-600);">
+      <span style="display:inline-flex;width:34px;height:34px;">{{ checkIcon }}</span>
+    </div>
+    <h1 style="font-family:var(--font-display);font-weight:300;font-size:38px;margin:0 0 12px;color:var(--text-primary);">Request received</h1>
+    <p style="font-size:var(--fs-body-lg);color:var(--text-secondary);margin:0 0 28px;line-height:1.6;">Your anonymous request is now in the HR queue. Keep this code if you'd like to reference it later.</p>
+    <div style="display:inline-block;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:24px 40px;box-shadow:var(--shadow-md);margin-bottom:36px;">
+      <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-secondary);margin-bottom:8px;">Your ticket</div>
+      <div style="font-family:var(--font-mono);font-size:34px;font-weight:600;letter-spacing:.06em;color:var(--text-accent);">{{ ticketId }}</div>
+    </div>
+    <div style="text-align:left;background:var(--surface-sunken);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:24px;margin-bottom:32px;">
+      <div style="font-weight:600;color:var(--text-primary);margin-bottom:14px;">What happens next</div>
+      <div style="display:flex;flex-direction:column;gap:12px;font-size:14px;color:var(--text-secondary);line-height:1.5;">
+        <div style="display:flex;gap:12px;"><span style="color:var(--text-accent);font-weight:600;font-family:var(--font-mono);">01</span> HR reviews the queue and assigns an independent Wellbeing Officer.</div>
+        <div style="display:flex;gap:12px;"><span style="color:var(--text-accent);font-weight:600;font-family:var(--font-mono);">02</span> A confidential time is proposed that fits your availability.</div>
+        <div style="display:flex;gap:12px;"><span style="color:var(--text-accent);font-weight:600;font-family:var(--font-mono);">03</span> You meet for a private 15–20 minute conversation — never a work evaluation.</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <button onclick="{{ goHome }}" style="font-family:var(--font-sans);font-weight:600;font-size:var(--fs-body);color:#062a33;background:var(--brand-accent);border:none;border-radius:var(--radius-md);padding:13px 26px;cursor:pointer;transition:all var(--dur-fast) var(--ease-standard);" style-hover="filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 8px 20px rgba(0,168,200,.30);" style-active="transform:translateY(0);">Back to overview</button>
+      <button onclick="{{ goBook }}" style="font-family:var(--font-sans);font-weight:600;font-size:var(--fs-body);color:var(--text-brand);background:transparent;border:1px solid var(--border-strong);border-radius:var(--radius-md);padding:13px 26px;cursor:pointer;transition:all var(--dur-fast) var(--ease-standard);" style-hover="background:var(--surface-sunken);" style-active="transform:translateY(1px);">Submit another</button>
+    </div>
+  </main>
+  </sc-if>
+
+  <!-- ===== ADMIN LOGIN ===== -->
+  <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ true }}">
+  <main style="position:relative;z-index:2;max-width:420px;margin:0 auto;padding:72px 32px;animation:wbFade var(--dur-slow) var(--ease-out);">
+    <div style="background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:36px;">
+      <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-accent);font-weight:600;margin-bottom:10px;">HR / People &amp; Culture</div>
+      <h1 style="font-family:var(--font-display);font-weight:300;font-size:30px;margin:0 0 24px;color:var(--text-primary);">Admin sign in</h1>
+      <label style="display:block;font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Username</label>
+      <input class="wb-input" type="text" value="{{ loginUser }}" oninput="{{ onUser }}" placeholder="hr" style="margin-bottom:16px;">
+      <label style="display:block;font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Password</label>
+      <input class="wb-input" type="password" value="{{ loginPass }}" oninput="{{ onPass }}" placeholder="••••••••" onkeydown="{{ onLoginKey }}" style="margin-bottom:8px;">
+      <sc-if value="{{ loginError }}" hint-placeholder-val="">
+        <div style="font-size:13px;color:var(--tcc-danger);margin-bottom:8px;">{{ loginError }}</div>
+      </sc-if>
+      <button onclick="{{ doLogin }}" style="width:100%;font-family:var(--font-sans);font-weight:600;font-size:var(--fs-body);color:var(--text-on-brand);background:var(--brand-primary);border:none;border-radius:var(--radius-sm);padding:13px;cursor:pointer;margin-top:12px;transition:all var(--dur-fast) var(--ease-standard);" style-hover="filter:brightness(1.12);transform:translateY(-1px);box-shadow:0 6px 18px rgba(22,33,92,.28);" style-active="transform:translateY(0);">Sign in</button>
+      <button onclick="{{ goHome }}" style="display:block;margin:18px auto 0;font-size:14px;color:var(--text-secondary);background:none;border:none;cursor:pointer;transition:color var(--dur-fast) var(--ease-standard);" style-hover="color:var(--text-primary);">← Back to overview</button>
+    </div>
+  </main>
+  </sc-if>
+
+  <!-- ===== ADMIN DASHBOARD ===== -->
+  <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}">
+  <main style="position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:40px 32px 64px;animation:wbFade var(--dur-slow) var(--ease-out);">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:28px;">
+      <div>
+        <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-accent);font-weight:600;margin-bottom:10px;">HR Console</div>
+        <h1 style="font-family:var(--font-display);font-weight:300;font-size:34px;margin:0;color:var(--text-primary);">Wellbeing request queue</h1>
+      </div>
+      <button onclick="{{ logout }}" style="font-family:var(--font-sans);font-weight:600;font-size:var(--fs-body-sm);color:var(--text-brand);background:transparent;border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:9px 18px;cursor:pointer;transition:all var(--dur-fast) var(--ease-standard);" style-hover="background:var(--surface-sunken);" style-active="transform:translateY(1px);">Sign out</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px;">
+      <div style="background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:18px 20px;"><div style="font-family:var(--font-mono);font-size:28px;font-weight:600;color:var(--text-primary);">{{ aggTotal }}</div><div style="font-size:12.5px;color:var(--text-secondary);">Total requests</div></div>
+      <div style="background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:18px 20px;"><div style="font-family:var(--font-mono);font-size:28px;font-weight:600;color:#c98a2e;">{{ aggNew }}</div><div style="font-size:12.5px;color:var(--text-secondary);">Awaiting assignment</div></div>
+      <div style="background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:18px 20px;"><div style="font-family:var(--font-mono);font-size:28px;font-weight:600;color:var(--text-accent);">{{ aggScheduled }}</div><div style="font-size:12.5px;color:var(--text-secondary);">Scheduled</div></div>
+      <div style="background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:18px 20px;"><div style="font-family:var(--font-mono);font-size:28px;font-weight:600;color:var(--tcc-danger);">{{ aggFlag }}</div><div style="font-size:12.5px;color:var(--text-secondary);">Auto-flagged</div></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start;">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <sc-for list="{{ ticketRows }}" as="row" hint-placeholder-count="3">
+          <div style="background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:22px;box-shadow:var(--shadow-sm);">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;">
+              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                <span style="font-family:var(--font-mono);font-size:17px;font-weight:600;color:var(--text-primary);">{{ row.id }}</span>
+                <span style="{{ row.moodBadgeStyle }}">{{ row.moodLabel }}</span>
+                <sc-if value="{{ row.flag }}" hint-placeholder-val="">
+                  <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--tcc-danger);background:#fbe4e5;border-radius:var(--radius-pill);padding:4px 11px;">● Auto-flag</span>
+                </sc-if>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span style="{{ row.statusBadgeStyle }}">{{ row.status }}</span>
+                <button onclick="{{ row.onDelete }}" style="font-family:var(--font-sans);font-size:12px;font-weight:600;color:var(--tcc-danger);background:transparent;border:1px solid var(--tcc-danger);border-radius:var(--radius-pill);padding:5px 12px;cursor:pointer;opacity:.75;white-space:nowrap;transition:all var(--dur-fast) var(--ease-standard);" style-hover="opacity:1;background:rgba(210,68,74,.06);" style-active="transform:translateY(1px);">Delete</button>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+              <sc-for list="{{ row.dimTags }}" as="tag" hint-placeholder-count="2">
+                <span style="font-size:12px;font-weight:500;color:var(--text-brand);background:var(--surface-sunken);border:1px solid var(--border-subtle);border-radius:var(--radius-pill);padding:4px 12px;">{{ tag }}</span>
+              </sc-for>
+            </div>
+            <sc-if value="{{ row.preferredDate }}" hint-placeholder-val="">
+              <div style="font-size:12.5px;color:var(--text-secondary);margin-bottom:10px;">Booker's preferred: <strong style="color:var(--text-primary);font-family:var(--font-mono);">{{ row.preferredDate }}</strong></div>
+            </sc-if>
+            <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:14px;font-size:13px;color:var(--text-secondary);">
+              <span>Urgency: <strong style="color:var(--text-primary);font-weight:600;">{{ row.urgencyLabel }}</strong></span>
+              <span>Format: <strong style="color:var(--text-primary);font-weight:600;">{{ row.formatLabel }}</strong></span>
+              <span>Free: <strong style="color:var(--text-primary);font-weight:600;">{{ row.timeText }}</strong></span>
+            </div>
+            <sc-if value="{{ row.note }}" hint-placeholder-val="">
+              <div style="background:var(--surface-sunken);border-left:2px solid var(--brand-accent);border-radius:var(--radius-xs);padding:12px 14px;font-size:14px;color:var(--text-primary);font-style:italic;line-height:1.5;margin-bottom:18px;">“{{ row.note }}”</div>
+            </sc-if>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end;border-top:1px solid var(--border-subtle);padding-top:16px;">
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px;">Wellbeing Officer</label>
+                <select class="wb-input" value="{{ row.officer }}" onchange="{{ row.onOfficer }}">
+                  <option value="">— Unassigned —</option>
+                  <option value="P'Nan · Wellbeing Officer">P'Nan · Wellbeing Officer</option>
+                  <option value="P'Bruce · Business Dev">P'Bruce · Business Dev</option>
+                  <option value="P'Mai · People &amp; Culture">P'Mai · People &amp; Culture</option>
+                  <option value="Dr. Aim · Psychology">Dr. Aim · Psychology</option>
+                </select>
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px;">Proposed time</label>
+                <button onclick="{{ row.openCal }}" style="{{ row.whenBtnStyle }}" style-hover="border-color:var(--brand-accent);background:rgba(0,168,200,.08);" style-active="transform:translateY(1px);">{{ row.whenDisplay }}</button>
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px;">Status</label>
+                <select class="wb-input" value="{{ row.status }}" onchange="{{ row.onStatus }}">
+                  <option value="New">New</option>
+                  <option value="Assigned">Assigned</option>
+                  <option value="Scheduled">Scheduled</option>
+                  <option value="Closed">Closed</option>
+                </select>
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px;">Outcome tag</label>
+                <select class="wb-input" value="{{ row.outcome }}" onchange="{{ row.onOutcome }}">
+                  <option value="">— Not yet assessed —</option>
+                  <option value="PASS">PASS · well-adjusted</option>
+                  <option value="WATCH">WATCH · monitor</option>
+                  <option value="SUPPORT">SUPPORT · at risk</option>
+                  <option value="FLAG">FLAG · escalate</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <aside style="display:flex;flex-direction:column;gap:16px;position:sticky;top:24px;">
+        <div style="background:var(--surface-inverse);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:22px;color:#eef1f9;">
+          <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--tcc-cyan-400);font-weight:600;margin-bottom:6px;">Team Pulse × Wellbeing</div>
+          <h3 style="font-family:var(--font-display);font-weight:300;font-size:21px;margin:0 0 6px;color:#fff;">Aggregated signals</h3>
+          <p style="font-size:12.5px;color:#9aa3c8;margin:0 0 18px;line-height:1.5;">Demand by dimension across all requests. Identities are never shown — only patterns.</p>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <sc-for list="{{ dimBars }}" as="bar" hint-placeholder-count="5">
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px;"><span style="color:#dfe3f4;">{{ bar.label }}</span><span style="font-family:var(--font-mono);color:var(--tcc-cyan-400);">{{ bar.count }}</span></div>
+                <div style="height:7px;background:rgba(255,255,255,.08);border-radius:var(--radius-pill);overflow:hidden;"><div style="height:100%;background:linear-gradient(90deg,var(--tcc-cyan-500),var(--tcc-cyan-300));border-radius:var(--radius-pill);width:{{ bar.pct }};"></div></div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="border-top:1px solid rgba(255,255,255,.1);margin-top:18px;padding-top:14px;font-size:12.5px;color:#9aa3c8;line-height:1.55;">Team Pulse explains <strong style="color:#fff;">behaviour</strong>. Wellbeing explains <strong style="color:#fff;">motivation</strong>. Combined, they give HR the full picture.</div>
+        </div>
+        <div style="background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:20px;">
+          <div style="font-weight:600;color:var(--text-primary);font-size:14px;margin-bottom:8px;">Officer guardrails</div>
+          <ul style="margin:0;padding-left:18px;font-size:12.5px;color:var(--text-secondary);line-height:1.7;">
+            <li>Confidential — no work scoring</li>
+            <li>Independent, middle-ground support</li>
+            <li>Not counselling or diagnosis</li>
+            <li>Escalate flags to supervisor + HR same day</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </main>
+  </sc-if>
+
+  {{ calendarEl }}
+
+  <!-- ===== FOOTER ===== -->
+  <footer style="position:relative;z-index:2;margin-top:auto;border-top:1px solid var(--border-subtle);padding:20px 32px;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--text-secondary);">
+    <span style="display:inline-flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#1f8a5b;animation:wbPulse 2.6s var(--ease-standard) infinite;"></span>Anonymous by design — no names, no tracking</span>
+    <span style="opacity:.45;">·</span>
+    <span>Supports wellbeing &amp; early intervention; not clinical assessment or diagnosis</span>
+    <span style="opacity:.45;">·</span>
+    <span>TCCtech Data Management — People &amp; Culture</span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;$preview&quot;:{&quot;width&quot;:1200,&quot;height&quot;:860},&quot;loopSeconds&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:6,&quot;tsType&quot;:&quot;number&quot;,&quot;min&quot;:3,&quot;max&quot;:15}}">
+class Component extends DCLogic {
+  DIMS = [
+    { key: 'work', label: 'Work Experience', desc: 'Task clarity, workload, learning curve' },
+    { key: 'social', label: 'Social Integration', desc: 'Team dynamics, communication, belonging' },
+    { key: 'emotional', label: 'Emotional Health', desc: 'Stress levels, motivation, self-efficacy' },
+    { key: 'growth', label: 'Growth & Purpose', desc: 'Goals, mentorship, career vision' },
+    { key: 'env', label: 'Environmental Fit', desc: 'Office culture, space, logistics' },
+  ];
+  MOODS = [
+    { v: 1, label: 'Critical' }, { v: 2, label: 'Struggling' }, { v: 3, label: 'Neutral' },
+    { v: 4, label: 'Positive' }, { v: 5, label: 'Thriving' },
+  ];
+  URGENCY = [
+    { key: 'checkin', label: 'Just checking in', short: 'Check-in' },
+    { key: 'soon', label: 'Support soon', short: 'Soon' },
+    { key: 'week', label: 'Need to talk this week', short: 'This week' },
+  ];
+  FORMATS = [
+    { key: 'inperson', label: 'In person' },
+    { key: 'virtual', label: 'Virtual' },
+    { key: 'either', label: 'Either is fine' },
+  ];
+  TIMES = ['Mornings', 'Afternoons', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+
+  state = {
+    view: 'home',
+    theme: 'light',
+    slide: 0,
+    dims: [],
+    mood: null,
+    urgency: null,
+    format: null,
+    times: [],
+    note: '',
+    ticketId: '',
+    loginUser: '',
+    loginPass: '',
+    loginError: '',
+    authed: false,
+    tickets: [],
+    pickerOpen: false,
+    pickerMonth: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+    pickerDate: null,
+    pickerSlot: null,
+    pickerTarget: null,
+    bookDate: null,
+  };
+
+  componentDidMount() {
+    let theme = 'light', tickets = null;
+    try { theme = localStorage.getItem('wb_theme') || 'light'; } catch (e) {}
+    try { const raw = localStorage.getItem('wb_tickets'); if (raw) tickets = JSON.parse(raw); } catch (e) {}
+    if (!tickets || !tickets.length) tickets = this.seedTickets();
+    this.setState({ theme, tickets });
+    const secs = Math.max(2, Number(this.props.loopSeconds) || 6);
+    this._timer = setInterval(() => {
+      this.setState(s => (s.view === 'home' ? { slide: (s.slide + 1) % 5 } : {}));
+    }, secs * 1000);
+  }
+  componentWillUnmount() { if (this._timer) clearInterval(this._timer); }
+
+  seedTickets() {
+    return [
+      { id: 'WB-7T1A8', dims: ['emotional', 'work'], mood: 1, urgency: 'week', format: 'inperson', times: ['Mornings'], note: "Haven't been sleeping well for a couple of weeks and feel stressed most days.", status: 'Assigned', officer: "P'Nan · Wellbeing Officer", when: '', outcome: 'SUPPORT', flag: true },
+      { id: 'WB-4K9X2', dims: ['work', 'growth'], mood: 3, urgency: 'soon', format: 'virtual', times: ['Tue', 'Thu', 'Afternoons'], note: "Not always sure what I should be working on day to day.", status: 'New', officer: '', when: '', outcome: '', flag: false },
+      { id: 'WB-2M5P0', dims: ['social', 'env'], mood: 4, urgency: 'checkin', format: 'either', times: ['Wed', 'Fri', 'Mornings'], note: '', status: 'Scheduled', officer: "P'Mai · People & Culture", when: 'Wed 25 Jun, 11:00', outcome: 'WATCH', flag: false },
+    ];
+  }
+
+  persist(tickets) { try { localStorage.setItem('wb_tickets', JSON.stringify(tickets)); } catch (e) {} }
+
+  // ---------- navigation ----------
+  nav(view) { this.setState({ view, loginError: '' }); }
+  toggleTheme() {
+    this.setState(s => {
+      const theme = s.theme === 'light' ? 'dark' : 'light';
+      try { localStorage.setItem('wb_theme', theme); } catch (e) {}
+      return { theme };
+    });
+  }
+
+  // ---------- booking ----------
+  toggleDim(k) { this.setState(s => ({ dims: s.dims.includes(k) ? s.dims.filter(x => x !== k) : [...s.dims, k] })); }
+  toggleTime(t) { this.setState(s => ({ times: s.times.includes(t) ? s.times.filter(x => x !== t) : [...s.times, t] })); }
+  genId() { let r = ''; for (let i = 0; i < 5; i++) r += '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ'[Math.floor(Math.random() * 34)]; return 'WB-' + r; }
+  computeFlag(dims, mood, note) {
+    const n = (note || '').toLowerCase();
+    return mood === 1 || (dims.includes('emotional') && mood && mood <= 2) || /sleep|can.?t sleep|useless|invisible|unwanted|panic|burn ?out|burnt? out/.test(n);
+  }
+  submitBooking() {
+    const { dims, mood, urgency, format, times, note, tickets, bookDate } = this.state;
+    if (!dims.length && !mood) return;
+    const id = this.genId();
+    const t = { id, dims: [...dims], mood, urgency, format, times: [...times], note: note.trim(), preferredDate: bookDate || '', status: 'New', officer: '', when: '', outcome: '', flag: this.computeFlag(dims, mood, note) };
+    const next = [t, ...tickets];
+    this.persist(next);
+    this.setState({ tickets: next, ticketId: id, view: 'confirm', dims: [], mood: null, urgency: null, format: null, times: [], note: '', bookDate: null });
+  }
+
+  // ---------- admin ----------
+  doLogin() {
+    if (this.state.loginUser.trim().toLowerCase() === 'hr' && this.state.loginPass === 'wellbeing2026') {
+      this.setState({ authed: true, view: 'admin', loginError: '', loginPass: '' });
+    } else {
+      this.setState({ loginError: 'Incorrect username or password.' });
+    }
+  }
+  updateTicket(id, patch) {
+    this.setState(s => {
+      const tickets = s.tickets.map(t => t.id === id ? { ...t, ...patch } : t);
+      this.persist(tickets);
+      return { tickets };
+    });
+  }
+  deleteTicket(id) {
+    if (!window.confirm('Delete this wellbeing request? This cannot be undone.')) return;
+    this.setState(s => {
+      const tickets = s.tickets.filter(t => t.id !== id);
+      this.persist(tickets);
+      return { tickets };
+    });
+  }
+
+  openPicker(target) {
+    this.setState({ pickerOpen: true, pickerTarget: target, pickerDate: null, pickerSlot: null });
+  }
+  navMonth(dir) {
+    this.setState(s => {
+      const m = s.pickerMonth;
+      return { pickerMonth: new Date(m.getFullYear(), m.getMonth() + dir, 1) };
+    });
+  }
+  formatPickerDate() {
+    const { pickerDate, pickerSlot } = this.state;
+    if (!pickerDate) return '';
+    const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return days[pickerDate.getDay()] + ' ' + pickerDate.getDate() + ' ' + months[pickerDate.getMonth()] + (pickerSlot ? ', ' + pickerSlot : '');
+  }
+  confirmPicker() {
+    const { pickerTarget } = this.state;
+    const label = this.formatPickerDate();
+    if (pickerTarget === 'book') {
+      this.setState({ bookDate: label, pickerOpen: false });
+    } else {
+      this.updateTicket(pickerTarget, { when: label });
+      this.setState({ pickerOpen: false });
+    }
+  }
+  renderCalendar() {
+    const { pickerOpen, pickerMonth, pickerDate, pickerSlot } = this.state;
+    if (!pickerOpen) return null;
+    const year = pickerMonth.getFullYear(), m = pickerMonth.getMonth();
+    const firstDay = new Date(year, m, 1), lastDay = new Date(year, m + 1, 0);
+    const startDow = (firstDay.getDay() + 6) % 7;
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const isSameDay = (a, b) => a && b && a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+    const isPast = d => d && d < today;
+    const cells = [];
+    for (let i = 0; i < startDow; i++) cells.push(null);
+    for (let d = 1; d <= lastDay.getDate(); d++) cells.push(new Date(year, m, d));
+    while (cells.length % 7 !== 0) cells.push(null);
+    const weeks = [];
+    for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
+    const monthName = firstDay.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+    const slots = ['09:00','10:00','11:00','13:00','14:00','15:00','16:00'];
+    const canConfirm = pickerDate && pickerSlot;
+    const cr = React.createElement;
+    const navBtn = (dir, lbl) => cr('button', { onClick: () => this.navMonth(dir), style: { background: 'none', border: '1px solid var(--border-subtle)', borderRadius: '6px', width: '34px', height: '34px', cursor: 'pointer', color: 'var(--text-primary)', fontSize: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 } }, lbl);
+    const header = cr('div', { style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' } }, navBtn(-1, '‹'), cr('span', { style: { fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: '18px', color: 'var(--text-primary)' } }, monthName), navBtn(1, '›'));
+    const wdHeaders = cr('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', marginBottom: '4px' } }, ['Mo','Tu','We','Th','Fr','Sa','Su'].map(d => cr('div', { key: d, style: { textAlign: 'center', fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', padding: '4px 0' } }, d)));
+    const grid = weeks.map((week, wi) => cr('div', { key: wi, style: { display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', gap: '2px' } },
+      week.map((d, di) => {
+        if (!d) return cr('div', { key: di, style: { height: '38px' } });
+        const sel = isSameDay(d, pickerDate), past = isPast(d), isToday = isSameDay(d, today);
+        return cr('button', { key: di, onClick: past ? undefined : () => this.setState({ pickerDate: d }),
+          style: { height: '38px', borderRadius: '6px', border: isToday && !sel ? '1px solid var(--border-strong)' : '1px solid transparent', cursor: past ? 'default' : 'pointer', fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: sel ? 700 : 400, background: sel ? 'var(--brand-accent)' : 'transparent', color: sel ? '#062a33' : past ? 'var(--border-strong)' : 'var(--text-primary)', opacity: past ? 0.35 : 1 }
+        }, d.getDate());
+      })
+    ));
+    const timeSection = pickerDate ? cr('div', { style: { marginTop: '18px', borderTop: '1px solid var(--border-subtle)', paddingTop: '16px' } },
+      cr('div', { style: { fontSize: '11px', fontWeight: 600, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: '10px' } }, 'Time slot'),
+      cr('div', { style: { display: 'flex', gap: '8px', flexWrap: 'wrap' } },
+        slots.map(t => cr('button', { key: t, onClick: () => this.setState({ pickerSlot: t }),
+          style: { fontFamily: 'var(--font-mono)', fontSize: '13px', fontWeight: 600, padding: '8px 14px', borderRadius: '20px', border: pickerSlot === t ? '1px solid var(--brand-accent)' : '1px solid var(--border-subtle)', background: pickerSlot === t ? 'rgba(0,168,200,0.13)' : 'var(--surface-card)', color: 'var(--text-primary)', cursor: 'pointer' }
+        }, t))
+      )
+    ) : null;
+    const confirmBtn = cr('button', { onClick: canConfirm ? () => this.confirmPicker() : undefined, disabled: !canConfirm,
+      style: { width: '100%', marginTop: '20px', fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: '15px', padding: '13px', borderRadius: '8px', border: 'none', background: canConfirm ? 'var(--brand-accent)' : 'var(--surface-sunken)', color: canConfirm ? '#062a33' : 'var(--text-secondary)', cursor: canConfirm ? 'pointer' : 'not-allowed' }
+    }, canConfirm ? 'Confirm — ' + this.formatPickerDate() : 'Select a date and time');
+    return cr('div', { onClick: () => this.setState({ pickerOpen: false }), style: { position: 'fixed', inset: 0, background: 'rgba(12,18,51,0.48)', zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' } },
+      cr('div', { onClick: ev => ev.stopPropagation(), style: { background: 'var(--surface-card)', borderRadius: '16px', boxShadow: '0 18px 48px rgba(12,18,51,0.28)', padding: '28px', width: '360px', maxWidth: '94vw' } },
+        header, wdHeaders, ...grid, timeSection, confirmBtn
+      )
+    );
+  }
+  // ---------- icons ----------
+  icon(paths, extra) {
+    return React.createElement('svg', Object.assign({ viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round', width: '100%', height: '100%' }, extra || {}), paths);
+  }
+  sunIcon() {
+    const c = React.createElement('circle', { cx: 12, cy: 12, r: 4, key: 'c' });
+    const rays = [[12,1,12,3],[12,21,12,23],[4.2,4.2,5.6,5.6],[18.4,18.4,19.8,19.8],[1,12,3,12],[21,12,23,12],[4.2,19.8,5.6,18.4],[18.4,5.6,19.8,4.2]].map((p,i)=>React.createElement('line',{x1:p[0],y1:p[1],x2:p[2],y2:p[3],key:i}));
+    return this.icon([c, ...rays]);
+  }
+  moonIcon() { return this.icon([React.createElement('path', { d: 'M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z', key: 'm' })]); }
+  lockIcon() { return this.icon([React.createElement('rect', { x: 4, y: 11, width: 16, height: 9, rx: 2, key: 'r' }), React.createElement('path', { d: 'M8 11V7a4 4 0 0 1 8 0v4', key: 'p' })]); }
+  checkIcon() { return this.icon([React.createElement('path', { d: 'M20 6 9 17l-5-5', key: 'c' })], { strokeWidth: 2.5 }); }
+
+  // ---------- style helpers ----------
+  chip(selected, extra) {
+    return Object.assign({
+      fontFamily: 'var(--font-sans)', fontSize: 'var(--fs-body-sm)', fontWeight: 600,
+      padding: '11px 18px', borderRadius: 'var(--radius-pill)', cursor: 'pointer',
+      transition: 'all var(--dur-fast) var(--ease-standard)',
+      color: 'var(--text-primary)',
+      background: selected ? 'rgba(0,168,200,0.13)' : 'var(--surface-card)',
+      border: selected ? '1px solid var(--brand-accent)' : '1px solid var(--border-subtle)',
+      boxShadow: selected ? '0 0 0 1px var(--brand-accent)' : 'none',
+    }, extra || {});
+  }
+  navBtn(active) {
+    return {
+      fontFamily: 'var(--font-sans)', fontSize: 'var(--fs-body-sm)', fontWeight: 500,
+      padding: '8px 14px', borderRadius: 'var(--radius-pill)', cursor: 'pointer',
+      border: '1px solid transparent',
+      transition: 'all var(--dur-fast) var(--ease-standard)',
+      color: active ? 'var(--text-brand)' : 'var(--text-secondary)',
+      background: active ? 'var(--surface-sunken)' : 'transparent',
+    };
+  }
+  moodMeta(v) {
+    return {
+      1: { label: 'Critical', bg: '#fbe4e5', fg: 'var(--tcc-danger)' },
+      2: { label: 'Struggling', bg: '#fbe4e5', fg: 'var(--tcc-danger)' },
+      3: { label: 'Neutral', bg: 'var(--tcc-steel-100)', fg: 'var(--tcc-steel-700)' },
+      4: { label: 'Positive', bg: '#e2f3ea', fg: 'var(--tcc-success)' },
+      5: { label: 'Thriving', bg: '#e2f3ea', fg: 'var(--tcc-success)' },
+    }[v] || { label: '—', bg: 'var(--tcc-steel-100)', fg: 'var(--tcc-steel-700)' };
+  }
+  badgePill(bg, fg) {
+    return { display: 'inline-flex', alignItems: 'center', fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: 'var(--fs-caption)', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '4px 11px', borderRadius: 'var(--radius-pill)', background: bg, color: fg };
+  }
+  statusMeta(s) {
+    return {
+      New: { bg: '#fbf0df', fg: '#9a6418' },
+      Assigned: { bg: 'var(--tcc-navy-050)', fg: 'var(--tcc-navy-700)' },
+      Scheduled: { bg: 'var(--tcc-cyan-100)', fg: 'var(--tcc-cyan-600)' },
+      Closed: { bg: 'var(--tcc-steel-100)', fg: 'var(--tcc-steel-700)' },
+    }[s] || { bg: 'var(--tcc-steel-100)', fg: 'var(--tcc-steel-700)' };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const dark = s.theme === 'dark';
+    const dimLabel = k => (this.DIMS.find(d => d.key === k) || {}).label || k;
+
+    const ticketRows = s.tickets.map(t => {
+      const mm = this.moodMeta(t.mood);
+      const sm = this.statusMeta(t.status);
+      return {
+        id: t.id,
+        status: t.status,
+        officer: t.officer || '',
+        when: t.when || '',
+        outcome: t.outcome || '',
+        note: t.note || '',
+        flag: !!t.flag,
+        moodLabel: mm.label,
+        moodBadgeStyle: this.badgePill(mm.bg, mm.fg),
+        statusBadgeStyle: this.badgePill(sm.bg, sm.fg),
+        dimTags: (t.dims || []).map(dimLabel),
+        urgencyLabel: (this.URGENCY.find(u => u.key === t.urgency) || {}).short || '—',
+        formatLabel: (this.FORMATS.find(f => f.key === t.format) || {}).label || '—',
+        timeText: (t.times && t.times.length) ? t.times.join(', ') : 'Flexible',
+        onOfficer: e => this.updateTicket(t.id, { officer: e.target.value, status: (t.status === 'New' && e.target.value) ? 'Assigned' : t.status }),
+        onWhen: e => this.updateTicket(t.id, { when: e.target.value }),
+        onStatus: e => this.updateTicket(t.id, { status: e.target.value }),
+        onOutcome: e => this.updateTicket(t.id, { outcome: e.target.value }),
+        preferredDate: t.preferredDate || '',
+        whenDisplay: t.when || 'Pick date & time',
+        whenBtnStyle: { width: '100%', fontFamily: 'var(--font-sans)', fontWeight: t.when ? 600 : 400, fontSize: 'var(--fs-body-sm)', padding: '11px 14px', borderRadius: 'var(--radius-sm)', border: t.when ? '1px solid var(--brand-accent)' : '1px solid var(--border-subtle)', background: t.when ? 'rgba(0,168,200,0.10)' : 'var(--surface-card)', color: t.when ? 'var(--text-primary)' : 'var(--text-secondary)', cursor: 'pointer', textAlign: 'left', display: 'block', transition: 'all var(--dur-fast) var(--ease-standard)' },
+        openCal: () => this.openPicker(t.id),
+        onDelete: () => this.deleteTicket(t.id),
+      };
+    });
+
+    const counts = {};
+    this.DIMS.forEach(d => counts[d.key] = 0);
+    s.tickets.forEach(t => (t.dims || []).forEach(k => { if (counts[k] != null) counts[k]++; }));
+    const maxc = Math.max(1, ...Object.values(counts));
+    const dimBars = this.DIMS.map(d => ({ label: d.label, count: counts[d.key], pct: Math.round((counts[d.key] / maxc) * 100) + '%' }));
+
+    const newCount = s.tickets.filter(t => t.status === 'New').length;
+    const schedCount = s.tickets.filter(t => t.status === 'Scheduled').length;
+    const flagCount = s.tickets.filter(t => t.flag).length;
+
+    const canSubmit = s.dims.length > 0 || !!s.mood;
+
+    return {
+      theme: s.theme,
+      isDark: dark,
+      isLight: !dark,
+      themeIcon: dark ? this.sunIcon() : this.moonIcon(),
+      themeLabel: dark ? 'Light' : 'Dark',
+      lockIcon: this.lockIcon(),
+      checkIcon: this.checkIcon(),
+
+      isHome: s.view === 'home',
+      isBook: s.view === 'book',
+      isConfirm: s.view === 'confirm',
+      isLogin: s.view === 'login',
+      isAdmin: s.view === 'admin',
+
+      goHome: () => this.nav('home'),
+      goBook: () => this.nav('book'),
+      goAdmin: () => this.nav(s.authed ? 'admin' : 'login'),
+      toggleTheme: () => this.toggleTheme(),
+
+      navHomeStyle: this.navBtn(s.view === 'home'),
+      navBookStyle: this.navBtn(s.view === 'book' || s.view === 'confirm'),
+      navAdminStyle: this.navBtn(s.view === 'admin' || s.view === 'login'),
+
+      // carousel
+      isSlide0: s.slide === 0, isSlide1: s.slide === 1, isSlide2: s.slide === 2, isSlide3: s.slide === 3, isSlide4: s.slide === 4,
+      slideCounter: '0' + (s.slide + 1) + ' / 05',
+      dotItems: [0, 1, 2, 3, 4].map(i => ({
+        onClick: () => this.setState({ slide: i }),
+        style: {
+          width: i === s.slide ? '26px' : '8px', height: '8px', borderRadius: 'var(--radius-pill)',
+          border: 'none', cursor: 'pointer', padding: 0,
+          background: i === s.slide ? 'var(--brand-accent)' : 'var(--border-strong)',
+          transition: 'all var(--dur-base) var(--ease-standard)',
+        },
+      })),
+
+      // booking lists
+      dimItems: this.DIMS.map(d => ({
+        label: d.label, desc: d.desc,
+        onClick: () => this.toggleDim(d.key),
+        style: this.chip(s.dims.includes(d.key), { textAlign: 'left', padding: '14px 16px', borderRadius: 'var(--radius-md)' }),
+      })),
+      moodItems: this.MOODS.map(m => ({
+        v: m.v, label: m.label,
+        onClick: () => this.setState({ mood: m.v }),
+        style: this.chip(s.mood === m.v, { flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', padding: '14px 6px', borderRadius: 'var(--radius-md)' }),
+      })),
+      urgencyItems: this.URGENCY.map(u => ({
+        label: u.label,
+        onClick: () => this.setState({ urgency: u.key }),
+        style: this.chip(s.urgency === u.key),
+      })),
+      formatItems: this.FORMATS.map(f => ({
+        label: f.label,
+        onClick: () => this.setState({ format: f.key }),
+        style: this.chip(s.format === f.key),
+      })),
+      timeItems: this.TIMES.map(t => ({
+        label: t,
+        onClick: () => this.toggleTime(t),
+        style: this.chip(s.times.includes(t)),
+      })),
+      note: s.note,
+      onNote: e => this.setState({ note: e.target.value }),
+      submitDisabled: !canSubmit,
+      submitHint: canSubmit ? 'You can stay completely anonymous.' : 'Pick at least one area or a mood to continue.',
+      submitStyle: {
+        fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: 'var(--fs-body-lg)',
+        color: '#062a33', background: 'var(--brand-accent)', border: 'none',
+        borderRadius: 'var(--radius-md)', padding: '15px 30px',
+        cursor: canSubmit ? 'pointer' : 'not-allowed', opacity: canSubmit ? 1 : 0.45,
+        boxShadow: canSubmit ? '0 8px 24px rgba(0,168,200,.22)' : 'none',
+        transition: 'all var(--dur-fast) var(--ease-standard)',
+      },
+      submitBooking: () => this.submitBooking(),
+      ticketId: s.ticketId,
+
+      // login
+      loginUser: s.loginUser, loginPass: s.loginPass, loginError: s.loginError,
+      onUser: e => this.setState({ loginUser: e.target.value }),
+      onPass: e => this.setState({ loginPass: e.target.value }),
+      onLoginKey: e => { if (e.key === 'Enter') this.doLogin(); },
+      doLogin: () => this.doLogin(),
+      logout: () => this.setState({ authed: false, view: 'home' }),
+
+      // admin
+      ticketRows,
+      dimBars,
+      aggTotal: s.tickets.length,
+      aggNew: newCount,
+      aggScheduled: schedCount,
+      aggFlag: flagCount,
+      calendarEl: this.renderCalendar(),
+      bookDateDisplay: s.bookDate || 'Pick a specific date →',
+      bookDateBtnStyle: { fontFamily: 'var(--font-sans)', fontWeight: s.bookDate ? 600 : 400, fontSize: 'var(--fs-body)', padding: '13px 20px', borderRadius: 'var(--radius-sm)', border: s.bookDate ? '1px solid var(--brand-accent)' : '1px solid var(--border-subtle)', background: s.bookDate ? 'rgba(0,168,200,0.10)' : 'var(--surface-card)', color: s.bookDate ? 'var(--text-primary)' : 'var(--text-secondary)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '10px', transition: 'all var(--dur-fast) var(--ease-standard)' },
+      openBookCal: () => this.openPicker('book'),
+    };
+  }
+}
+</script>
+
+
+
+
+</body></html>

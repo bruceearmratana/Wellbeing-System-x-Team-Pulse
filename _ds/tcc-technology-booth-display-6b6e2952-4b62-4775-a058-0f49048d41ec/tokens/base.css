@@ -1,0 +1,46 @@
+/* ============================================================
+   TCC Technology — base element styles & helpers
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: var(--text-body-role);
+  color: var(--text-primary);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--text-brand);
+  margin: 0 0 var(--space-3);
+  line-height: var(--lh-snug);
+  font-weight: var(--fw-semibold);
+}
+h1 { font-size: var(--fs-display-md); font-weight: var(--fw-light); letter-spacing: var(--ls-display); }
+h2 { font-size: var(--fs-heading-lg); }
+h3 { font-size: var(--fs-heading-md); }
+
+p { margin: 0 0 var(--space-4); }
+a { color: var(--text-accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Overline / eyebrow — recurring brand motif (wide-tracked caps) */
+.tcc-overline {
+  font-family: var(--font-sans);
+  font-size: var(--fs-overline);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-overline);
+  text-transform: uppercase;
+  color: var(--text-accent);
+}
+
+/* Thin brand rule echoing the logo's divider ellipse */
+.tcc-rule {
+  height: 2px;
+  border: 0;
+  background: linear-gradient(90deg, var(--tcc-cyan-500), transparent);
+  width: 64px;
+}

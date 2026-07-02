@@ -1,0 +1,48 @@
+/* ============================================================
+   TCC Technology — Typography tokens
+   Display: Jost (geometric, echoes the wide thin logo letterforms)
+   Text/UI: IBM Plex Sans (enterprise, neutral, technical)
+   Mono: IBM Plex Mono (specs, metrics, code)
+   ============================================================ */
+:root {
+  --font-display: 'Jost', 'Century Gothic', system-ui, sans-serif;
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* Weights */
+  --fw-light: 300; /* @kind font */
+  --fw-regular: 400; /* @kind font */
+  --fw-medium: 500; /* @kind font */
+  --fw-semibold: 600; /* @kind font */
+  --fw-bold: 700; /* @kind font */
+
+  /* Type scale (1.250 major-third-ish, tuned) */
+  --fs-display-xl: 64px;
+  --fs-display-lg: 48px;
+  --fs-display-md: 36px;
+  --fs-heading-lg: 28px;
+  --fs-heading-md: 22px;
+  --fs-heading-sm: 18px;
+  --fs-body-lg: 18px;
+  --fs-body: 16px;
+  --fs-body-sm: 14px;
+  --fs-caption: 12px;
+  --fs-overline: 11px;
+
+  /* Line heights */
+  --lh-tight: 1.1; /* @kind font */
+  --lh-snug: 1.25; /* @kind font */
+  --lh-normal: 1.5; /* @kind font */
+  --lh-relaxed: 1.65; /* @kind font */
+
+  /* Letter spacing — Jost display & overlines run wide, echoing logo */
+  --ls-display: 0.01em; /* @kind font */
+  --ls-overline: 0.18em; /* @kind font */
+  --ls-wide: 0.06em; /* @kind font */
+  --ls-normal: 0; /* @kind font */
+
+  /* Semantic text roles */
+  --text-display: var(--fw-light) var(--fs-display-lg)/var(--lh-tight) var(--font-display); /* @kind font */
+  --text-heading: var(--fw-semibold) var(--fs-heading-lg)/var(--lh-snug) var(--font-display); /* @kind font */
+  --text-body-role: var(--fw-regular) var(--fs-body)/var(--lh-normal) var(--font-sans); /* @kind font */
+}

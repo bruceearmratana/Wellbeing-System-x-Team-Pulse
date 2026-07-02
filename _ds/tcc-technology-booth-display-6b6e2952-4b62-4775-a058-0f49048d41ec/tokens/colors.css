@@ -1,0 +1,71 @@
+/* ============================================================
+   TCC Technology — Color tokens
+   Brand: deep corporate navy + steel gray, digital cyan accent.
+   ============================================================ */
+:root {
+  /* ---- Brand core ---- */
+  --tcc-navy-900: #0c1233;   /* deepest — backdrops */
+  --tcc-navy-800: #111a4a;
+  --tcc-navy-700: #16215c;   /* PRIMARY navy (logo "TECHNOLOGY") */
+  --tcc-navy-600: #1d2c75;
+  --tcc-navy-500: #2a3d96;   /* lifted navy for hover */
+  --tcc-navy-300: #6f7bc0;
+  --tcc-navy-100: #d9deef;
+  --tcc-navy-050: #eef1f9;
+
+  /* ---- Steel gray (logo "TCC") ---- */
+  --tcc-steel-700: #4a4c4f;
+  --tcc-steel-600: #5f6164;
+  --tcc-steel-500: #808285;   /* PRIMARY steel gray */
+  --tcc-steel-400: #9a9c9f;
+  --tcc-steel-300: #c3c5c8;
+  --tcc-steel-200: #dfe1e3;
+  --tcc-steel-100: #eef0f1;
+
+  /* ---- Digital cyan accent (data / connectivity) ---- */
+  --tcc-cyan-600: #008bb0;
+  --tcc-cyan-500: #00a8c8;   /* PRIMARY accent */
+  --tcc-cyan-400: #2bc1dd;
+  --tcc-cyan-300: #7adcef;
+  --tcc-cyan-100: #d3f2f8;
+
+  /* ---- Neutrals ---- */
+  --tcc-white: #ffffff;
+  --tcc-paper: #f6f8fb;       /* app/page background */
+  --tcc-ink-900: #14161c;     /* primary text on light */
+  --tcc-ink-700: #3a3d45;
+  --tcc-ink-500: #6b6f78;
+  --tcc-line: #e3e6ec;        /* hairline borders */
+
+  /* ---- Semantic status ---- */
+  --tcc-success: #2e9e6b;
+  --tcc-warning: #e0973a;
+  --tcc-danger:  #d2444a;
+  --tcc-info:    var(--tcc-cyan-500);
+
+  /* ============================================================
+     Semantic aliases — reference these in components
+     ============================================================ */
+  --color-bg: var(--tcc-paper);
+  --color-bg-inverse: var(--tcc-navy-900);
+  --surface-card: var(--tcc-white);
+  --surface-sunken: var(--tcc-steel-100);
+  --surface-inverse: var(--tcc-navy-800);
+
+  --text-primary: var(--tcc-ink-900);
+  --text-secondary: var(--tcc-ink-500);
+  --text-on-brand: var(--tcc-white);
+  --text-brand: var(--tcc-navy-700);
+  --text-accent: var(--tcc-cyan-600);
+
+  --border-subtle: var(--tcc-line);
+  --border-strong: var(--tcc-steel-300);
+
+  --brand-primary: var(--tcc-navy-700);
+  --brand-primary-hover: var(--tcc-navy-600);
+  --brand-primary-active: var(--tcc-navy-800);
+  --brand-accent: var(--tcc-cyan-500);
+  --brand-accent-hover: var(--tcc-cyan-600);
+
+  --focus-ring: var(--tcc-cyan-400);
+}
