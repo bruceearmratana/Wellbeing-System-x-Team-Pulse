@@ -2319,12 +2319,13 @@ class Component extends DCLogic {
       dims: (t.dims || []).map(k => (this.DIMS.find(d => d.key === k) || {}).label || k).join(', ') || '—',
       dimension: (t.dims || []).map(k => (this.DIMS.find(d => d.key === k) || {}).label || k).join(', ') || '—',
       mood_label: (this.MOODS.find(m => m.v === t.mood) || {}).label || '—',
-      feeling: t.mood ? (t.mood + ' (' + ((this.MOODS.find(m => m.v === t.mood) || {}).label || '—') + ')') : '—',
+      feeling: t.mood ? (t.mood + ' (' + ((this.MOODS.find(m => m.v === t.mood) || {}).label || '—') + ')') : 'N/A',
       urgency_label: (this.URGENCY.find(u => u.key === t.urgency) || {}).label || '—',
       format_label: (this.FORMATS.find(f => f.key === t.format) || {}).label || '—',
-      format: (this.FORMATS.find(f => f.key === t.format) || {}).label || '—',
+      format: (this.FORMATS.find(f => f.key === t.format) || {}).label || 'N/A',
       times: (t.times || []).join(', ') || '—',
       preferred_date: t.preferredDate || '—',
+      date: t.preferredDate || 'N/A',
       note: t.note || '—',
     };
     window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_USER, params).catch(err => console.error('user confirmation email failed', err));
