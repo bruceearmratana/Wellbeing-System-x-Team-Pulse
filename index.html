@@ -2033,6 +2033,10 @@ a:hover { text-decoration: underline; }
             <sc-if value="{{ row.note }}" hint-placeholder-val="">
               <div style="background:var(--surface-sunken);border-left:2px solid var(--brand-accent);border-radius:var(--radius-xs);padding:12px 14px;font-size:14px;color:var(--text-primary);font-style:italic;line-height:1.5;margin-bottom:18px;">“{{ row.note }}”</div>
             </sc-if>
+            <div style="margin-bottom:18px;">
+              <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px;">Admin notes (private, not sent to booker)</label>
+              <textarea class="wb-input" rows="3" placeholder="Internal notes about this session…" value="{{ row.adminNotes }}" oninput="{{ row.onAdminNotesInput }}" onblur="{{ row.onAdminNotesBlur }}" style="resize:vertical;line-height:1.5;"></textarea>
+            </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end;border-top:1px solid var(--border-subtle);padding-top:16px;">
               <div>
                 <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px;">Wellbeing Officer</label>
@@ -2143,6 +2147,7 @@ function rowToTicket(r) {
     officer: r.officer || '',
     when: r.scheduled_when || '',
     outcome: r.outcome || '',
+    adminNotes: r.admin_notes || '',
     flag: !!r.flag,
   };
 }
@@ -2170,6 +2175,7 @@ function patchToRow(patch) {
   if ('status' in patch) out.status = patch.status;
   if ('outcome' in patch) out.outcome = patch.outcome;
   if ('when' in patch) out.scheduled_when = patch.when;
+  if ('adminNotes' in patch) out.admin_notes = patch.adminNotes;
   return out;
 }
 
@@ -2350,8 +2356,11 @@ class Component extends DCLogic {
     await sb.auth.signOut();
     this.setState({ authed: false, tickets: [], view: 'home' });
   }
-  updateTicket(id, patch) {
+  setTicketFieldLocal(id, patch) {
     this.setState(s => ({ tickets: s.tickets.map(t => t.id === id ? { ...t, ...patch } : t) }));
+  }
+  updateTicket(id, patch) {
+    this.setTicketFieldLocal(id, patch);
     sb.from('bookings').update(patchToRow(patch)).eq('id', id).then(({ error }) => {
       if (error) { console.error('update failed', error); this.loadTickets(); }
       else { this.refreshPublicStats(); }
@@ -2513,6 +2522,9 @@ class Component extends DCLogic {
         outcome: t.outcome || '',
         note: t.note || '',
         email: t.email || '',
+        adminNotes: t.adminNotes || '',
+        onAdminNotesInput: e => this.setTicketFieldLocal(t.id, { adminNotes: e.target.value }),
+        onAdminNotesBlur: e => this.updateTicket(t.id, { adminNotes: e.target.value }),
         flag: !!t.flag,
         moodLabel: mm.label,
         moodBadgeStyle: this.badgePill(mm.bg, mm.fg),
