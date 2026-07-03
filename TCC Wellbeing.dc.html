@@ -2314,6 +2314,8 @@ class Component extends DCLogic {
     const params = {
       ticket_id: t.id,
       to_email: t.email,
+      email: t.email,
+      name: t.email,
       dims: (t.dims || []).map(k => (this.DIMS.find(d => d.key === k) || {}).label || k).join(', ') || '—',
       mood_label: (this.MOODS.find(m => m.v === t.mood) || {}).label || '—',
       urgency_label: (this.URGENCY.find(u => u.key === t.urgency) || {}).label || '—',
