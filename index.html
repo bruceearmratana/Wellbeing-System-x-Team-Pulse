@@ -2037,6 +2037,23 @@ a:hover { text-decoration: underline; }
               <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px;">Admin notes (private, not sent to booker)</label>
               <textarea class="wb-input" rows="3" placeholder="Internal notes about this session…" value="{{ row.adminNotes }}" oninput="{{ row.onAdminNotesInput }}" onblur="{{ row.onAdminNotesBlur }}" style="resize:vertical;line-height:1.5;"></textarea>
             </div>
+
+            <div style="margin-bottom:18px;">
+              <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:8px;">Session Q&amp;A log</label>
+              <sc-for list="{{ row.qaLogItems }}" as="qa" hint-placeholder-count="0">
+                <div style="background:var(--surface-sunken);border:1px solid var(--border-subtle);border-radius:var(--radius-xs);padding:10px 12px;margin-bottom:8px;">
+                  <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px;">{{ qa.whenText }}</div>
+                  <div style="font-size:13.5px;color:var(--text-primary);margin-bottom:4px;"><strong>Q:</strong> {{ qa.question }}</div>
+                  <div style="font-size:13.5px;color:var(--text-primary);"><strong>A:</strong> {{ qa.answer }}</div>
+                </div>
+              </sc-for>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px;">
+                <input class="wb-input" type="text" placeholder="Question asked…" value="{{ row.qaDraftQuestion }}" oninput="{{ row.onQaQuestion }}">
+                <input class="wb-input" type="text" placeholder="Response received…" value="{{ row.qaDraftAnswer }}" oninput="{{ row.onQaAnswer }}">
+              </div>
+              <button onclick="{{ row.onAddQa }}" style="margin-top:8px;font-family:var(--font-sans);font-size:12.5px;font-weight:600;color:var(--text-brand);background:transparent;border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:7px 14px;cursor:pointer;transition:all var(--dur-fast) var(--ease-standard);" style-hover="background:var(--surface-sunken);" style-active="transform:translateY(1px);">+ Add entry</button>
+            </div>
+
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end;border-top:1px solid var(--border-subtle);padding-top:16px;">
               <div>
                 <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px;">Wellbeing Officer</label>
@@ -2148,6 +2165,7 @@ function rowToTicket(r) {
     when: r.scheduled_when || '',
     outcome: r.outcome || '',
     adminNotes: r.admin_notes || '',
+    qaLog: r.qa_log || [],
     flag: !!r.flag,
   };
 }
@@ -2176,6 +2194,7 @@ function patchToRow(patch) {
   if ('outcome' in patch) out.outcome = patch.outcome;
   if ('when' in patch) out.scheduled_when = patch.when;
   if ('adminNotes' in patch) out.admin_notes = patch.adminNotes;
+  if ('qaLog' in patch) out.qa_log = patch.qaLog;
   return out;
 }
 
@@ -2223,6 +2242,7 @@ class Component extends DCLogic {
     loginError: '',
     authed: false,
     tickets: [],
+    qaDrafts: {},
     pickerOpen: false,
     pickerMonth: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     pickerDate: null,
@@ -2365,6 +2385,18 @@ class Component extends DCLogic {
       if (error) { console.error('update failed', error); this.loadTickets(); }
       else { this.refreshPublicStats(); }
     });
+  }
+  setQaDraft(id, patch) {
+    this.setState(s => ({ qaDrafts: { ...s.qaDrafts, [id]: { question: '', answer: '', ...s.qaDrafts[id], ...patch } } }));
+  }
+  addQaEntry(id) {
+    const draft = this.state.qaDrafts[id] || { question: '', answer: '' };
+    if (!draft.question.trim() && !draft.answer.trim()) return;
+    const ticket = this.state.tickets.find(t => t.id === id);
+    if (!ticket) return;
+    const entry = { question: draft.question.trim(), answer: draft.answer.trim(), at: new Date().toISOString() };
+    this.updateTicket(id, { qaLog: [...(ticket.qaLog || []), entry] });
+    this.setState(s => ({ qaDrafts: { ...s.qaDrafts, [id]: { question: '', answer: '' } } }));
   }
   deleteTicket(id) {
     if (!window.confirm('Delete this wellbeing request? This cannot be undone.')) return;
@@ -2525,6 +2557,16 @@ class Component extends DCLogic {
         adminNotes: t.adminNotes || '',
         onAdminNotesInput: e => this.setTicketFieldLocal(t.id, { adminNotes: e.target.value }),
         onAdminNotesBlur: e => this.updateTicket(t.id, { adminNotes: e.target.value }),
+        qaLogItems: (t.qaLog || []).map(qa => ({
+          question: qa.question || '',
+          answer: qa.answer || '',
+          whenText: qa.at ? new Date(qa.at).toLocaleString() : '',
+        })),
+        qaDraftQuestion: (s.qaDrafts[t.id] || {}).question || '',
+        qaDraftAnswer: (s.qaDrafts[t.id] || {}).answer || '',
+        onQaQuestion: e => this.setQaDraft(t.id, { question: e.target.value }),
+        onQaAnswer: e => this.setQaDraft(t.id, { answer: e.target.value }),
+        onAddQa: () => this.addQaEntry(t.id),
         flag: !!t.flag,
         moodLabel: mm.label,
         moodBadgeStyle: this.badgePill(mm.bg, mm.fg),
