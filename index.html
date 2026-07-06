@@ -1669,7 +1669,11 @@ a:hover { text-decoration: underline; }
       75%{transform:translateY(-32vh) translateX(2vw) scale(1.05);border-radius:54% 46% 48% 52% / 47% 54% 46% 53%;}
     }
     .wb-lava{position:absolute;bottom:-16vh;border-radius:52% 48% 45% 55% / 55% 48% 52% 45%;animation-name:wbLava;animation-timing-function:ease-in-out;animation-iteration-count:infinite;will-change:transform;}
-    @media (prefers-reduced-motion:reduce){.wb-lava{animation:none;}}
+    /* Minimal futuristic overlay: thin orbital rings + drifting connector lines + pulsing node dots */
+    @keyframes wbRingSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+    @keyframes wbRingBreathe{0%,100%{transform:scale(.94);opacity:.4;}50%{transform:scale(1.04);opacity:.85;}}
+    @keyframes wbLineDrift{0%,100%{transform:translate(0,0);opacity:.35;}50%{transform:translate(1.4vw,-1vh);opacity:.8;}}
+    @media (prefers-reduced-motion:reduce){.wb-lava,.wb-ring-el,.wb-line-el,.wb-node-el{animation:none;}}
     @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;}}
     .wb-input{width:100%;font-family:var(--font-sans);font-size:var(--fs-body);color:var(--text-primary);background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:11px 14px;outline:none;transition:border-color var(--dur-fast) var(--ease-standard),box-shadow var(--dur-fast) var(--ease-standard);}
     .wb-input:focus{border-color:var(--brand-accent);box-shadow:0 0 0 3px rgba(0,168,200,.16);}
@@ -1697,6 +1701,23 @@ a:hover { text-decoration: underline; }
     <span class="wb-lava" style="left:87%;width:15vw;height:15vw;background:radial-gradient(circle at 50% 42%,var(--wb-lava-2),transparent 68%);filter:blur(24px);animation-duration:23s;animation-delay:-12s;"></span>
     <span class="wb-lava" style="left:46%;width:22vw;height:22vw;background:radial-gradient(circle at 50% 42%,var(--wb-lava-1),transparent 70%);filter:blur(32px);animation-duration:30s;animation-delay:-27s;"></span>
   </div>
+
+  <!-- ===== Minimal futuristic overlay: thin orbital rings + connector lines + node dots ===== -->
+  <div aria-hidden="true" style="position:absolute;top:8%;right:6%;width:260px;height:260px;pointer-events:none;z-index:0;">
+    <div class="wb-ring-el" style="position:absolute;inset:0;border:1px solid var(--wb-ring);border-radius:50%;animation:wbRingBreathe 12s var(--ease-standard) infinite;"></div>
+    <div class="wb-ring-el" style="position:absolute;inset:34px;border:1px dashed var(--wb-ring-dash);border-radius:50%;animation:wbRingSpin 110s linear infinite;"></div>
+  </div>
+  <div aria-hidden="true" style="position:absolute;bottom:9%;left:5%;width:170px;height:170px;pointer-events:none;z-index:0;">
+    <div class="wb-ring-el" style="position:absolute;inset:0;border:1px solid var(--wb-ring-soft);border-radius:50%;animation:wbRingBreathe 14s var(--ease-standard) infinite;animation-delay:-5s;"></div>
+  </div>
+  <svg aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;">
+    <line class="wb-line-el" x1="0%" y1="20%" x2="40%" y2="5%" stroke="var(--wb-wave-a)" stroke-width="1" style="animation:wbLineDrift 23s ease-in-out infinite;"></line>
+    <line class="wb-line-el" x1="60%" y1="95%" x2="100%" y2="78%" stroke="var(--wb-wave-b)" stroke-width="1" style="animation:wbLineDrift 27s ease-in-out infinite;animation-delay:-9s;"></line>
+    <circle class="wb-node-el" cx="40%" cy="5%" r="3" fill="var(--wb-wave-a)" style="animation:wbPulse 4.5s ease-in-out infinite;"></circle>
+    <circle class="wb-node-el" cx="0%" cy="20%" r="2.5" fill="var(--wb-wave-a)" style="animation:wbPulse 6s ease-in-out infinite;animation-delay:-3s;"></circle>
+    <circle class="wb-node-el" cx="60%" cy="95%" r="3" fill="var(--wb-wave-b)" style="animation:wbPulse 5s ease-in-out infinite;animation-delay:-2s;"></circle>
+    <circle class="wb-node-el" cx="100%" cy="78%" r="2.5" fill="var(--wb-wave-b)" style="animation:wbPulse 7s ease-in-out infinite;animation-delay:-1s;"></circle>
+  </svg>
 
   <!-- ===== TOP NAV ===== -->
   <nav style="position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);padding:16px 32px;border-bottom:1px solid var(--border-subtle);background:color-mix(in srgb, var(--surface-card) 78%, transparent);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);">
