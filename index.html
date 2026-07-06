@@ -2038,10 +2038,25 @@ a:hover { text-decoration: underline; }
                 <div style="background:var(--surface-sunken);border:1px solid var(--border-subtle);border-radius:var(--radius-xs);padding:10px 12px;margin-bottom:8px;">
                   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
                     <div style="font-size:11px;color:var(--text-secondary);">{{ qa.whenText }}</div>
-                    <button onclick="{{ qa.onDelete }}" style="font-family:var(--font-sans);font-size:11px;font-weight:600;color:var(--tcc-danger);background:transparent;border:none;cursor:pointer;padding:2px 4px;opacity:.75;" style-hover="opacity:1;">Delete</button>
+                    <sc-if value="{{ qa.isNotEditing }}" hint-placeholder-val="{{ true }}">
+                      <div style="display:flex;gap:10px;">
+                        <button onclick="{{ qa.onEdit }}" style="font-family:var(--font-sans);font-size:11px;font-weight:600;color:var(--text-brand);background:transparent;border:none;cursor:pointer;padding:2px 4px;opacity:.75;" style-hover="opacity:1;">Edit</button>
+                        <button onclick="{{ qa.onDelete }}" style="font-family:var(--font-sans);font-size:11px;font-weight:600;color:var(--tcc-danger);background:transparent;border:none;cursor:pointer;padding:2px 4px;opacity:.75;" style-hover="opacity:1;">Delete</button>
+                      </div>
+                    </sc-if>
                   </div>
-                  <div style="font-size:13.5px;color:var(--text-primary);margin-bottom:4px;"><strong>Q:</strong> {{ qa.question }}</div>
-                  <div style="font-size:13.5px;color:var(--text-primary);"><strong>A:</strong> {{ qa.answer }}</div>
+                  <sc-if value="{{ qa.isNotEditing }}" hint-placeholder-val="{{ true }}">
+                    <div style="font-size:13.5px;color:var(--text-primary);margin-bottom:4px;"><strong>Q:</strong> {{ qa.question }}</div>
+                    <div style="font-size:13.5px;color:var(--text-primary);"><strong>A:</strong> {{ qa.answer }}</div>
+                  </sc-if>
+                  <sc-if value="{{ qa.isEditing }}" hint-placeholder-val="">
+                    <input class="wb-input" type="text" value="{{ qa.editQuestion }}" oninput="{{ qa.onEditQuestion }}" style="margin-bottom:6px;">
+                    <input class="wb-input" type="text" value="{{ qa.editAnswer }}" oninput="{{ qa.onEditAnswer }}" style="margin-bottom:8px;">
+                    <div style="display:flex;gap:8px;">
+                      <button onclick="{{ qa.onSave }}" style="font-family:var(--font-sans);font-size:12px;font-weight:600;color:var(--text-brand);background:var(--brand-accent);border:none;border-radius:var(--radius-sm);padding:6px 12px;cursor:pointer;">Save</button>
+                      <button onclick="{{ qa.onCancel }}" style="font-family:var(--font-sans);font-size:12px;font-weight:600;color:var(--text-secondary);background:transparent;border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:6px 12px;cursor:pointer;">Cancel</button>
+                    </div>
+                  </sc-if>
                 </div>
               </sc-for>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px;">
@@ -2240,6 +2255,7 @@ class Component extends DCLogic {
     authed: false,
     tickets: [],
     qaDrafts: {},
+    qaEditing: {},
     pickerOpen: false,
     pickerMonth: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     pickerDate: null,
@@ -2401,6 +2417,24 @@ class Component extends DCLogic {
     if (!ticket) return;
     this.updateTicket(id, { qaLog: (ticket.qaLog || []).filter((_, i) => i !== index) });
   }
+  startQaEdit(id, index, entry) {
+    this.setState(s => ({ qaEditing: { ...s.qaEditing, [id]: { index, question: entry.question || '', answer: entry.answer || '' } } }));
+  }
+  setQaEditDraft(id, patch) {
+    this.setState(s => ({ qaEditing: { ...s.qaEditing, [id]: { ...s.qaEditing[id], ...patch } } }));
+  }
+  cancelQaEdit(id) {
+    this.setState(s => { const next = { ...s.qaEditing }; delete next[id]; return { qaEditing: next }; });
+  }
+  saveQaEdit(id) {
+    const draft = this.state.qaEditing[id];
+    if (!draft) return;
+    const ticket = this.state.tickets.find(t => t.id === id);
+    if (!ticket) return;
+    const qaLog = (ticket.qaLog || []).map((qa, i) => i === draft.index ? { ...qa, question: draft.question.trim(), answer: draft.answer.trim() } : qa);
+    this.updateTicket(id, { qaLog });
+    this.cancelQaEdit(id);
+  }
   deleteTicket(id) {
     if (!window.confirm('Delete this wellbeing request? This cannot be undone.')) return;
     const prev = this.state.tickets;
@@ -2560,12 +2594,25 @@ class Component extends DCLogic {
         adminNotes: t.adminNotes || '',
         onAdminNotesInput: e => this.setTicketFieldLocal(t.id, { adminNotes: e.target.value }),
         onAdminNotesBlur: e => this.updateTicket(t.id, { adminNotes: e.target.value }),
-        qaLogItems: (t.qaLog || []).map((qa, i) => ({
-          question: qa.question || '',
-          answer: qa.answer || '',
-          whenText: qa.at ? new Date(qa.at).toLocaleString() : '',
-          onDelete: () => this.deleteQaEntry(t.id, i),
-        })),
+        qaLogItems: (t.qaLog || []).map((qa, i) => {
+          const editState = s.qaEditing[t.id];
+          const isEditing = !!editState && editState.index === i;
+          return {
+            question: qa.question || '',
+            answer: qa.answer || '',
+            whenText: qa.at ? new Date(qa.at).toLocaleString() : '',
+            isEditing,
+            isNotEditing: !isEditing,
+            editQuestion: isEditing ? editState.question : '',
+            editAnswer: isEditing ? editState.answer : '',
+            onEditQuestion: e => this.setQaEditDraft(t.id, { question: e.target.value }),
+            onEditAnswer: e => this.setQaEditDraft(t.id, { answer: e.target.value }),
+            onEdit: () => this.startQaEdit(t.id, i, qa),
+            onSave: () => this.saveQaEdit(t.id),
+            onCancel: () => this.cancelQaEdit(t.id),
+            onDelete: () => this.deleteQaEntry(t.id, i),
+          };
+        }),
         qaDraftQuestion: (s.qaDrafts[t.id] || {}).question || '',
         qaDraftAnswer: (s.qaDrafts[t.id] || {}).answer || '',
         onQaQuestion: e => this.setQaDraft(t.id, { question: e.target.value }),
