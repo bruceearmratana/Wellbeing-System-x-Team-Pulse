@@ -2042,7 +2042,10 @@ a:hover { text-decoration: underline; }
               <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:8px;">Session Q&amp;A log</label>
               <sc-for list="{{ row.qaLogItems }}" as="qa" hint-placeholder-count="0">
                 <div style="background:var(--surface-sunken);border:1px solid var(--border-subtle);border-radius:var(--radius-xs);padding:10px 12px;margin-bottom:8px;">
-                  <div style="font-size:11px;color:var(--text-secondary);margin-bottom:4px;">{{ qa.whenText }}</div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                    <div style="font-size:11px;color:var(--text-secondary);">{{ qa.whenText }}</div>
+                    <button onclick="{{ qa.onDelete }}" style="font-family:var(--font-sans);font-size:11px;font-weight:600;color:var(--tcc-danger);background:transparent;border:none;cursor:pointer;padding:2px 4px;opacity:.75;" style-hover="opacity:1;">Delete</button>
+                  </div>
                   <div style="font-size:13.5px;color:var(--text-primary);margin-bottom:4px;"><strong>Q:</strong> {{ qa.question }}</div>
                   <div style="font-size:13.5px;color:var(--text-primary);"><strong>A:</strong> {{ qa.answer }}</div>
                 </div>
@@ -2398,6 +2401,12 @@ class Component extends DCLogic {
     this.updateTicket(id, { qaLog: [...(ticket.qaLog || []), entry] });
     this.setState(s => ({ qaDrafts: { ...s.qaDrafts, [id]: { question: '', answer: '' } } }));
   }
+  deleteQaEntry(id, index) {
+    if (!window.confirm('Delete this Q&A entry? This cannot be undone.')) return;
+    const ticket = this.state.tickets.find(t => t.id === id);
+    if (!ticket) return;
+    this.updateTicket(id, { qaLog: (ticket.qaLog || []).filter((_, i) => i !== index) });
+  }
   deleteTicket(id) {
     if (!window.confirm('Delete this wellbeing request? This cannot be undone.')) return;
     const prev = this.state.tickets;
@@ -2557,10 +2566,11 @@ class Component extends DCLogic {
         adminNotes: t.adminNotes || '',
         onAdminNotesInput: e => this.setTicketFieldLocal(t.id, { adminNotes: e.target.value }),
         onAdminNotesBlur: e => this.updateTicket(t.id, { adminNotes: e.target.value }),
-        qaLogItems: (t.qaLog || []).map(qa => ({
+        qaLogItems: (t.qaLog || []).map((qa, i) => ({
           question: qa.question || '',
           answer: qa.answer || '',
           whenText: qa.at ? new Date(qa.at).toLocaleString() : '',
+          onDelete: () => this.deleteQaEntry(t.id, i),
         })),
         qaDraftQuestion: (s.qaDrafts[t.id] || {}).question || '',
         qaDraftAnswer: (s.qaDrafts[t.id] || {}).answer || '',
