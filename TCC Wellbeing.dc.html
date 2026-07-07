@@ -2000,6 +2000,7 @@ a:hover { text-decoration: underline; }
         <div style="display:flex;gap:12px;"><span style="color:var(--text-accent);font-weight:600;font-family:var(--font-mono);">01</span> HR reviews the queue and assigns an independent Wellbeing Officer.</div>
         <div style="display:flex;gap:12px;"><span style="color:var(--text-accent);font-weight:600;font-family:var(--font-mono);">02</span> A confidential time is proposed that fits your availability.</div>
         <div style="display:flex;gap:12px;"><span style="color:var(--text-accent);font-weight:600;font-family:var(--font-mono);">03</span> You meet for a private 15–20 minute conversation — never a work evaluation.</div>
+        <div style="display:flex;gap:12px;"><span style="color:var(--text-accent);font-weight:600;font-family:var(--font-mono);">04</span> If the officer wants to audio-record for accuracy, they'll ask you in person first — you can always say no.</div>
       </div>
     </div>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
@@ -2184,6 +2185,7 @@ a:hover { text-decoration: underline; }
             <li>Confidential — no work scoring</li>
             <li>Independent, middle-ground support</li>
             <li>Not counselling or diagnosis</li>
+            <li>Get verbal consent before audio-recording any session</li>
             <li>Escalate flags to supervisor + HR same day</li>
           </ul>
         </div>
@@ -2842,8 +2844,9 @@ class Component extends DCLogic {
     if (!consentOpen) return null;
     const cr = React.createElement;
     const points = [
-      'This is a confidential conversation with a Wellbeing Officer; notes are written, not audio-recorded.',
-      'Notes are visible only to the Wellbeing/HR team, never shared directly with your manager.',
+      'This is a confidential conversation with a Wellbeing Officer. Written notes are always taken to support the session.',
+      'The conversation may also be audio-recorded for accuracy. If so, the officer will ask for your separate verbal consent before recording starts, and you’re free to decline and continue with written notes only.',
+      'Notes — and any recording, if made — are visible only to the Wellbeing/HR team, never shared directly with your manager.',
       'A short reflection may be passed to your team leader or HR only if needed for your support or safety, with identifying details minimized wherever possible.',
       'You can skip any question and end the conversation at any time.',
       'This supports wellbeing and early intervention — it isn’t clinical diagnosis or counselling, and isn’t a performance review.',
@@ -2854,7 +2857,7 @@ class Component extends DCLogic {
     );
     const checkboxRow = cr('label', { style: { display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '13.5px', color: 'var(--text-primary)', cursor: 'pointer', marginBottom: '20px', lineHeight: 1.5 } },
       cr('input', { type: 'checkbox', checked: consentChecked, onChange: e => this.setState({ consentChecked: e.target.checked }), style: { marginTop: '3px', flexShrink: 0 } }),
-      cr('span', null, 'I have read the above and consent to my information being collected and handled as described.')
+      cr('span', null, 'I have read the above and consent to my information — including audio recording, if used — being collected and handled as described.')
     );
     const cancelBtn = cr('button', { onClick: () => this.closeConsent(),
       style: { flex: 1, fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: '14px', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-strong)', background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer' }
