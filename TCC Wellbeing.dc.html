@@ -2206,6 +2206,12 @@ a:hover { text-decoration: underline; }
       </div>
     </div>
 
+    <div style="display:flex;gap:8px;margin-bottom:24px;border-bottom:1px solid var(--border-subtle);">
+      <button onclick="{{ onSrTabLog }}" style="{{ srTabLogStyle }}">Log a session</button>
+      <button onclick="{{ onSrTabStored }}" style="{{ srTabStoredStyle }}">Stored sessions</button>
+    </div>
+
+    <sc-if value="{{ isSrLogTab }}" hint-placeholder-val="{{ true }}">
     <div style="background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);margin-bottom:28px;">
       <div style="font-weight:600;color:var(--text-primary);font-size:16px;margin-bottom:16px;">{{ srFormTitle }}</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
@@ -2263,7 +2269,9 @@ a:hover { text-decoration: underline; }
         </sc-if>
       </div>
     </div>
+    </sc-if>
 
+    <sc-if value="{{ isSrStoredTab }}" hint-placeholder-val="">
     <div style="display:flex;flex-direction:column;gap:16px;">
       <sc-for list="{{ sessionRecordRows }}" as="rec" hint-placeholder-count="2">
         <div style="background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:22px;box-shadow:var(--shadow-sm);">
@@ -2273,17 +2281,58 @@ a:hover { text-decoration: underline; }
               <span style="font-size:13px;color:var(--text-secondary);margin-left:8px;">{{ rec.program }}</span>
             </div>
             <div style="display:flex;gap:10px;">
+              <button onclick="{{ rec.onToggleExpand }}" style="font-family:var(--font-sans);font-size:12px;font-weight:600;color:var(--text-brand);background:transparent;border:1px solid var(--border-strong);border-radius:var(--radius-pill);padding:5px 12px;cursor:pointer;">{{ rec.expandLabel }}</button>
               <button onclick="{{ rec.onEdit }}" style="font-family:var(--font-sans);font-size:12px;font-weight:600;color:var(--text-brand);background:transparent;border:1px solid var(--border-strong);border-radius:var(--radius-pill);padding:5px 12px;cursor:pointer;">Edit</button>
               <button onclick="{{ rec.onDelete }}" style="font-family:var(--font-sans);font-size:12px;font-weight:600;color:var(--tcc-danger);background:transparent;border:1px solid var(--tcc-danger);border-radius:var(--radius-pill);padding:5px 12px;cursor:pointer;">Delete</button>
             </div>
           </div>
           <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">{{ rec.createdText }}<sc-if value="{{ rec.ticketId }}" hint-placeholder-val=""> · Linked to <strong style="font-family:var(--font-mono);color:var(--text-primary);">{{ rec.ticketId }}</strong></sc-if><sc-if value="{{ rec.officer }}" hint-placeholder-val=""> · {{ rec.officer }}</sc-if></div>
-          <sc-if value="{{ rec.reflection }}" hint-placeholder-val="">
-            <div style="background:var(--surface-sunken);border-left:2px solid var(--brand-accent);border-radius:var(--radius-xs);padding:12px 14px;font-size:14px;color:var(--text-primary);font-style:italic;line-height:1.5;">“{{ rec.reflection }}”</div>
+
+          <sc-if value="{{ rec.isNotExpanded }}" hint-placeholder-val="{{ true }}">
+            <sc-if value="{{ rec.reflection }}" hint-placeholder-val="">
+              <div style="background:var(--surface-sunken);border-left:2px solid var(--brand-accent);border-radius:var(--radius-xs);padding:12px 14px;font-size:14px;color:var(--text-primary);font-style:italic;line-height:1.5;">“{{ rec.reflection }}”</div>
+            </sc-if>
+          </sc-if>
+
+          <sc-if value="{{ rec.isExpanded }}" hint-placeholder-val="">
+            <div style="border-top:1px solid var(--border-subtle);margin-top:6px;padding-top:16px;">
+              <div style="font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;">Raw notes by dimension</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+                <sc-for list="{{ rec.dimNotes }}" as="dn" hint-placeholder-count="5">
+                  <div>
+                    <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:4px;">{{ dn.label }}</div>
+                    <div style="font-size:13.5px;color:var(--text-primary);line-height:1.5;white-space:pre-wrap;">{{ dn.value }}</div>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div style="margin-bottom:18px;">
+                <div style="font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Reflection</div>
+                <div style="font-size:14px;color:var(--text-primary);line-height:1.6;white-space:pre-wrap;">{{ rec.reflection }}</div>
+              </div>
+
+              <div>
+                <div style="font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;">Attachments</div>
+                <sc-for list="{{ rec.attachmentRows }}" as="att" hint-placeholder-count="0">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface-sunken);border:1px solid var(--border-subtle);border-radius:var(--radius-xs);padding:9px 12px;margin-bottom:8px;">
+                    <div style="font-size:13px;color:var(--text-primary);">{{ att.name }} <span style="color:var(--text-secondary);font-size:12px;">({{ att.sizeText }})</span></div>
+                    <div style="display:flex;gap:8px;">
+                      <button onclick="{{ att.onDownload }}" style="font-family:var(--font-sans);font-size:11.5px;font-weight:600;color:var(--text-brand);background:transparent;border:1px solid var(--border-strong);border-radius:var(--radius-pill);padding:4px 10px;cursor:pointer;">Download</button>
+                      <button onclick="{{ att.onDelete }}" style="font-family:var(--font-sans);font-size:11.5px;font-weight:600;color:var(--tcc-danger);background:transparent;border:1px solid var(--tcc-danger);border-radius:var(--radius-pill);padding:4px 10px;cursor:pointer;">Delete</button>
+                    </div>
+                  </div>
+                </sc-for>
+                <input type="file" onchange="{{ rec.onFileSelected }}" disabled="{{ rec.uploading }}" style="font-size:13px;color:var(--text-secondary);margin-top:6px;">
+                <sc-if value="{{ rec.uploading }}" hint-placeholder-val="">
+                  <div style="font-size:12px;color:var(--text-accent);margin-top:6px;">Uploading…</div>
+                </sc-if>
+              </div>
+            </div>
           </sc-if>
         </div>
       </sc-for>
     </div>
+    </sc-if>
   </main>
   </sc-if>
 
@@ -2374,6 +2423,7 @@ function rowToSessionRecord(r) {
     rawNotes: r.raw_notes || {},
     reflection: r.reflection || '',
     officer: r.officer || '',
+    attachments: r.attachments || [],
   };
 }
 function sessionRecordToRow(t) {
@@ -2442,6 +2492,9 @@ class Component extends DCLogic {
     srDraft: { intervieweeName: '', program: '', ticketId: '', officer: '', reflection: '',
       rawNotes: { work: '', social: '', emotional: '', growth: '', env: '' } },
     srEditingId: null,
+    srTab: 'log',
+    srExpandedId: null,
+    srUploading: {},
     consentOpen: false,
     consentChecked: false,
     pickerOpen: false,
@@ -2647,6 +2700,7 @@ class Component extends DCLogic {
   startEditSr(rec) {
     this.setState({
       srEditingId: rec.id,
+      srTab: 'log',
       srDraft: { intervieweeName: rec.intervieweeName, program: rec.program, ticketId: rec.ticketId, officer: rec.officer, reflection: rec.reflection, rawNotes: { ...rec.rawNotes } },
     });
   }
@@ -2660,6 +2714,36 @@ class Component extends DCLogic {
       : await sb.from('session_records').insert(row);
     if (error) { console.error('session record save failed', error); return; }
     this.resetSrDraft();
+    this.loadSessionRecords();
+  }
+  toggleSrExpand(id) { this.setState(s => ({ srExpandedId: s.srExpandedId === id ? null : id })); }
+  async uploadSrAttachment(rec, file) {
+    this.setState(s => ({ srUploading: { ...s.srUploading, [rec.id]: true } }));
+    const path = rec.id + '/' + Date.now() + '-' + file.name;
+    const { error: upErr } = await sb.storage.from('session-attachments').upload(path, file);
+    if (upErr) {
+      console.error('attachment upload failed', upErr);
+      this.setState(s => ({ srUploading: { ...s.srUploading, [rec.id]: false } }));
+      return;
+    }
+    const entry = { name: file.name, path, size: file.size, type: file.type, uploadedAt: new Date().toISOString() };
+    const attachments = [...(rec.attachments || []), entry];
+    const { error } = await sb.from('session_records').update({ attachments }).eq('id', rec.id);
+    this.setState(s => ({ srUploading: { ...s.srUploading, [rec.id]: false } }));
+    if (error) { console.error('attachment save failed', error); return; }
+    this.loadSessionRecords();
+  }
+  async downloadSrAttachment(att) {
+    const { data, error } = await sb.storage.from('session-attachments').createSignedUrl(att.path, 60);
+    if (error) { console.error('signed url failed', error); return; }
+    window.open(data.signedUrl, '_blank');
+  }
+  async deleteSrAttachment(rec, att) {
+    if (!window.confirm('Delete this attachment? This cannot be undone.')) return;
+    await sb.storage.from('session-attachments').remove([att.path]);
+    const attachments = (rec.attachments || []).filter(a => a.path !== att.path);
+    const { error } = await sb.from('session_records').update({ attachments }).eq('id', rec.id);
+    if (error) { console.error('attachment delete failed', error); return; }
     this.loadSessionRecords();
   }
   deleteSr(id) {
@@ -2820,6 +2904,15 @@ class Component extends DCLogic {
       background: active ? 'var(--surface-sunken)' : 'transparent',
     };
   }
+  srTabStyle(active) {
+    return {
+      fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 600,
+      padding: '10px 16px', cursor: 'pointer', border: 'none', background: 'transparent',
+      color: active ? 'var(--text-brand)' : 'var(--text-secondary)',
+      borderBottom: active ? '2px solid var(--brand-accent)' : '2px solid transparent',
+      marginBottom: '-1px', transition: 'all var(--dur-fast) var(--ease-standard)',
+    };
+  }
   moodMeta(v) {
     return {
       1: { label: 'Critical', bg: '#fbe4e5', fg: 'var(--tcc-danger)' },
@@ -2904,17 +2997,33 @@ class Component extends DCLogic {
       };
     });
 
-    const sessionRecordRows = s.sessionRecords.map(rec => ({
-      id: rec.id,
-      intervieweeName: rec.intervieweeName,
-      program: rec.program,
-      ticketId: rec.ticketId || '',
-      officer: rec.officer || '',
-      reflection: rec.reflection || '',
-      createdText: rec.createdAt ? new Date(rec.createdAt).toLocaleString() : '',
-      onEdit: () => this.startEditSr(rec),
-      onDelete: () => this.deleteSr(rec.id),
-    }));
+    const fmtSize = n => (n == null) ? '' : n < 1024 ? n + ' B' : n < 1048576 ? Math.round(n / 1024) + ' KB' : (n / 1048576).toFixed(1) + ' MB';
+    const sessionRecordRows = s.sessionRecords.map(rec => {
+      const isExpanded = s.srExpandedId === rec.id;
+      return {
+        id: rec.id,
+        intervieweeName: rec.intervieweeName,
+        program: rec.program,
+        ticketId: rec.ticketId || '',
+        officer: rec.officer || '',
+        reflection: rec.reflection || '',
+        createdText: rec.createdAt ? new Date(rec.createdAt).toLocaleString() : '',
+        onEdit: () => this.startEditSr(rec),
+        onDelete: () => this.deleteSr(rec.id),
+        isExpanded, isNotExpanded: !isExpanded,
+        onToggleExpand: () => this.toggleSrExpand(rec.id),
+        expandLabel: isExpanded ? 'Collapse' : 'Expand',
+        dimNotes: this.DIMS.map(d => ({ label: d.label, value: (rec.rawNotes || {})[d.key] || '—' })),
+        attachmentRows: (rec.attachments || []).map(att => ({
+          name: att.name,
+          sizeText: fmtSize(att.size),
+          onDownload: () => this.downloadSrAttachment(att),
+          onDelete: () => this.deleteSrAttachment(rec, att),
+        })),
+        uploading: !!s.srUploading[rec.id],
+        onFileSelected: e => { const f = e.target.files[0]; if (f) this.uploadSrAttachment(rec, f); e.target.value = ''; },
+      };
+    });
     const srDimFields = this.DIMS.map(d => ({
       key: d.key, label: d.label,
       value: s.srDraft.rawNotes[d.key] || '',
@@ -3032,6 +3141,12 @@ class Component extends DCLogic {
       dimBars,
 
       // session records
+      isSrLogTab: s.srTab === 'log',
+      isSrStoredTab: s.srTab === 'stored',
+      onSrTabLog: () => this.setState({ srTab: 'log' }),
+      onSrTabStored: () => this.setState({ srTab: 'stored' }),
+      srTabLogStyle: this.srTabStyle(s.srTab === 'log'),
+      srTabStoredStyle: this.srTabStyle(s.srTab === 'stored'),
       sessionRecordRows,
       srDimFields,
       srTicketOptions,
