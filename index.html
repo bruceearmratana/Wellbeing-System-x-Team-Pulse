@@ -1632,6 +1632,9 @@ a:hover { text-decoration: underline; }
       --wb-lava-1:rgba(0,182,212,.20);
       --wb-lava-2:rgba(84,104,214,.18);
       --wb-lava-3:rgba(150,120,232,.15);
+      --wb-grid:rgba(120,200,240,.07);
+      --wb-hud:rgba(0,200,235,.30);
+      --wb-hud-soft:rgba(140,150,230,.22);
     }
     /* Light theme (default): white surfaces with a subtle light-blue wash */
     :root, [data-theme="light"]{
@@ -1646,6 +1649,9 @@ a:hover { text-decoration: underline; }
       --wb-lava-1:rgba(0,168,200,.15);
       --wb-lava-2:rgba(72,96,196,.12);
       --wb-lava-3:rgba(140,116,214,.11);
+      --wb-grid:rgba(0,110,160,.08);
+      --wb-hud:rgba(0,140,170,.34);
+      --wb-hud-soft:rgba(90,105,200,.26);
       --wb-ring:rgba(0,140,170,.24);
       --wb-ring-soft:rgba(0,140,170,.15);
       --wb-ring-dash:rgba(0,140,170,.13);
@@ -1669,11 +1675,15 @@ a:hover { text-decoration: underline; }
       75%{transform:translateY(-32vh) translateX(2vw) scale(1.05);border-radius:54% 46% 48% 52% / 47% 54% 46% 53%;}
     }
     .wb-lava{position:absolute;bottom:-16vh;border-radius:52% 48% 45% 55% / 55% 48% 52% 45%;animation-name:wbLava;animation-timing-function:ease-in-out;animation-iteration-count:infinite;will-change:transform;}
-    /* Minimal futuristic overlay: thin orbital rings + drifting connector lines + pulsing node dots */
+    /* Minimal futuristic overlay: orbital rings, circuit traces with flowing dashes, HUD markers */
     @keyframes wbRingSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
     @keyframes wbRingBreathe{0%,100%{transform:scale(.94);opacity:.4;}50%{transform:scale(1.04);opacity:.85;}}
     @keyframes wbLineDrift{0%,100%{transform:translate(0,0);opacity:.35;}50%{transform:translate(1.4vw,-1vh);opacity:.8;}}
-    @media (prefers-reduced-motion:reduce){.wb-lava,.wb-ring-el,.wb-line-el,.wb-node-el{animation:none;}}
+    @keyframes wbDash{to{stroke-dashoffset:-320;}}
+    @keyframes wbOrbit{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+    @keyframes wbHudFloat{0%,100%{transform:translateY(0);opacity:.35;}50%{transform:translateY(-6px);opacity:.85;}}
+    .wb-dash-el{stroke-dasharray:5 11;animation:wbDash linear infinite;}
+    @media (prefers-reduced-motion:reduce){.wb-lava,.wb-ring-el,.wb-line-el,.wb-node-el,.wb-dash-el,.wb-orbit-el,.wb-hud-el{animation:none;}}
     @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;}}
     .wb-input{width:100%;font-family:var(--font-sans);font-size:var(--fs-body);color:var(--text-primary);background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:11px 14px;outline:none;transition:border-color var(--dur-fast) var(--ease-standard),box-shadow var(--dur-fast) var(--ease-standard);}
     .wb-input:focus{border-color:var(--brand-accent);box-shadow:0 0 0 3px rgba(0,168,200,.16);}
@@ -1702,22 +1712,46 @@ a:hover { text-decoration: underline; }
     <span class="wb-lava" style="left:46%;width:22vw;height:22vw;background:radial-gradient(circle at 50% 42%,var(--wb-lava-1),transparent 70%);filter:blur(32px);animation-duration:30s;animation-delay:-27s;"></span>
   </div>
 
-  <!-- ===== Minimal futuristic overlay: thin orbital rings + connector lines + node dots ===== -->
+  <!-- ===== Futuristic overlay: dot grid, orbital rings with satellite, circuit traces, HUD markers ===== -->
+  <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(var(--wb-grid) 1px,transparent 1px);background-size:30px 30px;-webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 45%,transparent 25%,#000 80%);mask-image:radial-gradient(ellipse 70% 60% at 50% 45%,transparent 25%,#000 80%);"></div>
   <div aria-hidden="true" style="position:absolute;top:8%;right:6%;width:260px;height:260px;pointer-events:none;z-index:0;">
     <div class="wb-ring-el" style="position:absolute;inset:0;border:1px solid var(--wb-ring);border-radius:50%;animation:wbRingBreathe 12s var(--ease-standard) infinite;"></div>
     <div class="wb-ring-el" style="position:absolute;inset:34px;border:1px dashed var(--wb-ring-dash);border-radius:50%;animation:wbRingSpin 110s linear infinite;"></div>
+    <div class="wb-orbit-el" style="position:absolute;inset:0;animation:wbOrbit 26s linear infinite;">
+      <span style="position:absolute;top:-3px;left:50%;margin-left:-3px;width:6px;height:6px;border-radius:50%;background:var(--wb-hud);box-shadow:0 0 10px var(--wb-hud);"></span>
+    </div>
+    <span style="position:absolute;top:50%;left:-8px;width:16px;height:1px;background:var(--wb-ring);"></span>
+    <span style="position:absolute;top:50%;right:-8px;width:16px;height:1px;background:var(--wb-ring);"></span>
+    <span style="position:absolute;left:50%;top:-8px;height:16px;width:1px;background:var(--wb-ring);"></span>
+    <span style="position:absolute;left:50%;bottom:-8px;height:16px;width:1px;background:var(--wb-ring);"></span>
   </div>
   <div aria-hidden="true" style="position:absolute;bottom:9%;left:5%;width:170px;height:170px;pointer-events:none;z-index:0;">
     <div class="wb-ring-el" style="position:absolute;inset:0;border:1px solid var(--wb-ring-soft);border-radius:50%;animation:wbRingBreathe 14s var(--ease-standard) infinite;animation-delay:-5s;"></div>
+    <div class="wb-ring-el" style="position:absolute;inset:26px;border:1px dashed var(--wb-ring-dash);border-radius:50%;animation:wbRingSpin 90s linear infinite reverse;"></div>
   </div>
   <svg aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;">
-    <line class="wb-line-el" x1="0%" y1="20%" x2="40%" y2="5%" stroke="var(--wb-wave-a)" stroke-width="1" style="animation:wbLineDrift 23s ease-in-out infinite;"></line>
-    <line class="wb-line-el" x1="60%" y1="95%" x2="100%" y2="78%" stroke="var(--wb-wave-b)" stroke-width="1" style="animation:wbLineDrift 27s ease-in-out infinite;animation-delay:-9s;"></line>
-    <circle class="wb-node-el" cx="40%" cy="5%" r="3" fill="var(--wb-wave-a)" style="animation:wbPulse 4.5s ease-in-out infinite;"></circle>
-    <circle class="wb-node-el" cx="0%" cy="20%" r="2.5" fill="var(--wb-wave-a)" style="animation:wbPulse 6s ease-in-out infinite;animation-delay:-3s;"></circle>
-    <circle class="wb-node-el" cx="60%" cy="95%" r="3" fill="var(--wb-wave-b)" style="animation:wbPulse 5s ease-in-out infinite;animation-delay:-2s;"></circle>
-    <circle class="wb-node-el" cx="100%" cy="78%" r="2.5" fill="var(--wb-wave-b)" style="animation:wbPulse 7s ease-in-out infinite;animation-delay:-1s;"></circle>
+    <!-- upper circuit trace: edge → bend → bend → node -->
+    <line class="wb-dash-el" x1="-2%" y1="26%" x2="14%" y2="26%" stroke="var(--wb-hud)" stroke-width="1" style="animation-duration:14s;"></line>
+    <line class="wb-dash-el" x1="14%" y1="26%" x2="21%" y2="17%" stroke="var(--wb-hud)" stroke-width="1" style="animation-duration:14s;"></line>
+    <line class="wb-dash-el" x1="21%" y1="17%" x2="38%" y2="17%" stroke="var(--wb-hud)" stroke-width="1" style="animation-duration:14s;"></line>
+    <circle cx="14%" cy="26%" r="2" fill="var(--wb-hud)"></circle>
+    <circle class="wb-node-el" cx="38%" cy="17%" r="3" fill="var(--wb-hud)" style="animation:wbPulse 4.5s ease-in-out infinite;"></circle>
+    <!-- lower circuit trace, flowing the other way -->
+    <line class="wb-dash-el" x1="102%" y1="72%" x2="84%" y2="72%" stroke="var(--wb-hud-soft)" stroke-width="1" style="animation-duration:18s;animation-direction:reverse;"></line>
+    <line class="wb-dash-el" x1="84%" y1="72%" x2="76%" y2="82%" stroke="var(--wb-hud-soft)" stroke-width="1" style="animation-duration:18s;animation-direction:reverse;"></line>
+    <line class="wb-dash-el" x1="76%" y1="82%" x2="58%" y2="82%" stroke="var(--wb-hud-soft)" stroke-width="1" style="animation-duration:18s;animation-direction:reverse;"></line>
+    <circle cx="84%" cy="72%" r="2" fill="var(--wb-hud-soft)"></circle>
+    <circle class="wb-node-el" cx="58%" cy="82%" r="3" fill="var(--wb-hud-soft)" style="animation:wbPulse 5.5s ease-in-out infinite;animation-delay:-2s;"></circle>
+    <!-- long horizon line with slow drift -->
+    <line class="wb-line-el" x1="55%" y1="8%" x2="98%" y2="8%" stroke="var(--wb-wave-b)" stroke-width="1" style="animation:wbLineDrift 25s ease-in-out infinite;animation-delay:-6s;"></line>
+    <circle class="wb-node-el" cx="98%" cy="8%" r="2.5" fill="var(--wb-wave-b)" style="animation:wbPulse 6s ease-in-out infinite;animation-delay:-1s;"></circle>
   </svg>
+  <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;z-index:0;font-family:var(--font-mono);font-size:14px;color:var(--wb-hud);">
+    <span class="wb-hud-el" style="position:absolute;top:34%;left:8%;animation:wbHudFloat 9s ease-in-out infinite;">+</span>
+    <span class="wb-hud-el" style="position:absolute;top:12%;left:46%;animation:wbHudFloat 11s ease-in-out infinite;animation-delay:-4s;color:var(--wb-hud-soft);">+</span>
+    <span class="wb-hud-el" style="position:absolute;top:64%;left:30%;animation:wbHudFloat 10s ease-in-out infinite;animation-delay:-7s;color:var(--wb-hud-soft);">+</span>
+    <span class="wb-hud-el" style="position:absolute;top:52%;left:88%;animation:wbHudFloat 12s ease-in-out infinite;animation-delay:-2s;">+</span>
+  </div>
 
   <!-- ===== TOP NAV ===== -->
   <nav style="position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);padding:16px 32px;border-bottom:1px solid var(--border-subtle);background:color-mix(in srgb, var(--surface-card) 78%, transparent);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);">
@@ -1742,7 +1776,7 @@ a:hover { text-decoration: underline; }
   <main style="position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:56px 32px 40px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;">
     <div style="animation:wbFade var(--dur-slow) var(--ease-out);">
       <div style="font-family:var(--font-sans);font-weight:600;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-accent);margin-bottom:18px;">TCCtech People &amp; Culture</div>
-      <h1 style="font-family:var(--font-display);font-weight:300;font-size:52px;line-height:1.08;letter-spacing:.01em;margin:0 0 20px;color:var(--text-primary);">Book a wellbeing session, <span style="color:var(--text-accent);">completely confidentially.</span></h1>
+      <h1 style="font-family:var(--font-display);font-weight:300;font-size:52px;line-height:1.08;letter-spacing:.01em;margin:0 0 20px;color:var(--text-primary);">Book a wellbeing session, <span style="color:var(--text-accent);background:linear-gradient(95deg,var(--text-accent) 20%,#8b7ce8 90%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">completely confidentially.</span></h1>
       <p style="font-size:var(--fs-body-lg);line-height:1.6;color:var(--text-secondary);max-width:30em;margin:0 0 32px;">A confidential check-in with an independent Wellbeing Officer. You choose what to share. Only the Wellbeing Officer and HR admin can see your request — it's never shared publicly.</p>
       <div style="display:flex;gap:14px;flex-wrap:wrap;">
         <button onclick="{{ goBook }}" style="display:inline-flex;align-items:center;gap:10px;font-family:var(--font-sans);font-weight:600;font-size:var(--fs-body-lg);color:#062a33;background:var(--brand-accent);border:none;border-radius:var(--radius-md);padding:16px 30px;cursor:pointer;box-shadow:0 8px 24px rgba(0,168,200,.24);transition:all var(--dur-fast) var(--ease-standard);" style-hover="filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 14px 32px rgba(0,168,200,.40);" style-active="transform:translateY(0);">Book a session →</button>
