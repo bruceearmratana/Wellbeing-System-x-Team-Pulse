@@ -1973,7 +1973,7 @@ a:hover { text-decoration: underline; }
     </section>
 
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-      <button onclick="{{ submitBooking }}" disabled="{{ submitDisabled }}" style="{{ submitStyle }}" style-hover="filter:brightness(1.07);transform:translateY(-1px);" style-active="transform:translateY(0);">{{ submitLabel }}</button>
+      <button onclick="{{ openConsent }}" disabled="{{ submitDisabled }}" style="{{ submitStyle }}" style-hover="filter:brightness(1.07);transform:translateY(-1px);" style-active="transform:translateY(0);">{{ submitLabel }}</button>
       <span style="font-size:13px;color:var(--text-secondary);">{{ submitHint }}</span>
     </div>
     <sc-if value="{{ submitError }}" hint-placeholder-val="">
@@ -2036,7 +2036,10 @@ a:hover { text-decoration: underline; }
         <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-accent);font-weight:600;margin-bottom:10px;">HR Console</div>
         <h1 style="font-family:var(--font-display);font-weight:300;font-size:34px;margin:0;color:var(--text-primary);">Wellbeing request queue</h1>
       </div>
-      <button onclick="{{ logout }}" style="font-family:var(--font-sans);font-weight:600;font-size:var(--fs-body-sm);color:var(--text-brand);background:transparent;border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:9px 18px;cursor:pointer;transition:all var(--dur-fast) var(--ease-standard);" style-hover="background:var(--surface-sunken);" style-active="transform:translateY(1px);">Sign out</button>
+      <div style="display:flex;gap:10px;">
+        <button onclick="{{ goRecords }}" style="font-family:var(--font-sans);font-weight:600;font-size:var(--fs-body-sm);color:var(--text-brand);background:transparent;border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:9px 18px;cursor:pointer;transition:all var(--dur-fast) var(--ease-standard);" style-hover="background:var(--surface-sunken);" style-active="transform:translateY(1px);">Session Records</button>
+        <button onclick="{{ logout }}" style="font-family:var(--font-sans);font-weight:600;font-size:var(--fs-body-sm);color:var(--text-brand);background:transparent;border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:9px 18px;cursor:pointer;transition:all var(--dur-fast) var(--ease-standard);" style-hover="background:var(--surface-sunken);" style-active="transform:translateY(1px);">Sign out</button>
+      </div>
     </div>
 
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px;">
@@ -2189,7 +2192,103 @@ a:hover { text-decoration: underline; }
   </main>
   </sc-if>
 
+  <!-- ===== SESSION RECORDS (admin-only raw data + reflection) ===== -->
+  <sc-if value="{{ isRecords }}" hint-placeholder-val="">
+  <main style="position:relative;z-index:2;max-width:900px;margin:0 auto;padding:40px 32px 64px;animation:wbFade var(--dur-slow) var(--ease-out);">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:28px;">
+      <div>
+        <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-accent);font-weight:600;margin-bottom:10px;">HR Console · admin-eyes-only</div>
+        <h1 style="font-family:var(--font-display);font-weight:300;font-size:34px;margin:0;color:var(--text-primary);">Session records</h1>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button onclick="{{ goAdmin }}" style="font-family:var(--font-sans);font-weight:600;font-size:var(--fs-body-sm);color:var(--text-brand);background:transparent;border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:9px 18px;cursor:pointer;transition:all var(--dur-fast) var(--ease-standard);" style-hover="background:var(--surface-sunken);" style-active="transform:translateY(1px);">← Back to queue</button>
+        <button onclick="{{ logout }}" style="font-family:var(--font-sans);font-weight:600;font-size:var(--fs-body-sm);color:var(--text-brand);background:transparent;border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:9px 18px;cursor:pointer;transition:all var(--dur-fast) var(--ease-standard);" style-hover="background:var(--surface-sunken);" style-active="transform:translateY(1px);">Sign out</button>
+      </div>
+    </div>
+
+    <div style="background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);margin-bottom:28px;">
+      <div style="font-weight:600;color:var(--text-primary);font-size:16px;margin-bottom:16px;">{{ srFormTitle }}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+        <div>
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px;">Interviewee name</label>
+          <input class="wb-input" type="text" placeholder="Full name" value="{{ srIntervieweeName }}" oninput="{{ onSrIntervieweeName }}">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px;">Program</label>
+          <input class="wb-input" type="text" placeholder="Team / program" value="{{ srProgram }}" oninput="{{ onSrProgram }}">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+        <div>
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px;">Linked ticket (optional)</label>
+          <select class="wb-input" value="{{ srTicketId }}" onchange="{{ onSrTicketId }}">
+            <option value="">— Not linked —</option>
+            <sc-for list="{{ srTicketOptions }}" as="opt" hint-placeholder-count="0">
+              <option value="{{ opt.id }}">{{ opt.label }}</option>
+            </sc-for>
+          </select>
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px;">Wellbeing Officer</label>
+          <select class="wb-input" value="{{ srOfficer }}" onchange="{{ onSrOfficer }}">
+            <option value="">— Unassigned —</option>
+            <option value="P'Nan · Wellbeing Officer">P'Nan · Wellbeing Officer</option>
+            <option value="P'Bruce · Business Dev">P'Bruce · Business Dev</option>
+            <option value="P'Mai · People &amp; Culture">P'Mai · People &amp; Culture</option>
+            <option value="Dr. Aim · Psychology">Dr. Aim · Psychology</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;">Raw notes by dimension</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+        <sc-for list="{{ srDimFields }}" as="df" hint-placeholder-count="5">
+          <div>
+            <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px;">{{ df.label }}</label>
+            <textarea class="wb-input" rows="3" placeholder="Raw notes…" value="{{ df.value }}" oninput="{{ df.onChange }}" style="resize:vertical;line-height:1.5;"></textarea>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="margin-bottom:18px;">
+        <label style="display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px;">Reflection</label>
+        <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 8px;">This is what gets shared with a team leader or HR if needed.</p>
+        <textarea class="wb-input" rows="5" placeholder="Overall reflection…" value="{{ srReflection }}" oninput="{{ onSrReflection }}" style="resize:vertical;line-height:1.5;"></textarea>
+      </div>
+
+      <div style="display:flex;gap:10px;">
+        <button onclick="{{ onSaveSr }}" disabled="{{ srSaveDisabled }}" style="font-family:var(--font-sans);font-weight:600;font-size:14px;color:#062a33;background:var(--brand-accent);border:none;border-radius:var(--radius-sm);padding:11px 22px;cursor:pointer;opacity:{{ srSaveOpacity }};transition:all var(--dur-fast) var(--ease-standard);" style-hover="filter:brightness(1.08);">{{ srSaveLabel }}</button>
+        <sc-if value="{{ srIsEditing }}" hint-placeholder-val="">
+          <button onclick="{{ onCancelSr }}" style="font-family:var(--font-sans);font-weight:600;font-size:14px;color:var(--text-secondary);background:transparent;border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:11px 22px;cursor:pointer;">Cancel</button>
+        </sc-if>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <sc-for list="{{ sessionRecordRows }}" as="rec" hint-placeholder-count="2">
+        <div style="background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:22px;box-shadow:var(--shadow-sm);">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+            <div>
+              <span style="font-weight:600;font-size:16px;color:var(--text-primary);">{{ rec.intervieweeName }}</span>
+              <span style="font-size:13px;color:var(--text-secondary);margin-left:8px;">{{ rec.program }}</span>
+            </div>
+            <div style="display:flex;gap:10px;">
+              <button onclick="{{ rec.onEdit }}" style="font-family:var(--font-sans);font-size:12px;font-weight:600;color:var(--text-brand);background:transparent;border:1px solid var(--border-strong);border-radius:var(--radius-pill);padding:5px 12px;cursor:pointer;">Edit</button>
+              <button onclick="{{ rec.onDelete }}" style="font-family:var(--font-sans);font-size:12px;font-weight:600;color:var(--tcc-danger);background:transparent;border:1px solid var(--tcc-danger);border-radius:var(--radius-pill);padding:5px 12px;cursor:pointer;">Delete</button>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">{{ rec.createdText }}<sc-if value="{{ rec.ticketId }}" hint-placeholder-val=""> · Linked to <strong style="font-family:var(--font-mono);color:var(--text-primary);">{{ rec.ticketId }}</strong></sc-if><sc-if value="{{ rec.officer }}" hint-placeholder-val=""> · {{ rec.officer }}</sc-if></div>
+          <sc-if value="{{ rec.reflection }}" hint-placeholder-val="">
+            <div style="background:var(--surface-sunken);border-left:2px solid var(--brand-accent);border-radius:var(--radius-xs);padding:12px 14px;font-size:14px;color:var(--text-primary);font-style:italic;line-height:1.5;">“{{ rec.reflection }}”</div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </main>
+  </sc-if>
+
   {{ calendarEl }}
+  {{ consentModalEl }}
 
   <!-- ===== FOOTER ===== -->
   <footer style="position:relative;z-index:2;margin-top:auto;border-top:1px solid var(--border-subtle);padding:20px 32px;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--text-secondary);">
@@ -2265,6 +2364,34 @@ function patchToRow(patch) {
   return out;
 }
 
+function rowToSessionRecord(r) {
+  return {
+    id: r.id,
+    createdAt: r.created_at,
+    ticketId: r.ticket_id || '',
+    intervieweeName: r.interviewee_name || '',
+    program: r.program || '',
+    rawNotes: r.raw_notes || {},
+    reflection: r.reflection || '',
+    officer: r.officer || '',
+  };
+}
+function sessionRecordToRow(t) {
+  return {
+    id: t.id,
+    ticket_id: t.ticketId || null,
+    interviewee_name: t.intervieweeName,
+    program: t.program,
+    raw_notes: t.rawNotes,
+    reflection: t.reflection,
+    officer: t.officer,
+  };
+}
+function emptySrDraft() {
+  return { intervieweeName: '', program: '', ticketId: '', officer: '', reflection: '',
+    rawNotes: { work: '', social: '', emotional: '', growth: '', env: '' } };
+}
+
 class Component extends DCLogic {
   DIMS = [
     { key: 'work', label: 'Work Experience', desc: 'Task clarity, workload, learning curve' },
@@ -2311,6 +2438,12 @@ class Component extends DCLogic {
     tickets: [],
     qaDrafts: {},
     qaEditing: {},
+    sessionRecords: [],
+    srDraft: { intervieweeName: '', program: '', ticketId: '', officer: '', reflection: '',
+      rawNotes: { work: '', social: '', emotional: '', growth: '', env: '' } },
+    srEditingId: null,
+    consentOpen: false,
+    consentChecked: false,
     pickerOpen: false,
     pickerMonth: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     pickerDate: null,
@@ -2335,11 +2468,11 @@ class Component extends DCLogic {
     if (session) this.setState({ authed: true });
 
     this.refreshPublicStats();
-    if (session) this.loadTickets();
+    if (session) { this.loadTickets(); this.loadSessionRecords(); }
 
     sb.auth.onAuthStateChange((_event, session) => {
       this.setState({ authed: !!session });
-      if (session) this.loadTickets();
+      if (session) { this.loadTickets(); this.loadSessionRecords(); }
     });
   }
   componentWillUnmount() { if (this._timer) clearInterval(this._timer); }
@@ -2361,6 +2494,12 @@ class Component extends DCLogic {
     const { data, error } = await sb.from('bookings').select('*').order('created_at', { ascending: false });
     if (error) { console.error('tickets fetch failed', error); return; }
     this.setState({ tickets: (data || []).map(rowToTicket) });
+  }
+
+  async loadSessionRecords() {
+    const { data, error } = await sb.from('session_records').select('*').order('created_at', { ascending: false });
+    if (error) { console.error('session records fetch failed', error); return; }
+    this.setState({ sessionRecords: (data || []).map(rowToSessionRecord) });
   }
 
   // ---------- navigation ----------
@@ -2442,7 +2581,7 @@ class Component extends DCLogic {
   }
   async logout() {
     await sb.auth.signOut();
-    this.setState({ authed: false, tickets: [], view: 'home' });
+    this.setState({ authed: false, tickets: [], sessionRecords: [], view: 'home' });
   }
   setTicketFieldLocal(id, patch) {
     this.setState(s => ({ tickets: s.tickets.map(t => t.id === id ? { ...t, ...patch } : t) }));
@@ -2498,6 +2637,46 @@ class Component extends DCLogic {
       if (error) { console.error('delete failed', error); this.setState({ tickets: prev }); }
       else { this.refreshPublicStats(); }
     });
+  }
+
+  // ---------- session records ----------
+  setSrDraft(patch) { this.setState(s => ({ srDraft: { ...s.srDraft, ...patch } })); }
+  setSrNote(key, value) { this.setState(s => ({ srDraft: { ...s.srDraft, rawNotes: { ...s.srDraft.rawNotes, [key]: value } } })); }
+  genSrId() { let r = ''; for (let i = 0; i < 5; i++) r += '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ'[Math.floor(Math.random() * 34)]; return 'SR-' + r; }
+  resetSrDraft() { this.setState({ srEditingId: null, srDraft: emptySrDraft() }); }
+  startEditSr(rec) {
+    this.setState({
+      srEditingId: rec.id,
+      srDraft: { intervieweeName: rec.intervieweeName, program: rec.program, ticketId: rec.ticketId, officer: rec.officer, reflection: rec.reflection, rawNotes: { ...rec.rawNotes } },
+    });
+  }
+  async saveSr() {
+    const { srDraft, srEditingId } = this.state;
+    if (!srDraft.intervieweeName.trim() || !srDraft.program.trim()) return;
+    const id = srEditingId || this.genSrId();
+    const row = sessionRecordToRow({ ...srDraft, id });
+    const { error } = srEditingId
+      ? await sb.from('session_records').update(row).eq('id', id)
+      : await sb.from('session_records').insert(row);
+    if (error) { console.error('session record save failed', error); return; }
+    this.resetSrDraft();
+    this.loadSessionRecords();
+  }
+  deleteSr(id) {
+    if (!window.confirm('Delete this session record? This cannot be undone.')) return;
+    const prev = this.state.sessionRecords;
+    this.setState(s => ({ sessionRecords: s.sessionRecords.filter(r => r.id !== id) }));
+    sb.from('session_records').delete().eq('id', id).then(({ error }) => {
+      if (error) { console.error('delete failed', error); this.setState({ sessionRecords: prev }); }
+    });
+  }
+
+  // ---------- booking consent ----------
+  openConsent() { this.setState({ consentOpen: true, consentChecked: false }); }
+  closeConsent() { this.setState({ consentOpen: false }); }
+  async confirmConsent() {
+    this.setState({ consentOpen: false });
+    await this.submitBooking();
   }
 
   openPicker(target) {
@@ -2571,6 +2750,38 @@ class Component extends DCLogic {
     return cr('div', { onClick: () => this.setState({ pickerOpen: false }), style: { position: 'fixed', inset: 0, background: 'rgba(12,18,51,0.48)', zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' } },
       cr('div', { onClick: ev => ev.stopPropagation(), style: { background: 'var(--surface-card)', borderRadius: '16px', boxShadow: '0 18px 48px rgba(12,18,51,0.28)', padding: '28px', width: '360px', maxWidth: '94vw' } },
         header, wdHeaders, ...grid, timeSection, confirmBtn
+      )
+    );
+  }
+  renderConsentModal() {
+    const { consentOpen, consentChecked } = this.state;
+    if (!consentOpen) return null;
+    const cr = React.createElement;
+    const points = [
+      'This is a confidential conversation with a Wellbeing Officer; notes are written, not audio-recorded.',
+      'Notes are visible only to the Wellbeing/HR team, never shared directly with your manager.',
+      'A short reflection may be passed to your team leader or HR only if needed for your support or safety, with identifying details minimized wherever possible.',
+      'You can skip any question and end the conversation at any time.',
+      'This supports wellbeing and early intervention — it isn’t clinical diagnosis or counselling, and isn’t a performance review.',
+    ];
+    const heading = cr('h3', { style: { fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: '22px', margin: '0 0 14px', color: 'var(--text-primary)' } }, 'Before you submit');
+    const list = cr('ul', { style: { margin: '0 0 18px', paddingLeft: '20px', fontSize: '13.5px', lineHeight: 1.6, color: 'var(--text-secondary)' } },
+      points.map((p, i) => cr('li', { key: i, style: { marginBottom: '8px' } }, p))
+    );
+    const checkboxRow = cr('label', { style: { display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '13.5px', color: 'var(--text-primary)', cursor: 'pointer', marginBottom: '20px', lineHeight: 1.5 } },
+      cr('input', { type: 'checkbox', checked: consentChecked, onChange: e => this.setState({ consentChecked: e.target.checked }), style: { marginTop: '3px', flexShrink: 0 } }),
+      cr('span', null, 'I have read the above and consent to my information being collected and handled as described.')
+    );
+    const cancelBtn = cr('button', { onClick: () => this.closeConsent(),
+      style: { flex: 1, fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: '14px', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-strong)', background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer' }
+    }, 'Cancel');
+    const confirmBtn = cr('button', { onClick: consentChecked ? () => this.confirmConsent() : undefined, disabled: !consentChecked,
+      style: { flex: 2, fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: '14px', padding: '12px', borderRadius: '8px', border: 'none', background: consentChecked ? 'var(--brand-accent)' : 'var(--surface-sunken)', color: consentChecked ? '#062a33' : 'var(--text-secondary)', cursor: consentChecked ? 'pointer' : 'not-allowed' }
+    }, 'I Consent — Submit Request');
+    return cr('div', { onClick: () => this.closeConsent(), style: { position: 'fixed', inset: 0, background: 'rgba(12,18,51,0.48)', zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' } },
+      cr('div', { onClick: ev => ev.stopPropagation(), style: { background: 'var(--surface-card)', borderRadius: '16px', boxShadow: '0 18px 48px rgba(12,18,51,0.28)', padding: '28px', width: '440px', maxWidth: '94vw' } },
+        heading, list, checkboxRow,
+        cr('div', { style: { display: 'flex', gap: '10px' } }, cancelBtn, confirmBtn)
       )
     );
   }
@@ -2693,6 +2904,25 @@ class Component extends DCLogic {
       };
     });
 
+    const sessionRecordRows = s.sessionRecords.map(rec => ({
+      id: rec.id,
+      intervieweeName: rec.intervieweeName,
+      program: rec.program,
+      ticketId: rec.ticketId || '',
+      officer: rec.officer || '',
+      reflection: rec.reflection || '',
+      createdText: rec.createdAt ? new Date(rec.createdAt).toLocaleString() : '',
+      onEdit: () => this.startEditSr(rec),
+      onDelete: () => this.deleteSr(rec.id),
+    }));
+    const srDimFields = this.DIMS.map(d => ({
+      key: d.key, label: d.label,
+      value: s.srDraft.rawNotes[d.key] || '',
+      onChange: e => this.setSrNote(d.key, e.target.value),
+    }));
+    const srTicketOptions = s.tickets.map(t => ({ id: t.id, label: t.id + (t.email ? ' — ' + t.email : '') }));
+    const srCanSave = s.srDraft.intervieweeName.trim() && s.srDraft.program.trim();
+
     const dimCounts = (s.publicStats && s.publicStats.dimCounts) || {};
     const counts = {};
     this.DIMS.forEach(d => counts[d.key] = dimCounts[d.key] || 0);
@@ -2717,15 +2947,17 @@ class Component extends DCLogic {
       isConfirm: s.view === 'confirm',
       isLogin: s.view === 'login',
       isAdmin: s.view === 'admin',
+      isRecords: s.view === 'records',
 
       goHome: () => this.nav('home'),
       goBook: () => this.nav('book'),
       goAdmin: () => this.nav(s.authed ? 'admin' : 'login'),
+      goRecords: () => this.nav(s.authed ? 'records' : 'login'),
       toggleTheme: () => this.toggleTheme(),
 
       navHomeStyle: this.navBtn(s.view === 'home'),
       navBookStyle: this.navBtn(s.view === 'book' || s.view === 'confirm'),
-      navAdminStyle: this.navBtn(s.view === 'admin' || s.view === 'login'),
+      navAdminStyle: this.navBtn(s.view === 'admin' || s.view === 'login' || s.view === 'records'),
 
       // carousel
       isSlide0: s.slide === 0, isSlide1: s.slide === 1, isSlide2: s.slide === 2, isSlide3: s.slide === 3, isSlide4: s.slide === 4,
@@ -2784,6 +3016,7 @@ class Component extends DCLogic {
         transition: 'all var(--dur-fast) var(--ease-standard)',
       },
       submitBooking: () => this.submitBooking(),
+      openConsent: () => this.openConsent(),
       ticketId: s.ticketId,
 
       // login
@@ -2797,11 +3030,34 @@ class Component extends DCLogic {
       // admin
       ticketRows,
       dimBars,
+
+      // session records
+      sessionRecordRows,
+      srDimFields,
+      srTicketOptions,
+      srFormTitle: s.srEditingId ? 'Edit session record' : 'New session record',
+      srIntervieweeName: s.srDraft.intervieweeName,
+      onSrIntervieweeName: e => this.setSrDraft({ intervieweeName: e.target.value }),
+      srProgram: s.srDraft.program,
+      onSrProgram: e => this.setSrDraft({ program: e.target.value }),
+      srTicketId: s.srDraft.ticketId,
+      onSrTicketId: e => this.setSrDraft({ ticketId: e.target.value }),
+      srOfficer: s.srDraft.officer,
+      onSrOfficer: e => this.setSrDraft({ officer: e.target.value }),
+      srReflection: s.srDraft.reflection,
+      onSrReflection: e => this.setSrDraft({ reflection: e.target.value }),
+      srIsEditing: !!s.srEditingId,
+      srSaveLabel: s.srEditingId ? 'Update record' : 'Save record',
+      srSaveDisabled: !srCanSave,
+      srSaveOpacity: srCanSave ? 1 : 0.45,
+      onSaveSr: () => this.saveSr(),
+      onCancelSr: () => this.resetSrDraft(),
       aggTotal: (s.publicStats && s.publicStats.total) || 0,
       aggNew: (s.publicStats && s.publicStats.newCount) || 0,
       aggScheduled: (s.publicStats && s.publicStats.scheduled) || 0,
       aggFlag: (s.publicStats && s.publicStats.flag) || 0,
       calendarEl: this.renderCalendar(),
+      consentModalEl: this.renderConsentModal(),
       bookDateDisplay: s.bookDate || 'Pick a specific date →',
       bookDateBtnStyle: { fontFamily: 'var(--font-sans)', fontWeight: s.bookDate ? 600 : 400, fontSize: 'var(--fs-body)', padding: '13px 20px', borderRadius: 'var(--radius-sm)', border: s.bookDate ? '1px solid var(--brand-accent)' : '1px solid var(--border-subtle)', background: s.bookDate ? 'rgba(0,168,200,0.10)' : 'var(--surface-card)', color: s.bookDate ? 'var(--text-primary)' : 'var(--text-secondary)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '10px', transition: 'all var(--dur-fast) var(--ease-standard)' },
       openBookCal: () => this.openPicker('book'),
