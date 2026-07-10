@@ -1667,6 +1667,11 @@ a:hover { text-decoration: underline; }
     }
     @keyframes wbFade{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
     @keyframes wbPulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+    /* FAQ launcher: gentle continuous bounce while hovered */
+    @keyframes wbFaqBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+    .wb-faq-fab{transition:transform var(--dur-fast) var(--ease-standard),box-shadow var(--dur-fast) var(--ease-standard);}
+    .wb-faq-fab:hover{animation:wbFaqBounce .6s var(--ease-standard) infinite;box-shadow:0 12px 30px rgba(0,168,200,.5);}
+    @media (prefers-reduced-motion:reduce){.wb-faq-fab:hover{animation:none;transform:translateY(-3px);}}
     /* Lava lamp: soft oil blob drifts up, cools, sinks — seamless loop with gentle sway + gooey morph */
     @keyframes wbLava{
       0%,100%{transform:translateY(0) translateX(0) scale(1);border-radius:52% 48% 45% 55% / 55% 48% 52% 45%;}
@@ -2445,81 +2450,151 @@ function emptySrDraft() {
     rawNotes: { work: '', social: '', emotional: '', growth: '', env: '' } };
 }
 
-// ---------- FAQ chatbot (free, no LLM — pure keyword retrieval over a fixed Q&A set) ----------
+// ---------- FAQ chatbot (free, no LLM — keyword + word-overlap retrieval over a fixed Q&A set) ----------
 const FAQS = [
   {
     q: 'Is this confidential?',
     a: 'Yes — only the Wellbeing Officer and HR admin can see your request. It’s never shared with your manager or made public.',
-    keywords: ['confidential', 'private', 'anonymous', 'who sees', 'see my', 'privacy'],
+    keywords: ['confidential', 'confidentiality', 'private', 'privacy', 'secret', 'who sees', 'who can see', 'who knows', 'discreet'],
   },
   {
     q: 'Do I have to give my name?',
     a: 'No name is required. We only ask for an email so we can send you a confirmation and keep in touch about your session.',
-    keywords: ['name', 'identity', 'who am i', 'anonymous'],
+    keywords: ['name', 'anonymous', 'anonymity', 'identify', 'identity', 'reveal', 'give my name'],
   },
   {
     q: 'Is my email shared with anyone?',
     a: 'Your email is kept confidential and used only to send you a confirmation — it’s never shared or published.',
-    keywords: ['email', 'share email', 'who sees email', 'my email'],
+    keywords: ['email', 'share email', 'who gets my email', 'contact details', 'my details'],
   },
   {
     q: 'Will this affect my performance review?',
-    a: 'No. Wellbeing sessions are completely separate from performance reviews — they’re for support, not evaluation.',
-    keywords: ['performance', 'review', 'evaluation', 'work score', 'fired', 'job', 'hurt my review', 'appraisal'],
+    a: 'No. Wellbeing sessions are completely separate from performance reviews — they’re for support, not evaluation. Booking one is never held against you.',
+    keywords: ['performance', 'review', 'evaluation', 'appraisal', 'work score', 'fired', 'lose my job', 'promotion', 'held against', 'look bad', 'record'],
   },
   {
     q: 'How long does a session take?',
     a: 'Sessions are typically a private 15–20 minute conversation with a Wellbeing Officer.',
-    keywords: ['how long', 'duration', 'how much time', 'minutes', 'length'],
+    keywords: ['how long', 'duration', 'how much time', 'minutes', 'length', 'take long', 'time does it take'],
   },
   {
     q: 'Can I choose in-person or online?',
     a: 'Yes — when booking, you can select In person, Virtual, or Either is fine.',
-    keywords: ['in person', 'online', 'virtual', 'format', 'video call'],
+    keywords: ['in person', 'online', 'virtual', 'remote', 'video call', 'zoom', 'face to face', 'format', 'where is the session'],
   },
   {
     q: 'What happens after I submit a request?',
-    a: 'HR reviews your request and assigns a Wellbeing Officer, then proposes a time that fits your availability.',
-    keywords: ['after submit', 'after i submit', 'next', 'what happens', 'process', 'what now'],
+    a: 'HR reviews your request and assigns a Wellbeing Officer, then proposes a time that fits your availability. You’ll get an email confirmation with your ticket code.',
+    keywords: ['after submit', 'after i submit', 'after booking', 'next step', 'what happens', 'what now', 'then what', 'process', 'how it works'],
   },
   {
     q: 'Is my session recorded?',
     a: 'Not by default. Written notes are always taken. If the officer wants to audio-record for accuracy, they’ll ask for your consent in person first, and you can decline.',
-    keywords: ['recorded', 'recording', 'audio', 'record', 'tape'],
+    keywords: ['recorded', 'recording', 'audio', 'tape', 'notes taken', 'write down'],
   },
   {
     q: 'Can I cancel or reschedule?',
-    a: 'Reach out to HR or your assigned Wellbeing Officer directly to reschedule — this isn’t yet automated in the booking system.',
-    keywords: ['cancel', 'reschedule', 'change time', 'postpone', 'move my session'],
+    a: 'Reach out to HR or your assigned Wellbeing Officer directly to cancel or reschedule — this isn’t yet automated in the booking system.',
+    keywords: ['cancel', 'reschedule', 'change time', 'change date', 'postpone', 'move my session', 'rebook'],
   },
   {
     q: 'What are the 5 wellbeing dimensions?',
-    a: 'Work Experience, Social Integration, Emotional Health, Growth & Purpose, and Environmental Fit.',
-    keywords: ['dimensions', 'five', '5 areas', 'categories', 'wellbeing dimensions'],
+    a: 'Work Experience, Social Integration, Emotional Health, Growth & Purpose, and Environmental Fit. You pick whichever feel relevant when booking.',
+    keywords: ['dimensions', 'five areas', '5 areas', 'categories', 'topics', 'what areas', 'options'],
   },
   {
     q: 'Is this a substitute for therapy or counselling?',
-    a: 'No — this supports wellbeing and early intervention, but isn’t clinical counselling or diagnosis.',
-    keywords: ['therapy', 'counselling', 'counseling', 'clinical', 'diagnosis', 'psychologist'],
+    a: 'No — this supports wellbeing and early intervention, but isn’t clinical counselling, therapy, or diagnosis. For ongoing clinical care, we can point you toward professional support.',
+    keywords: ['therapy', 'therapist', 'counselling', 'counseling', 'counsellor', 'clinical', 'diagnosis', 'psychologist', 'psychiatrist', 'treatment', 'medical'],
   },
   {
     q: 'Who do I contact for urgent help?',
-    a: 'For anything urgent or a safety concern, please contact HR directly rather than waiting on a booking.',
-    keywords: ['urgent', 'emergency', 'crisis', 'help now', 'immediately'],
+    a: 'For anything urgent, please contact HR directly rather than waiting on a booking. If it’s an emergency or a safety concern, see the crisis question below.',
+    keywords: ['urgent', 'urgently', 'soon', 'quickly', 'asap', 'right away', 'cant wait', 'immediate'],
+  },
+  {
+    q: 'Is this free? Does it cost anything?',
+    a: 'It’s completely free — the wellbeing programme is provided by the company at no cost to you.',
+    keywords: ['free', 'cost', 'pay', 'payment', 'charge', 'price', 'expensive', 'money', 'fee'],
+  },
+  {
+    q: 'Who will I be talking to?',
+    a: 'An independent Wellbeing Officer — someone outside your direct reporting line, there to support you, not to evaluate your work.',
+    keywords: ['who will i talk', 'who do i talk', 'who is the officer', 'wellbeing officer', 'counsellor', 'boss', 'my manager', 'independent'],
+  },
+  {
+    q: 'What can I talk about in a session?',
+    a: 'Anything affecting how you’re doing at work — workload, stress, team dynamics, motivation, growth, your environment, or something personal that’s spilling into work. You lead the conversation.',
+    keywords: ['talk about', 'discuss', 'bring up', 'what to say', 'topics', 'what can i share', 'subjects'],
+  },
+  {
+    q: 'Will my manager or boss know I booked?',
+    a: 'No. Your manager is not notified. HR only ever sees aggregated, anonymised patterns — never that you personally booked a session.',
+    keywords: ['manager know', 'boss know', 'supervisor', 'my boss', 'my manager', 'will they know', 'find out', 'tell my boss'],
+  },
+  {
+    q: 'How do I book a session?',
+    a: 'Click "Book a session", pick the areas that feel relevant (or just your overall mood), add your email, and submit. It takes about a minute.',
+    keywords: ['how do i book', 'how to book', 'sign up', 'register', 'make a booking', 'request a session', 'get started', 'start'],
+  },
+  {
+    q: 'Can I book more than one session?',
+    a: 'Yes — you can book as often as you need. There’s no limit, and each request is handled the same way.',
+    keywords: ['more than one', 'multiple', 'again', 'another session', 'how many', 'limit', 'regular', 'ongoing'],
+  },
+  {
+    q: 'What happens to my notes and data afterward?',
+    a: 'Notes are stored securely and are visible only to the Wellbeing/HR team, used solely to support you. A short reflection may go to a team leader or HR only if needed for your support or safety, with identifying details minimised.',
+    keywords: ['my data', 'my notes', 'stored', 'kept', 'afterward', 'afterwards', 'what happens to', 'saved', 'gdpr', 'deleted'],
+  },
+  {
+    q: 'What if I’m in crisis or need emergency help?',
+    a: 'This tool isn’t an emergency service. If you’re in immediate danger, call emergency services (191 in Thailand) right now. For urgent mental-health support, the Department of Mental Health hotline is 1323 (24 hours). Please also let HR know so we can support you.',
+    keywords: ['crisis', 'emergency', 'suicidal', 'suicide', 'harm myself', 'hurt myself', 'danger', 'hotline', 'help now', 'desperate', 'cant cope'],
   },
 ];
-const FAQ_QUICK_REPLIES = [0, 7, 3, 4, 6]; // indices into FAQS shown as default quick-reply buttons
-function matchFaq(query) {
-  const q = (query || '').toLowerCase();
-  let best = null, bestScore = 0;
-  for (const entry of FAQS) {
-    let score = 0;
-    for (const kw of entry.keywords) {
-      if (q.includes(kw)) score += kw.split(' ').length;
+const FAQ_QUICK_REPLIES = [0, 15, 3, 4, 6]; // default quick-reply buttons: confidential, manager-knows, review, length, next
+
+const FAQ_STOPWORDS = new Set([
+  'the', 'is', 'a', 'an', 'of', 'to', 'for', 'and', 'or', 'do', 'does', 'did', 'i', 'me', 'my', 'we',
+  'you', 'your', 'it', 'be', 'am', 'are', 'was', 'this', 'that', 'these', 'those', 'in', 'on', 'at',
+  'with', 'as', 'if', 'so', 'but', 'can', 'could', 'would', 'should', 'will', 'get', 'got', 'have',
+  'has', 'had', 'about', 'there', 'here', 'any', 'some', 'they', 'them',
+]);
+
+function faqWords(text) {
+  return (text || '').toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/)
+    .filter(w => w && !FAQ_STOPWORDS.has(w));
+}
+
+function scoreFaq(entry, rawQuery, queryWords) {
+  const q = ' ' + rawQuery.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim() + ' ';
+  let score = 0;
+  for (const kw of entry.keywords) {
+    if (kw.includes(' ')) {
+      if (q.includes(' ' + kw + ' ') || q.includes(kw)) score += 3 * kw.split(' ').length;
+    } else if (queryWords.has(kw)) {
+      score += 3;
     }
-    if (score > bestScore) { bestScore = score; best = entry; }
   }
-  return bestScore > 0 ? best.a : null;
+  // Weak paraphrase signal: overlap between the user's words and the question text.
+  const qWordsInQuestion = faqWords(entry.q);
+  for (const w of qWordsInQuestion) {
+    if (queryWords.has(w)) score += 1;
+  }
+  return score;
+}
+
+// Returns { type: 'answer', index } | { type: 'suggest', indices } | { type: 'none' }
+function matchFaq(query) {
+  const queryWords = new Set(faqWords(query));
+  const scored = FAQS.map((entry, index) => ({ index, score: scoreFaq(entry, query || '', queryWords) }))
+    .filter(s => s.score > 0)
+    .sort((a, b) => b.score - a.score);
+
+  if (!scored.length) return { type: 'none' };
+  if (scored[0].score >= 3) return { type: 'answer', index: scored[0].index };
+  return { type: 'suggest', indices: scored.slice(0, 3).map(s => s.index) };
 }
 
 class Component extends DCLogic {
@@ -2851,14 +2926,35 @@ class Component extends DCLogic {
   askFaq(text) {
     const trimmed = (text || '').trim();
     if (!trimmed) return;
-    const answer = matchFaq(trimmed);
+    const result = matchFaq(trimmed);
+    let botMsg;
+    if (result.type === 'answer') {
+      botMsg = { from: 'bot', text: FAQS[result.index].a };
+    } else if (result.type === 'suggest') {
+      botMsg = {
+        from: 'bot',
+        text: 'I’m not certain I understood, but here’s what might help — tap the closest one:',
+        suggestions: result.indices,
+      };
+    } else {
+      botMsg = {
+        from: 'bot',
+        text: 'I couldn’t find that in the FAQ. You can browse every question below, or reach out to HR directly for anything specific to your situation.',
+        showBrowse: true,
+      };
+    }
     this.setState(s => ({
-      faqMessages: [
-        ...s.faqMessages,
-        { from: 'user', text: trimmed },
-        { from: 'bot', text: answer || 'I\'m not sure about that one — try rephrasing, or reach out to HR directly for anything specific to your situation.' },
-      ],
+      faqMessages: [...s.faqMessages, { from: 'user', text: trimmed }, botMsg],
       faqInput: '',
+    }));
+  }
+  browseAllFaq() {
+    this.setState(s => ({
+      faqMessages: [...s.faqMessages, {
+        from: 'bot',
+        text: 'Here’s everything I can help with — tap any question:',
+        suggestions: FAQS.map((_, i) => i),
+      }],
     }));
   }
 
@@ -2976,6 +3072,8 @@ class Component extends DCLogic {
 
     const bubbleBtn = cr('button', {
       onClick: () => this.toggleFaq(),
+      className: 'wb-faq-fab',
+      'aria-label': 'Open wellbeing FAQ',
       style: {
         position: 'fixed', right: '24px', bottom: '24px', zIndex: 120,
         width: '56px', height: '56px', borderRadius: '50%', border: 'none',
@@ -2986,35 +3084,70 @@ class Component extends DCLogic {
 
     if (!faqOpen) return bubbleBtn;
 
-    const messageBubbles = faqMessages.map((m, i) => cr('div', {
-      key: i,
+    // A suggestion/quick-reply button (bot side).
+    const replyBtn = (idx, key) => cr('button', {
+      key: key, onClick: () => this.askFaq(FAQS[idx].q),
       style: {
-        alignSelf: m.from === 'user' ? 'flex-end' : 'flex-start',
-        maxWidth: '82%',
-        background: m.from === 'user' ? 'var(--brand-accent)' : 'var(--surface-sunken)',
-        color: m.from === 'user' ? '#062a33' : 'var(--text-primary)',
-        padding: '10px 14px', borderRadius: '14px', fontSize: '13.5px', lineHeight: 1.5,
+        textAlign: 'left', fontFamily: 'var(--font-sans)', fontSize: '13px', fontWeight: 500,
+        padding: '9px 12px', borderRadius: '10px', border: '1px solid var(--border-subtle)',
+        background: 'var(--surface-card)', color: 'var(--text-brand)', cursor: 'pointer',
       },
-    }, m.text));
+    }, FAQS[idx].q);
 
-    const showQuickReplies = faqMessages.length === 1;
-    const quickReplies = showQuickReplies ? cr('div', { key: 'qr', style: { display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' } },
-      FAQ_QUICK_REPLIES.map(i => {
-        const entry = FAQS[i];
-        return cr('button', {
-          key: i, onClick: () => this.askFaq(entry.q),
+    const rows = [];
+    faqMessages.forEach((m, i) => {
+      rows.push(cr('div', {
+        key: 'm' + i,
+        style: {
+          alignSelf: m.from === 'user' ? 'flex-end' : 'flex-start',
+          maxWidth: '82%',
+          background: m.from === 'user' ? 'var(--brand-accent)' : 'var(--surface-sunken)',
+          color: m.from === 'user' ? '#062a33' : 'var(--text-primary)',
+          padding: '10px 14px', borderRadius: '14px', fontSize: '13.5px', lineHeight: 1.5,
+        },
+      }, m.text));
+      if (m.suggestions && m.suggestions.length) {
+        rows.push(cr('div', { key: 'sug' + i, style: { display: 'flex', flexDirection: 'column', gap: '8px', alignSelf: 'stretch' } },
+          m.suggestions.map(idx => replyBtn(idx, 'sug' + i + '-' + idx))
+        ));
+      }
+      if (m.showBrowse) {
+        rows.push(cr('button', {
+          key: 'br' + i, onClick: () => this.browseAllFaq(),
           style: {
-            textAlign: 'left', fontFamily: 'var(--font-sans)', fontSize: '13px', fontWeight: 500,
-            padding: '9px 12px', borderRadius: '10px', border: '1px solid var(--border-subtle)',
-            background: 'var(--surface-card)', color: 'var(--text-brand)', cursor: 'pointer',
+            alignSelf: 'flex-start', fontFamily: 'var(--font-sans)', fontSize: '13px', fontWeight: 600,
+            padding: '9px 14px', borderRadius: '10px', border: '1px solid var(--brand-accent)',
+            background: 'transparent', color: 'var(--text-brand)', cursor: 'pointer',
           },
-        }, entry.q);
-      })
-    ) : null;
+        }, 'Browse all questions'));
+      }
+    });
+
+    // Initial greeting always shows the default quick-reply buttons beneath it.
+    if (faqMessages.length === 1) {
+      rows.push(cr('div', { key: 'qr', style: { display: 'flex', flexDirection: 'column', gap: '8px', alignSelf: 'stretch' } },
+        FAQ_QUICK_REPLIES.map(idx => replyBtn(idx, 'qr-' + idx))
+      ));
+    }
+
+    const header = cr('div', { style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '1px solid var(--border-subtle)' } },
+      cr('span', { style: { fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '15px', color: 'var(--text-primary)' } }, 'Wellbeing FAQ'),
+      cr('button', { onClick: () => this.toggleFaq(), 'aria-label': 'Close', style: { background: 'none', border: 'none', fontSize: '18px', color: 'var(--text-secondary)', cursor: 'pointer', lineHeight: 1 } }, '✕')
+    );
+
+    const browseBar = cr('button', {
+      onClick: () => this.browseAllFaq(),
+      style: {
+        display: 'block', width: '100%', textAlign: 'center', fontFamily: 'var(--font-sans)',
+        fontSize: '12.5px', fontWeight: 600, padding: '8px', border: 'none',
+        borderTop: '1px solid var(--border-subtle)', background: 'transparent',
+        color: 'var(--text-brand)', cursor: 'pointer',
+      },
+    }, 'Browse all questions');
 
     const inputRow = cr('div', { style: { display: 'flex', gap: '8px', padding: '12px', borderTop: '1px solid var(--border-subtle)' } },
       cr('input', {
-        type: 'text', value: faqInput, placeholder: 'Type a question…',
+        type: 'text', value: faqInput, placeholder: 'Type your question…',
         onChange: e => this.setState({ faqInput: e.target.value }),
         onKeyDown: e => { if (e.key === 'Enter') this.askFaq(faqInput); },
         style: { flex: 1, fontFamily: 'var(--font-sans)', fontSize: '13.5px', padding: '9px 12px', borderRadius: '8px', border: '1px solid var(--border-subtle)', background: 'var(--bg)', color: 'var(--text-primary)' },
@@ -3025,24 +3158,18 @@ class Component extends DCLogic {
       }, 'Send')
     );
 
-    const header = cr('div', { style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '1px solid var(--border-subtle)' } },
-      cr('span', { style: { fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '15px', color: 'var(--text-primary)' } }, 'Wellbeing FAQ'),
-      cr('button', { onClick: () => this.toggleFaq(), style: { background: 'none', border: 'none', fontSize: '18px', color: 'var(--text-secondary)', cursor: 'pointer', lineHeight: 1 } }, '✕')
-    );
-
     const panel = cr('div', {
       style: {
         position: 'fixed', right: '24px', bottom: '92px', zIndex: 120,
-        width: '340px', maxWidth: '88vw', maxHeight: '480px',
+        width: '360px', maxWidth: '88vw', height: '520px', maxHeight: '80vh',
         background: 'var(--surface-card)', border: '1px solid var(--border-subtle)',
         borderRadius: '16px', boxShadow: '0 18px 48px rgba(12,18,51,0.28)',
         display: 'flex', flexDirection: 'column', overflow: 'hidden',
       },
     },
       header,
-      cr('div', { style: { flex: 1, overflowY: 'auto', padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '10px' } },
-        ...messageBubbles, quickReplies
-      ),
+      cr('div', { style: { flex: 1, overflowY: 'auto', padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '10px' } }, ...rows),
+      browseBar,
       inputRow
     );
 
