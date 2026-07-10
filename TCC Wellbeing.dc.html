@@ -2340,6 +2340,7 @@ a:hover { text-decoration: underline; }
 
   {{ calendarEl }}
   {{ consentModalEl }}
+  {{ faqWidgetEl }}
 
   <!-- ===== FOOTER ===== -->
   <footer style="position:relative;z-index:2;margin-top:auto;border-top:1px solid var(--border-subtle);padding:20px 32px;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--text-secondary);">
@@ -2444,6 +2445,83 @@ function emptySrDraft() {
     rawNotes: { work: '', social: '', emotional: '', growth: '', env: '' } };
 }
 
+// ---------- FAQ chatbot (free, no LLM — pure keyword retrieval over a fixed Q&A set) ----------
+const FAQS = [
+  {
+    q: 'Is this confidential?',
+    a: 'Yes — only the Wellbeing Officer and HR admin can see your request. It’s never shared with your manager or made public.',
+    keywords: ['confidential', 'private', 'anonymous', 'who sees', 'see my', 'privacy'],
+  },
+  {
+    q: 'Do I have to give my name?',
+    a: 'No name is required. We only ask for an email so we can send you a confirmation and keep in touch about your session.',
+    keywords: ['name', 'identity', 'who am i', 'anonymous'],
+  },
+  {
+    q: 'Is my email shared with anyone?',
+    a: 'Your email is kept confidential and used only to send you a confirmation — it’s never shared or published.',
+    keywords: ['email', 'share email', 'who sees email', 'my email'],
+  },
+  {
+    q: 'Will this affect my performance review?',
+    a: 'No. Wellbeing sessions are completely separate from performance reviews — they’re for support, not evaluation.',
+    keywords: ['performance', 'review', 'evaluation', 'work score', 'fired', 'job', 'hurt my review', 'appraisal'],
+  },
+  {
+    q: 'How long does a session take?',
+    a: 'Sessions are typically a private 15–20 minute conversation with a Wellbeing Officer.',
+    keywords: ['how long', 'duration', 'how much time', 'minutes', 'length'],
+  },
+  {
+    q: 'Can I choose in-person or online?',
+    a: 'Yes — when booking, you can select In person, Virtual, or Either is fine.',
+    keywords: ['in person', 'online', 'virtual', 'format', 'video call'],
+  },
+  {
+    q: 'What happens after I submit a request?',
+    a: 'HR reviews your request and assigns a Wellbeing Officer, then proposes a time that fits your availability.',
+    keywords: ['after submit', 'after i submit', 'next', 'what happens', 'process', 'what now'],
+  },
+  {
+    q: 'Is my session recorded?',
+    a: 'Not by default. Written notes are always taken. If the officer wants to audio-record for accuracy, they’ll ask for your consent in person first, and you can decline.',
+    keywords: ['recorded', 'recording', 'audio', 'record', 'tape'],
+  },
+  {
+    q: 'Can I cancel or reschedule?',
+    a: 'Reach out to HR or your assigned Wellbeing Officer directly to reschedule — this isn’t yet automated in the booking system.',
+    keywords: ['cancel', 'reschedule', 'change time', 'postpone', 'move my session'],
+  },
+  {
+    q: 'What are the 5 wellbeing dimensions?',
+    a: 'Work Experience, Social Integration, Emotional Health, Growth & Purpose, and Environmental Fit.',
+    keywords: ['dimensions', 'five', '5 areas', 'categories', 'wellbeing dimensions'],
+  },
+  {
+    q: 'Is this a substitute for therapy or counselling?',
+    a: 'No — this supports wellbeing and early intervention, but isn’t clinical counselling or diagnosis.',
+    keywords: ['therapy', 'counselling', 'counseling', 'clinical', 'diagnosis', 'psychologist'],
+  },
+  {
+    q: 'Who do I contact for urgent help?',
+    a: 'For anything urgent or a safety concern, please contact HR directly rather than waiting on a booking.',
+    keywords: ['urgent', 'emergency', 'crisis', 'help now', 'immediately'],
+  },
+];
+const FAQ_QUICK_REPLIES = [0, 7, 3, 4, 6]; // indices into FAQS shown as default quick-reply buttons
+function matchFaq(query) {
+  const q = (query || '').toLowerCase();
+  let best = null, bestScore = 0;
+  for (const entry of FAQS) {
+    let score = 0;
+    for (const kw of entry.keywords) {
+      if (q.includes(kw)) score += kw.split(' ').length;
+    }
+    if (score > bestScore) { bestScore = score; best = entry; }
+  }
+  return bestScore > 0 ? best.a : null;
+}
+
 class Component extends DCLogic {
   DIMS = [
     { key: 'work', label: 'Work Experience', desc: 'Task clarity, workload, learning curve' },
@@ -2499,6 +2577,9 @@ class Component extends DCLogic {
     srUploading: {},
     consentOpen: false,
     consentChecked: false,
+    faqOpen: false,
+    faqMessages: [{ from: 'bot', text: 'Hi! I can answer common questions about booking a wellbeing session. Tap a question below or type your own.' }],
+    faqInput: '',
     pickerOpen: false,
     pickerMonth: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     pickerDate: null,
@@ -2765,6 +2846,22 @@ class Component extends DCLogic {
     await this.submitBooking();
   }
 
+  // ---------- FAQ chatbot ----------
+  toggleFaq() { this.setState(s => ({ faqOpen: !s.faqOpen })); }
+  askFaq(text) {
+    const trimmed = (text || '').trim();
+    if (!trimmed) return;
+    const answer = matchFaq(trimmed);
+    this.setState(s => ({
+      faqMessages: [
+        ...s.faqMessages,
+        { from: 'user', text: trimmed },
+        { from: 'bot', text: answer || 'I\'m not sure about that one — try rephrasing, or reach out to HR directly for anything specific to your situation.' },
+      ],
+      faqInput: '',
+    }));
+  }
+
   openPicker(target) {
     this.setState({ pickerOpen: true, pickerTarget: target, pickerDate: null, pickerSlot: null });
   }
@@ -2872,6 +2969,85 @@ class Component extends DCLogic {
       )
     );
   }
+  renderFaqWidget() {
+    const { view, faqOpen, faqMessages, faqInput } = this.state;
+    if (!['home', 'book', 'confirm'].includes(view)) return null;
+    const cr = React.createElement;
+
+    const bubbleBtn = cr('button', {
+      onClick: () => this.toggleFaq(),
+      style: {
+        position: 'fixed', right: '24px', bottom: '24px', zIndex: 120,
+        width: '56px', height: '56px', borderRadius: '50%', border: 'none',
+        background: 'var(--brand-accent)', color: '#062a33', cursor: 'pointer',
+        boxShadow: '0 8px 24px rgba(0,168,200,.35)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+      },
+    }, cr('span', { style: { display: 'inline-flex', width: '26px', height: '26px' } }, this.chatIcon()));
+
+    if (!faqOpen) return bubbleBtn;
+
+    const messageBubbles = faqMessages.map((m, i) => cr('div', {
+      key: i,
+      style: {
+        alignSelf: m.from === 'user' ? 'flex-end' : 'flex-start',
+        maxWidth: '82%',
+        background: m.from === 'user' ? 'var(--brand-accent)' : 'var(--surface-sunken)',
+        color: m.from === 'user' ? '#062a33' : 'var(--text-primary)',
+        padding: '10px 14px', borderRadius: '14px', fontSize: '13.5px', lineHeight: 1.5,
+      },
+    }, m.text));
+
+    const showQuickReplies = faqMessages.length === 1;
+    const quickReplies = showQuickReplies ? cr('div', { key: 'qr', style: { display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' } },
+      FAQ_QUICK_REPLIES.map(i => {
+        const entry = FAQS[i];
+        return cr('button', {
+          key: i, onClick: () => this.askFaq(entry.q),
+          style: {
+            textAlign: 'left', fontFamily: 'var(--font-sans)', fontSize: '13px', fontWeight: 500,
+            padding: '9px 12px', borderRadius: '10px', border: '1px solid var(--border-subtle)',
+            background: 'var(--surface-card)', color: 'var(--text-brand)', cursor: 'pointer',
+          },
+        }, entry.q);
+      })
+    ) : null;
+
+    const inputRow = cr('div', { style: { display: 'flex', gap: '8px', padding: '12px', borderTop: '1px solid var(--border-subtle)' } },
+      cr('input', {
+        type: 'text', value: faqInput, placeholder: 'Type a question…',
+        onChange: e => this.setState({ faqInput: e.target.value }),
+        onKeyDown: e => { if (e.key === 'Enter') this.askFaq(faqInput); },
+        style: { flex: 1, fontFamily: 'var(--font-sans)', fontSize: '13.5px', padding: '9px 12px', borderRadius: '8px', border: '1px solid var(--border-subtle)', background: 'var(--bg)', color: 'var(--text-primary)' },
+      }),
+      cr('button', {
+        onClick: () => this.askFaq(faqInput),
+        style: { fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: '13px', padding: '9px 16px', borderRadius: '8px', border: 'none', background: 'var(--brand-accent)', color: '#062a33', cursor: 'pointer' },
+      }, 'Send')
+    );
+
+    const header = cr('div', { style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '1px solid var(--border-subtle)' } },
+      cr('span', { style: { fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '15px', color: 'var(--text-primary)' } }, 'Wellbeing FAQ'),
+      cr('button', { onClick: () => this.toggleFaq(), style: { background: 'none', border: 'none', fontSize: '18px', color: 'var(--text-secondary)', cursor: 'pointer', lineHeight: 1 } }, '✕')
+    );
+
+    const panel = cr('div', {
+      style: {
+        position: 'fixed', right: '24px', bottom: '92px', zIndex: 120,
+        width: '340px', maxWidth: '88vw', maxHeight: '480px',
+        background: 'var(--surface-card)', border: '1px solid var(--border-subtle)',
+        borderRadius: '16px', boxShadow: '0 18px 48px rgba(12,18,51,0.28)',
+        display: 'flex', flexDirection: 'column', overflow: 'hidden',
+      },
+    },
+      header,
+      cr('div', { style: { flex: 1, overflowY: 'auto', padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '10px' } },
+        ...messageBubbles, quickReplies
+      ),
+      inputRow
+    );
+
+    return cr('div', { key: 'faq-widget' }, panel, bubbleBtn);
+  }
   // ---------- icons ----------
   icon(paths, extra) {
     return React.createElement('svg', Object.assign({ viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round', width: '100%', height: '100%' }, extra || {}), paths);
@@ -2884,6 +3060,7 @@ class Component extends DCLogic {
   moonIcon() { return this.icon([React.createElement('path', { d: 'M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z', key: 'm' })]); }
   lockIcon() { return this.icon([React.createElement('rect', { x: 4, y: 11, width: 16, height: 9, rx: 2, key: 'r' }), React.createElement('path', { d: 'M8 11V7a4 4 0 0 1 8 0v4', key: 'p' })]); }
   checkIcon() { return this.icon([React.createElement('path', { d: 'M20 6 9 17l-5-5', key: 'c' })], { strokeWidth: 2.5 }); }
+  chatIcon() { return this.icon([React.createElement('path', { d: 'M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.4 8.4 0 0 1-4-1L3 20l1-5.5a8.4 8.4 0 0 1-1-4A8.38 8.38 0 0 1 11.5 2 8.5 8.5 0 0 1 21 11.5Z', key: 'b' })]); }
 
   // ---------- style helpers ----------
   chip(selected, extra) {
@@ -3176,6 +3353,7 @@ class Component extends DCLogic {
       aggFlag: (s.publicStats && s.publicStats.flag) || 0,
       calendarEl: this.renderCalendar(),
       consentModalEl: this.renderConsentModal(),
+      faqWidgetEl: this.renderFaqWidget(),
       bookDateDisplay: s.bookDate || 'Pick a specific date →',
       bookDateBtnStyle: { fontFamily: 'var(--font-sans)', fontWeight: s.bookDate ? 600 : 400, fontSize: 'var(--fs-body)', padding: '13px 20px', borderRadius: 'var(--radius-sm)', border: s.bookDate ? '1px solid var(--brand-accent)' : '1px solid var(--border-subtle)', background: s.bookDate ? 'rgba(0,168,200,0.10)' : 'var(--surface-card)', color: s.bookDate ? 'var(--text-primary)' : 'var(--text-secondary)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '10px', transition: 'all var(--dur-fast) var(--ease-standard)' },
       openBookCal: () => this.openPicker('book'),
