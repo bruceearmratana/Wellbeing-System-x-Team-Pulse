@@ -1672,6 +1672,11 @@ a:hover { text-decoration: underline; }
     .wb-faq-fab{transition:transform var(--dur-fast) var(--ease-standard),box-shadow var(--dur-fast) var(--ease-standard);}
     .wb-faq-fab:hover{animation:wbFaqBounce .6s var(--ease-standard) infinite;box-shadow:0 12px 30px rgba(0,168,200,.5);}
     @media (prefers-reduced-motion:reduce){.wb-faq-fab:hover{animation:none;transform:translateY(-3px);}}
+    /* FAQ question choices: light up on hover */
+    .wb-faq-reply{display:block;width:100%;text-align:left;font-family:var(--font-sans);font-size:13px;font-weight:500;padding:9px 12px;border-radius:10px;border:1px solid var(--border-subtle);background:var(--surface-card);color:var(--text-brand);cursor:pointer;transition:all var(--dur-fast) var(--ease-standard);}
+    .wb-faq-reply:hover{border-color:var(--brand-accent);background:rgba(0,168,200,.10);box-shadow:0 3px 14px rgba(0,168,200,.22);transform:translateY(-1px);}
+    .wb-faq-browse{display:block;width:100%;text-align:center;font-family:var(--font-sans);font-size:12.5px;font-weight:600;padding:8px;border:none;border-top:1px solid var(--border-subtle);background:transparent;color:var(--text-brand);cursor:pointer;transition:background var(--dur-fast) var(--ease-standard);}
+    .wb-faq-browse:hover{background:rgba(0,168,200,.10);}
     /* Lava lamp: soft oil blob drifts up, cools, sinks — seamless loop with gentle sway + gooey morph */
     @keyframes wbLava{
       0%,100%{transform:translateY(0) translateX(0) scale(1);border-radius:52% 48% 45% 55% / 55% 48% 52% 45%;}
@@ -2520,7 +2525,7 @@ const FAQS = [
   {
     q: 'Who will I be talking to?',
     a: 'An independent Wellbeing Officer — someone outside your direct reporting line, there to support you, not to evaluate your work.',
-    keywords: ['who will i talk', 'who do i talk', 'who is the officer', 'wellbeing officer', 'counsellor', 'boss', 'my manager', 'independent'],
+    keywords: ['who will i talk', 'who do i talk', 'who is the officer', 'wellbeing officer', 'counsellor', 'talk to my boss', 'talk to my manager', 'independent'],
   },
   {
     q: 'What can I talk about in a session?',
@@ -2551,6 +2556,56 @@ const FAQS = [
     q: 'What if I’m in crisis or need emergency help?',
     a: 'This tool isn’t an emergency service. If you’re in immediate danger, call emergency services (191 in Thailand) right now. For urgent mental-health support, the Department of Mental Health hotline is 1323 (24 hours). Please also let HR know so we can support you.',
     keywords: ['crisis', 'emergency', 'suicidal', 'suicide', 'harm myself', 'hurt myself', 'danger', 'hotline', 'help now', 'desperate', 'cant cope'],
+  },
+  {
+    q: 'Do I need my manager’s approval to book?',
+    a: 'No approval needed. Booking a wellbeing session is entirely your choice — you don’t need permission from your manager or anyone else.',
+    keywords: ['approval', 'permission', 'allowed', 'ask my manager', 'ask permission', 'need consent', 'sign off', 'authorise', 'authorize', 'manager approval', 'managers permission', 'manager permission'],
+  },
+  {
+    q: 'Is this only for people who are struggling?',
+    a: 'Not at all. It’s open to everyone — whether you’re going through a tough time or just want a proactive check-in while things are going well.',
+    keywords: ['only for', 'struggling', 'have to be', 'who is it for', 'eligible', 'qualify', 'doing fine', 'not struggling', 'everyone'],
+  },
+  {
+    q: 'Is taking part mandatory or voluntary?',
+    a: 'It’s completely voluntary. You’re never required to book, and you can end a session at any point without giving a reason.',
+    keywords: ['mandatory', 'voluntary', 'required', 'have to', 'obligated', 'forced', 'compulsory', 'must i'],
+  },
+  {
+    q: 'What language will the session be in?',
+    a: 'Sessions can be held in Thai or English — whichever you’re most comfortable with. You can note your preference when booking or tell your officer.',
+    keywords: ['language', 'thai', 'english', 'speak', 'in english', 'in thai', 'translator', 'what language'],
+  },
+  {
+    q: 'Can I book on behalf of a coworker I’m worried about?',
+    a: 'It’s best if the person books themselves so the session fits their own needs — feel free to share the link. If you’re seriously concerned about someone’s safety, contact HR directly.',
+    keywords: ['on behalf', 'for someone', 'for a coworker', 'for a friend', 'colleague', 'worried about someone', 'refer', 'book for'],
+  },
+  {
+    q: 'What if I’m nervous or don’t know what to expect?',
+    a: 'That’s completely normal. It’s just a relaxed, private conversation — there’s no script, no pressure, and you share only what you want to. The officer will guide things gently.',
+    keywords: ['nervous', 'scared', 'anxious', 'what to expect', 'awkward', 'shy', 'first time', 'uncomfortable', 'worried about the session'],
+  },
+  {
+    q: 'Will there be any follow-up after my session?',
+    a: 'If it would help, the officer may check in with you or suggest next steps — always with your agreement. You can also request a follow-up session anytime.',
+    keywords: ['follow up', 'follow-up', 'after the session', 'check in', 'next steps', 'aftercare', 'come back', 'again after'],
+  },
+  {
+    q: 'Can I prepare or bring notes beforehand?',
+    a: 'Yes — jotting down what’s on your mind beforehand can help, but it’s entirely optional. Come however you feel comfortable.',
+    keywords: ['prepare', 'bring notes', 'beforehand', 'write down', 'get ready', 'preparation', 'what to bring', 'in advance'],
+  },
+  {
+    q: 'When are sessions available?',
+    a: 'Sessions are usually arranged during working hours. After you book, the officer proposes a time that fits your availability — you can share your preferred days and times.',
+    keywords: ['when available', 'what times', 'what days', 'availability', 'schedule', 'hours', 'weekend', 'after work', 'timing'],
+  },
+  {
+    q: 'Who runs this programme and how do I give feedback?',
+    a: 'It’s run by the People & Culture (HR) team. Feedback is very welcome — reach out to HR directly and it’ll help shape how the programme evolves.',
+    keywords: ['who runs', 'who made', 'who manages', 'feedback', 'suggestion', 'complaint', 'improve', 'people and culture', 'in charge'],
   },
 ];
 const FAQ_QUICK_REPLIES = [0, 15, 3, 4, 6]; // default quick-reply buttons: confidential, manager-knows, review, length, next
@@ -3084,14 +3139,10 @@ class Component extends DCLogic {
 
     if (!faqOpen) return bubbleBtn;
 
-    // A suggestion/quick-reply button (bot side).
+    // A suggestion/quick-reply button (bot side). Styling + hover glow live in
+    // the .wb-faq-reply CSS class (inline styles would override :hover).
     const replyBtn = (idx, key) => cr('button', {
-      key: key, onClick: () => this.askFaq(FAQS[idx].q),
-      style: {
-        textAlign: 'left', fontFamily: 'var(--font-sans)', fontSize: '13px', fontWeight: 500,
-        padding: '9px 12px', borderRadius: '10px', border: '1px solid var(--border-subtle)',
-        background: 'var(--surface-card)', color: 'var(--text-brand)', cursor: 'pointer',
-      },
+      key: key, className: 'wb-faq-reply', onClick: () => this.askFaq(FAQS[idx].q),
     }, FAQS[idx].q);
 
     const rows = [];
@@ -3136,13 +3187,7 @@ class Component extends DCLogic {
     );
 
     const browseBar = cr('button', {
-      onClick: () => this.browseAllFaq(),
-      style: {
-        display: 'block', width: '100%', textAlign: 'center', fontFamily: 'var(--font-sans)',
-        fontSize: '12.5px', fontWeight: 600, padding: '8px', border: 'none',
-        borderTop: '1px solid var(--border-subtle)', background: 'transparent',
-        color: 'var(--text-brand)', cursor: 'pointer',
-      },
+      className: 'wb-faq-browse', onClick: () => this.browseAllFaq(),
     }, 'Browse all questions');
 
     const inputRow = cr('div', { style: { display: 'flex', gap: '8px', padding: '12px', borderTop: '1px solid var(--border-subtle)' } },
