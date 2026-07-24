@@ -2060,6 +2060,8 @@ a:hover { text-decoration: underline; }
       <div style="background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:18px 20px;"><div style="font-family:var(--font-mono);font-size:28px;font-weight:600;color:var(--tcc-danger);">{{ aggFlag }}</div><div style="font-size:12.5px;color:var(--text-secondary);">Auto-flagged</div></div>
     </div>
 
+    {{ insightsPanelEl }}
+
     <div style="display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start;">
       <div style="display:flex;flex-direction:column;gap:16px;">
         <sc-for list="{{ ticketRows }}" as="row" hint-placeholder-count="3">
@@ -2380,6 +2382,7 @@ function isValidEmail(email) {
 function rowToTicket(r) {
   return {
     id: r.id,
+    createdAt: r.created_at || '',
     dims: r.dims || [],
     mood: r.mood,
     urgency: r.urgency,
@@ -2652,6 +2655,229 @@ function matchFaq(query) {
   return { type: 'suggest', indices: scored.slice(0, 3).map(s => s.index) };
 }
 
+// ---------- Insights assistant (admin-only, 100% local) ----------
+// Parses a natural-language question, then computes EXACT aggregates over the
+// bookings already loaded in the browser. The "AI" only interprets intent and
+// phrases the answer — it never invents numbers, and no data leaves the device,
+// so this stays inside the platform's "aggregated signals only" promise.
+const DIM_SYNONYMS = {
+  work: ['work', 'workload', 'workloads', 'task', 'tasks', 'job', 'jobs', 'learning', 'onboarding', 'clarity'],
+  social: ['social', 'team', 'teams', 'belonging', 'communication', 'colleague', 'colleagues', 'coworker', 'coworkers', 'integration', 'relationship', 'relationships', 'isolation', 'lonely', 'loneliness'],
+  emotional: ['emotional', 'emotion', 'emotions', 'stress', 'stressed', 'stressful', 'burnout', 'motivation', 'motivated', 'mental', 'feeling', 'feelings', 'anxiety', 'anxious', 'morale'],
+  growth: ['growth', 'purpose', 'career', 'careers', 'goal', 'goals', 'mentorship', 'mentor', 'mentoring', 'development', 'progression', 'promotion', 'vision'],
+  env: ['env', 'environment', 'environmental', 'office', 'culture', 'workspace', 'commute'],
+};
+
+const NUM_WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, a: 1, an: 1 };
+function wordToNum(w) {
+  if (!w) return null;
+  if (/^\d+$/.test(w)) return parseInt(w, 10);
+  return NUM_WORDS[w] || null;
+}
+
+function detectDims(q) {
+  const found = [];
+  for (const key of Object.keys(DIM_SYNONYMS)) {
+    if (DIM_SYNONYMS[key].some(w => new RegExp('\\b' + w + '\\b').test(q))) found.push(key);
+  }
+  return found;
+}
+
+function _dayStart(d) { const x = new Date(d); x.setHours(0, 0, 0, 0); return x.getTime(); }
+function parseWindow(q) {
+  const now = Date.now();
+  const win = (label, start, end) => ({ hasWindow: true, label, start, end });
+  const nd = new Date();
+  const y = nd.getFullYear(), mo = nd.getMonth();
+  // Named calendar periods
+  if (/\btoday\b/.test(q)) return win('today', _dayStart(now), now);
+  if (/\byesterday\b/.test(q)) return win('yesterday', _dayStart(now) - 86400000, _dayStart(now));
+  if (/\bthis week\b/.test(q)) { const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return win('this week', d.getTime(), now); }
+  if (/\blast week\b/.test(q)) { const s = new Date(); s.setHours(0, 0, 0, 0); s.setDate(s.getDate() - ((s.getDay() + 6) % 7) - 7); return win('last week', s.getTime(), s.getTime() + 604800000); }
+  if (/\bthis month\b/.test(q)) return win('this month', new Date(y, mo, 1).getTime(), now);
+  if (/\blast month\b/.test(q)) return win('last month', new Date(y, mo - 1, 1).getTime(), new Date(y, mo, 1).getTime());
+  if (/\bthis quarter\b/.test(q)) return win('this quarter', new Date(y, Math.floor(mo / 3) * 3, 1).getTime(), now);
+  if (/\blast quarter\b/.test(q)) { const qs = Math.floor(mo / 3) * 3; return win('last quarter', new Date(y, qs - 3, 1).getTime(), new Date(y, qs, 1).getTime()); }
+  if (/\bthis year\b/.test(q)) return win('this year', new Date(y, 0, 1).getTime(), now);
+  if (/\blast year\b/.test(q)) return win('last year', new Date(y - 1, 0, 1).getTime(), new Date(y, 0, 1).getTime());
+  // Relative "last/past/within N day|week|month|quarter|year(s)" (also bare "3 months")
+  const unitMs = { day: 86400000, week: 604800000, month: 2629800000, quarter: 7889400000, year: 31557600000 };
+  const m = q.match(/\b(?:last|past|previous|recent|within|over|in|the)?\s*(?:the\s+)?(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|a|an)\s*-?\s*(day|week|month|quarter|year)s?\b/);
+  if (m) {
+    const n = wordToNum(m[1]) || 1, u = m[2];
+    return win('the last ' + n + ' ' + u + (n > 1 ? 's' : ''), now - n * unitMs[u], now);
+  }
+  return { hasWindow: false, label: 'all time', start: 0, end: now };
+}
+
+function detectFilters(q) {
+  const f = {};
+  if (/\b(urgent|urgency|escalat|pressing|priority)\b/.test(q)) f.urgency = ['soon', 'week'];
+  if (/\b(virtual|online|remote|video)\b/.test(q)) f.format = 'virtual';
+  if (/\bin[- ]?person\b|face[- ]to[- ]face/.test(q)) f.format = 'inperson';
+  if (/\b(flag|flagged|at[- ]risk|auto-flag)\b/.test(q)) f.flag = true;
+  if (/\b(unassigned|awaiting)\b/.test(q)) f.status = 'New';
+  if (/\bscheduled\b/.test(q)) f.status = 'Scheduled';
+  return f;
+}
+function describeFilters(f) {
+  const parts = [];
+  if (f.urgency) parts.push('urgent only');
+  if (f.format) parts.push(f.format === 'virtual' ? 'virtual only' : 'in-person only');
+  if (f.flag) parts.push('auto-flagged only');
+  if (f.status) parts.push(f.status.toLowerCase() + ' only');
+  return parts.join(', ');
+}
+
+function detectIntent(q, dims) {
+  if (/\b(compare|versus|vs\.?|difference between|against|compared)\b/.test(q) || dims.length >= 2) return 'compare';
+  if (/\b(trend|trending|increas|decreas|rising|risen|falling|fallen|growing|grew|declin|change|changed|over time|going up|going down)\b/.test(q)) return 'trend';
+  if (/\b(least|lowest|fewest|smallest|bottom|rarest)\b/.test(q)) return 'rank_bottom';
+  if (/\b(most|top|highest|biggest|largest|leading|common|frequent|popular|reported|requested|prevalent|dominant|main)\b/.test(q)) return 'rank_top';
+  if (/\b(how many|number of|count|total|volume)\b/.test(q)) return 'count';
+  if (dims.length === 1) return 'focus';
+  return 'breakdown';
+}
+function looksAnalytical(q) {
+  return /\b(dimension|dimensions|report|reported|request|requests|most|least|compare|trend|how many|count|total|urgent|virtual|flag|breakdown|top|highest|lowest|distribution|pattern|which|what)\b/.test(q) || detectDims(q).length > 0;
+}
+
+function _ticketTime(t) { const v = t.createdAt ? Date.parse(t.createdAt) : NaN; return isNaN(v) ? null : v; }
+function filterTickets(tickets, win, filters) {
+  return tickets.filter(t => {
+    if (win.hasWindow) { const ts = _ticketTime(t); if (ts === null || ts < win.start || ts >= win.end) return false; }
+    if (filters.urgency && !filters.urgency.includes(t.urgency)) return false;
+    if (filters.format && t.format !== filters.format) return false;
+    if (filters.flag && !t.flag) return false;
+    if (filters.status && t.status !== filters.status) return false;
+    return true;
+  });
+}
+function dimCounts(tix) {
+  const c = { work: 0, social: 0, emotional: 0, growth: 0, env: 0 };
+  tix.forEach(t => (t.dims || []).forEach(k => { if (k in c) c[k]++; }));
+  return c;
+}
+function deltaPhrase(curPct, priorPct) {
+  const d = Math.round(curPct - priorPct);
+  if (Math.abs(d) < 2) return 'about the same as the previous period (' + priorPct + '%)';
+  return (d > 0 ? 'up' : 'down') + ' from ' + priorPct + '% in the previous period';
+}
+function trendWord(cur, prev) {
+  if (prev === 0 && cur === 0) return 'no change';
+  if (prev === 0) return 'up from none';
+  const d = Math.round((cur - prev) / prev * 100);
+  if (Math.abs(d) < 5) return 'roughly flat';
+  return d > 0 ? 'up about ' + d + '%' : 'down about ' + Math.abs(d) + '%';
+}
+
+// Core: parse the question, compute exact aggregates, return a phrased answer +
+// optional bar data. Returns { text, bars? } (bars: [{label,count,pct,sub}]).
+function runInsight(query, tickets, DIMS) {
+  const q = ' ' + (query || '').toLowerCase().replace(/[^a-z0-9\s.-]/g, ' ').replace(/\s+/g, ' ').trim() + ' ';
+  if (!q.trim()) return { text: 'Ask me something like “what dimension is most reported in the last 3 months?”' };
+  if (!looksAnalytical(q)) {
+    return { text: 'I answer questions about the booking data — the five wellbeing dimensions, request volumes, trends and comparisons over a time range. Try: “what dimension is most reported in the last 3 months?”, “compare emotional health vs workload”, or “how many urgent requests this month?”' };
+  }
+
+  const dims = detectDims(q);
+  const win = parseWindow(q);
+  const filters = detectFilters(q);
+  const intent = detectIntent(q, dims);
+  const labelOf = k => (DIMS.find(d => d.key === k) || {}).label || k;
+
+  const inWin = filterTickets(tickets, win, filters);
+  const total = inWin.length;
+  const counts = dimCounts(inWin);
+  const pct = n => total ? Math.round(n / total * 100) : 0;
+
+  let prior = null;
+  if (win.hasWindow) {
+    const len = win.end - win.start;
+    const pt = filterTickets(tickets, { hasWindow: true, start: win.start - len, end: win.start }, filters);
+    prior = { total: pt.length, counts: dimCounts(pt) };
+  }
+
+  const filterNote = describeFilters(filters);
+  const scope = win.label + (filterNote ? ' (' + filterNote + ')' : '');
+
+  if (!total) return { text: 'No requests match ' + scope + '. Try a wider time range or fewer filters.' };
+
+  const ranked = DIMS.map(d => ({ key: d.key, label: d.label, count: counts[d.key], pct: pct(counts[d.key]) })).sort((a, b) => b.count - a.count);
+  const topCount = ranked[0].count || 1;
+  const barsFrom = list => list.map(r => ({ label: r.label, count: r.count, pct: Math.round(r.count / topCount * 100) + '%', sub: r.pct + '% of requests' }));
+
+  if (intent === 'compare') {
+    const keys = dims.length >= 2 ? dims : ['emotional', 'work'];
+    const cmp = keys.map(k => ({ key: k, label: labelOf(k), count: counts[k], pct: pct(counts[k]) })).sort((a, b) => b.count - a.count);
+    const maxc = cmp[0].count || 1;
+    const bars = cmp.map(c => ({ label: c.label, count: c.count, pct: Math.round(c.count / maxc * 100) + '%', sub: c.pct + '% of requests' }));
+    let text = 'Over ' + scope + ', ' + cmp.map(c => c.label + ': ' + c.count + ' (' + c.pct + '%)').join(' · ') + '. ';
+    const diff = cmp[0].count - cmp[1].count;
+    text += diff === 0 ? 'They\'re tied.' : cmp[0].label + ' leads by ' + diff + ' request' + (diff === 1 ? '' : 's') + ' across ' + total + ' total.';
+    return { text, bars };
+  }
+
+  if (intent === 'trend') {
+    const w = win.hasWindow ? win : parseWindow('last 3 months');
+    const wIn = filterTickets(tickets, w, filters), wTotal = wIn.length, wCounts = dimCounts(wIn);
+    const len = w.end - w.start;
+    const pIn = filterTickets(tickets, { hasWindow: true, start: w.start - len, end: w.start }, filters);
+    const pCounts = dimCounts(pIn), pTotal = pIn.length;
+    const wScope = w.label + (filterNote ? ' (' + filterNote + ')' : '');
+    if (dims.length) {
+      const k = dims[0], cur = wCounts[k], prev = pCounts[k];
+      const curP = wTotal ? Math.round(cur / wTotal * 100) : 0, prevP = pTotal ? Math.round(prev / pTotal * 100) : 0;
+      const text = labelOf(k) + ' was raised in ' + cur + ' of ' + wTotal + ' requests (' + curP + '%) over ' + wScope + ', versus ' + prev + ' of ' + pTotal + ' (' + prevP + '%) the previous period — ' + trendWord(cur, prev) + '.';
+      return { text, bars: [{ label: 'Now · ' + w.label, count: cur, pct: Math.round(cur / Math.max(cur, prev, 1) * 100) + '%', sub: curP + '%' }, { label: 'Previous period', count: prev, pct: Math.round(prev / Math.max(cur, prev, 1) * 100) + '%', sub: prevP + '%' }] };
+    }
+    const text = 'Total requests: ' + wTotal + ' over ' + wScope + ' versus ' + pTotal + ' the previous period — ' + trendWord(wTotal, pTotal) + '.';
+    return { text, bars: [{ label: 'Now · ' + w.label, count: wTotal, pct: Math.round(wTotal / Math.max(wTotal, pTotal, 1) * 100) + '%', sub: '' }, { label: 'Previous period', count: pTotal, pct: Math.round(pTotal / Math.max(wTotal, pTotal, 1) * 100) + '%', sub: '' }] };
+  }
+
+  if (intent === 'count') {
+    let text = 'There ' + (total === 1 ? 'was' : 'were') + ' ' + total + ' request' + (total === 1 ? '' : 's') + ' over ' + scope + '.';
+    if (dims.length) { const k = dims[0]; text += ' ' + counts[k] + ' of them (' + pct(counts[k]) + '%) raised ' + labelOf(k) + '.'; }
+    if (prior && prior.total) text += ' Previous period: ' + prior.total + '.';
+    return { text, bars: barsFrom(ranked.filter(r => r.count > 0)) };
+  }
+
+  if (intent === 'rank_bottom') {
+    const least = ranked[ranked.length - 1];
+    const text = 'Over ' + scope + ', the least-reported dimension is ' + least.label + ' — ' + least.count + ' of ' + total + ' requests (' + least.pct + '%).';
+    return { text, bars: barsFrom(ranked) };
+  }
+
+  if (intent === 'focus') {
+    const k = dims[0], rank = ranked.findIndex(r => r.key === k) + 1;
+    const ordinal = ['', '1st', '2nd', '3rd', '4th', '5th'][rank] || rank + 'th';
+    let text = labelOf(k) + ' was raised in ' + counts[k] + ' of ' + total + ' requests (' + pct(counts[k]) + '%) over ' + scope + ' — ' + ordinal + ' of the five dimensions.';
+    if (prior && prior.total) { const pP = Math.round((prior.counts[k] || 0) / prior.total * 100); text += ' That\'s ' + deltaPhrase(pct(counts[k]), pP) + '.'; }
+    return { text, bars: barsFrom(ranked) };
+  }
+
+  // rank_top and breakdown default
+  const top = ranked[0];
+  let text;
+  if (intent === 'breakdown') {
+    text = 'Full breakdown over ' + scope + ' (' + total + ' request' + (total === 1 ? '' : 's') + '):';
+  } else {
+    text = 'Over ' + scope + ', the most-reported dimension is ' + top.label + ' — ' + top.count + ' of ' + total + ' requests (' + top.pct + '%) raised it.';
+    if (prior && prior.total) { const pP = Math.round((prior.counts[top.key] || 0) / prior.total * 100); text += ' That\'s ' + deltaPhrase(top.pct, pP) + '.'; }
+    const rest = ranked.slice(1, 3).filter(r => r.count > 0).map(r => r.label + ' (' + r.pct + '%)');
+    if (rest.length) text += ' Next: ' + rest.join(', ') + '.';
+  }
+  return { text, bars: barsFrom(ranked) };
+}
+
+const INSIGHT_EXAMPLES = [
+  'What dimension is most reported in the last 3 months?',
+  'Compare emotional health vs workload',
+  'Is emotional health trending up?',
+  'How many urgent requests this month?',
+  'Which dimension is least reported?',
+];
+
 class Component extends DCLogic {
   DIMS = [
     { key: 'work', label: 'Work Experience', desc: 'Task clarity, workload, learning curve' },
@@ -2710,6 +2936,8 @@ class Component extends DCLogic {
     faqOpen: false,
     faqMessages: [{ from: 'bot', text: 'Hi! I can answer common questions about booking a wellbeing session. Tap a question below or type your own.' }],
     faqInput: '',
+    insightMessages: [{ from: 'bot', text: 'Ask about the booking data — most/least reported dimensions, volumes, trends and comparisons over any time range. Every answer is computed from live records, right here in your browser. Try an example below.' }],
+    insightInput: '',
     pickerOpen: false,
     pickerMonth: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     pickerDate: null,
@@ -3013,6 +3241,18 @@ class Component extends DCLogic {
     }));
   }
 
+  askInsight(text) {
+    const trimmed = (text || '').trim();
+    if (!trimmed) return;
+    const result = runInsight(trimmed, this.state.tickets, this.DIMS);
+    const botMsg = { from: 'bot', text: result.text };
+    if (result.bars && result.bars.length) botMsg.bars = result.bars;
+    this.setState(s => ({
+      insightMessages: [...s.insightMessages, { from: 'user', text: trimmed }, botMsg],
+      insightInput: '',
+    }));
+  }
+
   openPicker(target) {
     this.setState({ pickerOpen: true, pickerTarget: target, pickerDate: null, pickerSlot: null });
   }
@@ -3219,6 +3459,74 @@ class Component extends DCLogic {
     );
 
     return cr('div', { key: 'faq-widget' }, panel, bubbleBtn);
+  }
+
+  renderInsightsPanel() {
+    if (this.state.view !== 'admin') return null;
+    const cr = React.createElement;
+    const { insightMessages, insightInput } = this.state;
+
+    const barEl = (b, i) => cr('div', { key: 'bar' + i, style: { marginTop: i === 0 ? '2px' : '0' } },
+      cr('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', fontSize: '12px', marginBottom: '4px', gap: '10px' } },
+        cr('span', { style: { color: 'var(--text-primary)' } }, b.label),
+        cr('span', { style: { fontFamily: 'var(--font-mono)', color: 'var(--text-accent)', whiteSpace: 'nowrap' } }, b.count + (b.sub ? '  ·  ' + b.sub : ''))
+      ),
+      cr('div', { style: { height: '7px', background: 'var(--surface-sunken)', borderRadius: 'var(--radius-pill)', overflow: 'hidden' } },
+        cr('div', { style: { height: '100%', width: b.pct, background: 'linear-gradient(90deg,var(--tcc-cyan-500),var(--tcc-cyan-300))', borderRadius: 'var(--radius-pill)' } })
+      )
+    );
+
+    const rows = insightMessages.map((m, i) => {
+      const bubble = cr('div', {
+        style: {
+          alignSelf: m.from === 'user' ? 'flex-end' : 'flex-start', maxWidth: '86%',
+          background: m.from === 'user' ? 'var(--brand-accent)' : 'var(--surface-sunken)',
+          color: m.from === 'user' ? '#062a33' : 'var(--text-primary)',
+          padding: '10px 14px', borderRadius: '14px', fontSize: '13.5px', lineHeight: 1.55,
+        },
+      }, m.text);
+      if (m.bars && m.bars.length) {
+        return cr('div', { key: 'im' + i, style: { display: 'flex', flexDirection: 'column', gap: '10px', alignSelf: 'stretch' } },
+          bubble,
+          cr('div', { style: { display: 'flex', flexDirection: 'column', gap: '9px', background: 'var(--surface-card)', border: '1px solid var(--border-subtle)', borderRadius: '12px', padding: '14px 16px' } }, m.bars.map(barEl))
+        );
+      }
+      return cr('div', { key: 'im' + i, style: { display: 'flex', alignSelf: 'stretch' } }, bubble);
+    });
+
+    const exampleChips = cr('div', { style: { display: 'flex', flexWrap: 'wrap', gap: '8px' } },
+      INSIGHT_EXAMPLES.map((ex, i) => cr('button', {
+        key: 'ex' + i, className: 'wb-faq-reply', onClick: () => this.askInsight(ex),
+        style: { flex: '0 1 auto' },
+      }, ex))
+    );
+
+    const inputRow = cr('div', { style: { display: 'flex', gap: '8px', marginTop: '14px' } },
+      cr('input', {
+        type: 'text', value: insightInput, placeholder: 'Ask about the data…',
+        onChange: e => this.setState({ insightInput: e.target.value }),
+        onKeyDown: e => { if (e.key === 'Enter') this.askInsight(insightInput); },
+        style: { flex: 1, fontFamily: 'var(--font-sans)', fontSize: '13.5px', padding: '10px 13px', borderRadius: '8px', border: '1px solid var(--border-subtle)', background: 'var(--bg)', color: 'var(--text-primary)' },
+      }),
+      cr('button', {
+        onClick: () => this.askInsight(insightInput),
+        style: { fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: '13px', padding: '10px 20px', borderRadius: '8px', border: 'none', background: 'var(--brand-accent)', color: '#062a33', cursor: 'pointer' },
+      }, 'Ask')
+    );
+
+    return cr('div', {
+      key: 'insights-panel',
+      style: { background: 'var(--surface-card)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-lg)', padding: '22px 24px', marginBottom: '14px', boxShadow: 'var(--shadow-sm)' },
+    },
+      cr('div', { style: { display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' } },
+        cr('span', { style: { display: 'inline-flex', width: '20px', height: '20px', color: 'var(--text-accent)' } }, this.chatIcon()),
+        cr('h3', { style: { fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: '21px', margin: 0, color: 'var(--text-primary)' } }, 'Ask the data')
+      ),
+      cr('p', { style: { fontSize: '12.5px', color: 'var(--text-secondary)', margin: '0 0 16px', lineHeight: 1.5 } }, 'Natural-language insights computed locally from live bookings — no identities, no data ever leaves this device.'),
+      cr('div', { style: { display: 'flex', flexDirection: 'column', gap: '12px', maxHeight: '320px', overflowY: 'auto', marginBottom: '14px', paddingRight: '4px' } }, ...rows),
+      exampleChips,
+      inputRow
+    );
   }
   // ---------- icons ----------
   icon(paths, extra) {
@@ -3526,6 +3834,7 @@ class Component extends DCLogic {
       calendarEl: this.renderCalendar(),
       consentModalEl: this.renderConsentModal(),
       faqWidgetEl: this.renderFaqWidget(),
+      insightsPanelEl: this.renderInsightsPanel(),
       bookDateDisplay: s.bookDate || 'Pick a specific date →',
       bookDateBtnStyle: { fontFamily: 'var(--font-sans)', fontWeight: s.bookDate ? 600 : 400, fontSize: 'var(--fs-body)', padding: '13px 20px', borderRadius: 'var(--radius-sm)', border: s.bookDate ? '1px solid var(--brand-accent)' : '1px solid var(--border-subtle)', background: s.bookDate ? 'rgba(0,168,200,0.10)' : 'var(--surface-card)', color: s.bookDate ? 'var(--text-primary)' : 'var(--text-secondary)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '10px', transition: 'all var(--dur-fast) var(--ease-standard)' },
       openBookCal: () => this.openPicker('book'),
